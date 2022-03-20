@@ -20,6 +20,8 @@ def game():
     scene = {}  # the scene describes the game at any given point
 
     while is_running:
+        # this would kinda unrender the game on each iteration
+        screen.fill((255, 255, 255))
         for event in pygame.event.get():
             stage = event_handler(event)
             is_running = stage[0]
