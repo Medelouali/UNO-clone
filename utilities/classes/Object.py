@@ -11,11 +11,18 @@ def aspect_ratio(image):
     img.close()
     return dims[0]/dims[1]
 
+
+def get_dims(image):
+    img = Image.open(image)
+    dims = img.size
+    img.close()
+    return dims
+
 # This class generalizes objects like cards, coins...
 
 
 class Object:
-    def __init__(self, x_axis, y_axis, width, avatar, screen, dimensions, speed=10):
+    def __init__(self, x_axis, y_axis, width, avatar, screen, scene, dimensions, speed=10):
         self.x_axis = x_axis
         self.y_axis = y_axis
         self.aspect_ratio = aspect_ratio(avatar)
@@ -25,8 +32,15 @@ class Object:
         self.screen = screen
         self.dimensions = dimensions
         self.speed = speed
+        self.scene = scene
 
-        self.render()
+        self.update_scene(scene)
+
+    def update_scene(self, scene):
+        for index, obj in enumerate(scene):
+            if(obj.x_axis == self.x_axis and obj.y_axis == self.y_axis):
+                scene[index] = self
+                break
 
     def get_coordinates(self):
         print(self.x_axis, self.y_axis)  # Just for testing
@@ -34,7 +48,6 @@ class Object:
 
     # An object can be rendered and/or be rotated by degrees
     def render(self, rotate=False, degrees=0):
-        # self.screen.fill((255, 255, 255))
         if(rotate):
             img1 = pygame.image.load(self.avatar)
             img2 = pygame.transform.rotate(img1, degrees)
@@ -49,17 +62,12 @@ class Object:
 
     # An object can move by x, and y
     def moveBy(self, x, y):
-        can_move = True
         if(self.x_axis <= self.dimensions[0]):
             self.x_axis += x
-        else:
-            can_move = False
         if(self.y_axis <= self.dimensions[1]):
             self.y_axis += y
-        else:
-            can_move = False
-        self.render()
-        return can_move
+        self.update_scene(self.scene)
+        return self
 
     # An object can move to x, and y
     def moveTo(self, x, y):
@@ -76,17 +84,20 @@ class Object:
             self.x_axis += speed
             self.y_axis += coeff*self.x_axis+const
             self.get_coordinates()
-        self.render()
+        self.update_scene(self.scene)
+        return self
 
     # An object can move to x, and y
 
     def grow(self, new_width):
         self.width = new_width
         self.heigth = int(self.width/self.aspect_ratio)
-        self.render()
+        self.update_scene(self.scene)
+        return self
 
     # An object can be resized according to a certain aspect-ratio
     def growBy(self, ratio):
         self.width = int(ratio*self.width)
         self.heigth = int(ratio*self.heigth)
-        self.render()
+        self.update_scene(self.scene)
+        return self

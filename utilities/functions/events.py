@@ -1,8 +1,11 @@
+from types import new_class
 import pygame
 
+from utilities.classes.Object import Object
 
-def event_handler(event):
+
+def event_handler(event, scene):
     if(event.type == pygame.QUIT):
-        return False, {}
-    new_changes = {"cardX": 10, "cardY": 20}  # just as an example
-    return True, new_changes
+        return False
+    # Just for testing r now
+    return True
