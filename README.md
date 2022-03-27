@@ -1,2 +1,2 @@
 # PythonGame
-A python game using Pygame
+A look-alike UNO game, it's built using the python package Pygame
