@@ -5,6 +5,7 @@ class State:
             "rotation": 1,
             "unoWasSaid": False,
             "winner": None,
+            "activePlayer": None
         }
         
     def setState(self, key, value):
