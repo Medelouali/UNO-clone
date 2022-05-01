@@ -1,10 +1,17 @@
 
-class Object:
-    def __init__(self, isVisible=False, coordinates=[0, 0], dimensions=[1, 1], icon=None):
+import pygame
+
+
+class Object(pygame.sprite.Sprite):
+    def __init__(self, isVisible=False, coordinates=[10, 10], icon=None):
+        super().__init__()
+        self.image=pygame.image.load(icon)
+        self.rect=self.image.get_rect()
+        self.rect.center=coordinates
+        
         self.isVisible=isVisible
         self.coordinates=coordinates
-        self.dimensions=dimensions # width, height
         self.icon=icon
 
-    def render(self):
-        pass
+    def update(self):
+        self.rect.center=pygame.mouse.get_pos()

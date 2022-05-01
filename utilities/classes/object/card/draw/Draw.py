@@ -1,5 +1,5 @@
-from object.Object import Object
+from card.Card import Card
 
-class Draw(Object):
+class Draw(Card):
     def __init__(self):
         pass
