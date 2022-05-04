@@ -13,6 +13,7 @@ class Player:
     def screamUno(self):
         if self.playerActive == True:
             if self.hand.cardinal==1:
+                pass
             #print("UNO!") we can either do it automatically or
             #canClickUno= True this makes a button on screen clickable then the player can either click it or not"""
     
