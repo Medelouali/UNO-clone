@@ -1,5 +1,5 @@
 class Player:
-    def _init_(self, ID, hand, playerActive, score):
+    def _init_(self, ID):
         self.ID = ID
         self.hand = []
         self.playerActive = False
