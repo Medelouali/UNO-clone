@@ -15,7 +15,8 @@ class Player:
             if self.hand.cardinal==1:
             #print("UNO!") we can either do it automatically or
             #canClickUno= True this makes a button on screen clickable then the player can either click it or not"""
-    
+    def getHand(self):
+        return self.hand
         
             
             
