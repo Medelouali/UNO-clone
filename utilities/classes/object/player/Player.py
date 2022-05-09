@@ -1,3 +1,4 @@
+from utilities.classes.game import Game
 class Player:
     def _init_(self, ID):
         self.ID = ID
