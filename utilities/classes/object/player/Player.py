@@ -3,10 +3,9 @@ class Player:
     def _init_(self, ID):
         self.ID = ID
         self.hand = []
-        self.playerActive = False
         self.score = 0
     def isActive(self):
-        return self.playerActive
+        """compare self player id with active id in state"""
     def throwCard(self, playedCards, cardToPlay):
         if self.playerActive == True:
             card = self.hand.pop(cardToPlay) #temporary variable to hold the popped card
