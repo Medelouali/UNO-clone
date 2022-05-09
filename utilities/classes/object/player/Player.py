@@ -1,5 +1,4 @@
 from utilities.classes.game import Game
-from utilities.classes.game.State import State
 class Player:
     def _init_(self, ID):
         self.ID = ID
