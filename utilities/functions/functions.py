@@ -1,12 +1,13 @@
 import classes.object.card.Card as Card
 import variables.variables as var
 
-def createCards(listColors,listNumbers):
+def createCards(listColors,listNumbers,typeList):
     #la liste des cartes a construire
     listOfCards=[]
-    for number in listNumbers:
-        for col in listColors:
-            listOfCards.append(Card.Card(col,number))
+    for type in typeList:
+        for number in listNumbers:
+            for col in listColors:
+                listOfCards.append(Card.Card(col,number,type))
     return listOfCards
 
 #construire une liste de cartes avec des clones , par défaut on considere la valeur 2
@@ -25,7 +26,7 @@ def cloneCards(listCards,clonesPerCard=2):
 
 # creation de wild cards traitement a part (color=None, Number=None)
 def createWildCards(numberOfwildCards):
-    listOfWildCards=[Card.Card()]#une carte wild est crée dans la liste
+    listOfWildCards=[Card.Card(type="Wild")]#une carte wild est crée dans la liste
     return cloneCards(listOfWildCards,numberOfwildCards)
 
 # Construire Normal Cards
@@ -44,7 +45,7 @@ def createNrmlCards():
 #construire des "special-cards"
 def createSpecialCards():
     # Création des cartes de type "Skip" + "Reverse" +"Draw2/4"
-    subDeck1=createCards(var.unoColors,[None,None,None])
+    subDeck1=createCards(var.unoColors,[None,None,None],var.coloredType)
 
     #Création des cartes de type "Wild"
     #creation de 4 wild cards
