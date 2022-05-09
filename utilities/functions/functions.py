@@ -1,10 +1,10 @@
 import classes.object.card.Card as Card
 import variables.variables as var
 
-def createCards(listColors,listNumbers,typeList):
+def createCards(listColors,listNumbers,typesList):
     #la liste des cartes a construire
     listOfCards=[]
-    for type in typeList:
+    for type in typesList:
         for number in listNumbers:
             for col in listColors:
                 listOfCards.append(Card.Card(col,number,type))
@@ -45,7 +45,7 @@ def createNrmlCards():
 #construire des "special-cards"
 def createSpecialCards():
     # Création des cartes de type "Skip" + "Reverse" +"Draw2/4"
-    subDeck1=createCards(var.unoColors,[None,None,None],var.coloredType)
+    subDeck1=createCards(var.unoColors,[None],var.coloredType)
 
     #Création des cartes de type "Wild"
     #creation de 4 wild cards
