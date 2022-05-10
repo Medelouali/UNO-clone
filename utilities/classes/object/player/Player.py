@@ -8,7 +8,7 @@ class Player:
         self.hasUno == False
         self.screamedUno == False
     def isActive(self, Game):
-        if Game.state.activePlayer == self.ID:
+        if Game.state.["activePlayer"] == self.ID:
             return True
         else:
             return False
@@ -18,7 +18,7 @@ class Player:
         if isActive(self, game) == True:
             card = self.hand.pop(hand.index(cardToPlay)) #temporary variable to hold the popped card
             playedCards.append(card)
-            Game.state.activePlayer = Game.players[Game.rotation+1].ID
+            Game.state.["activePlayer"] = Game.players[Game.rotation+1].ID
             """changes playerActive to next player hence this player's to false"""
     def getHasUno(self):
         return self.hasUno
@@ -33,6 +33,9 @@ class Player:
             elif self.hasUno == True:
                 self.screamUno = True
                 print("player ", self.ID, "screamed UNO\n")
+            else:
+                print("why'd you do that?")
+                """I'm tempted to add a click counter and a while loop to make the comment more sarcastic everytime uno is clicked for no reason"""
     def getHand(self):
         return self.hand
         
