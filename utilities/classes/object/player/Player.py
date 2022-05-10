@@ -1,4 +1,6 @@
 from utilities.classes.game import Game
+import object.card as cards
+from object.Object import Object
 class Player:
     def _init_(self, ID):
         self.ID = ID
@@ -13,13 +15,26 @@ class Player:
         else:
             return False
         """compare self player id with active id in state returns true or false"""
-    """def compareSingleCard( work in progress"""
-    def throwCard(self, playedCards, cardToPlay, Game):
+    def compareSingleCard(self,lastPlayedCard,cardToPlay):
+        if cardToPlay.type=="normal":
+            if(lastPlayedCard.getColor()==cardToPlay.getColor() and lastPlayedCard.getNumbers()==cardToPlay.getNumbers()):
+                return cardToPlay
+            else:
+                return NULL
+        elif cardToPlay.type=="wild":
+            return cardToPlay
+        else:
+            if lastPlayedCard.getColor()==cardToPlay.getColor():
+                return cardToPlay
+            else:
+                return NULL
+    def throwCard(self, playedCards, lastPlayedCard, cardToPlay, Game):
         if isActive(self, Game) == True:
-            card = self.hand.pop(hand.index(cardToPlay)) #temporary variable to hold the popped card
-            playedCards.append(card)
-            Game.state.["activePlayer"] = Game.players[Game.rotation+1].ID
-            """changes playerActive to next player hence this player's to false"""
+            if compareSingleCard(self, lastPlayedCard, cardToPlay)== cardToPlay:
+                card = self.hand.pop(hand.index(cardToPlay)) #temporary variable to hold the popped card
+                playedCards.append(card)
+                Game.state.["activePlayer"] = Game.players[Game.rotation+1].ID
+            """changes playerActive to next player hence this player's to false"""        
     def getHasUno(self):
         return self.hasUno
     def getScreamedUno(self):
