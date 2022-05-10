@@ -5,8 +5,8 @@ class Player:
         self.hand = []
         self.handCardinal = 7
         self.score = 0
-        self.hasUno == False
-        self.screamedUno == False
+        self.hasUno = False
+        self.screamedUno = False
     def isActive(self, Game):
         if Game.state.["activePlayer"] == self.ID:
             return True
