@@ -33,7 +33,7 @@ class Player:
             if compareSingleCard(self, lastPlayedCard, cardToPlay)== cardToPlay:
                 card = self.hand.pop(hand.index(cardToPlay)) #temporary variable to hold the popped card
                 playedCards.append(card)
-                Game.state["activePlayer"] = Game.players[Game.rotation+1].ID
+                Game.state["activePlayer"] = Game.players[Game.state["activePlayer"]+Game.rotation]
             """changes playerActive to next player hence this player's to false"""        
     def getHasUno(self):
         return self.hasUno
@@ -41,8 +41,8 @@ class Player:
         return self.screamedUno
     def screamUno(self, Game):
         if isActive(self, Game) == True:
-            if (Game.players[Game.rotation-1].hasUno == True) and (Game.players[Game.rotation-1].screamedUno == False):
-                Game.players[Game.rotation-1].draw(2)
+            if (Game.players[Game.state["activePlayer"]-Game.rotation].hasUno == True) and (Game.players[Game.state["activePlayer"]-Game.rotation].screamedUno == False):
+                Game.players[Game.state["activePlayer"]-Game.rotation].draw(2)
                 self.screamUno = True
                 print("player ", self.ID, "screamed UNO\n")
             elif self.hasUno == True:
