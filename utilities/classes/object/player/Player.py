@@ -33,7 +33,7 @@ class Player:
             if compareSingleCard(self, lastPlayedCard, cardToPlay)== cardToPlay:
                 card = self.hand.pop(hand.index(cardToPlay)) #temporary variable to hold the popped card
                 playedCards.append(card)
-                Game.state["activePlayer"] = Game.players[Game.state["activePlayer"]+Game.rotation]
+                Game.state["activePlayer"] = Game.players[Game.state["activePlayer"]+Game.rotation].ID
             """changes playerActive to next player hence this player's to false"""        
     def getHasUno(self):
         return self.hasUno
