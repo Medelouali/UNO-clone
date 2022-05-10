@@ -13,7 +13,7 @@ class Player:
         else:
             return False
         """compare self player id with active id in state returns true or false"""
-    def compareSingleCard(
+    """def compareSingleCard( work in progress"""
     def throwCard(self, playedCards, cardToPlay, Game):
         if isActive(self, game) == True:
             card = self.hand.pop(hand.index(cardToPlay)) #temporary variable to hold the popped card
