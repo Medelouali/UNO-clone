@@ -1,5 +1,6 @@
 from utilities.classes.game import Game
 import object.card as cards
+from utilities.classes.object.deck import Deck
 from object.Object import Object
 class Player:
     def _init_(self, ID):
@@ -42,7 +43,7 @@ class Player:
     def screamUno(self, Game):
         if self.isActive(self, Game) == True:
             if (Game.players[Game.state["activePlayer"]-Game.rotation].hasUno == True) and (Game.players[Game.state["activePlayer"]-Game.rotation].screamedUno == False):
-                Game.players[Game.state["activePlayer"]-Game.rotation].draw(2)
+                Game.players[Game.state["activePlayer"]-Game.rotation].deck.draw(deck, self.hand, 2)
                 self.screamUno = True
                 print("player ", self.ID, "screamed UNO\n")
             elif self.hasUno == True:
