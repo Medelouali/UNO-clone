@@ -6,5 +6,6 @@ class Card(Object):
         super().__init__(isVisible, coordinates, dimensions, icon)
         self.number = number
         self.color=color
+
         
     

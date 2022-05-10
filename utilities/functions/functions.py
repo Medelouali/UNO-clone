@@ -1,7 +1,7 @@
 import classes.object.card.Card as Card
 import variables.variables as var
 
-def createCards(listColors,listNumbers,typesList):
+def createCards(listColors,listNumbers,typesList=["Normal"]):
     #la liste des cartes a construire
     listOfCards=[]
     for type in typesList:
