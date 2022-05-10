@@ -1,5 +1,6 @@
 from utilities.classes.game import Game
 import object.card as cards
+from utilities.classes.object.deck import Deck
 from object.Object import Object
 class Player:
     def _init_(self, ID):
@@ -29,20 +30,20 @@ class Player:
             else:
                 return NULL
     def throwCard(self, playedCards, lastPlayedCard, cardToPlay, Game):
-        if isActive(self, Game) == True:
-            if compareSingleCard(self, lastPlayedCard, cardToPlay)== cardToPlay:
+        if self.isActive(self, Game) == True:
+            if self.compareSingleCard(self, lastPlayedCard, cardToPlay)== cardToPlay:
                 card = self.hand.pop(hand.index(cardToPlay)) #temporary variable to hold the popped card
                 playedCards.append(card)
-                Game.state["activePlayer"] = Game.players[Game.state["activePlayer"]+Game.rotation]
+                Game.state["activePlayer"] += Game.rotation
             """changes playerActive to next player hence this player's to false"""        
     def getHasUno(self):
         return self.hasUno
     def getScreamedUno(self):
         return self.screamedUno
     def screamUno(self, Game):
-        if isActive(self, Game) == True:
+        if self.isActive(self, Game) == True:
             if (Game.players[Game.state["activePlayer"]-Game.rotation].hasUno == True) and (Game.players[Game.state["activePlayer"]-Game.rotation].screamedUno == False):
-                Game.players[Game.state["activePlayer"]-Game.rotation].draw(2)
+                Game.players[Game.state["activePlayer"]-Game.rotation].deck.draw(deck, self.hand, 2)
                 self.screamUno = True
                 print("player ", self.ID, "screamed UNO\n")
             elif self.hasUno == True:
