@@ -64,4 +64,9 @@ class Deck():
         if self.taille==0:
             self.vide=True
         return self.vide
-
+    #Affichage des cartes du deck
+    def showDeck(self):
+        print("Your deck :\n {")
+        for i in range(0,self.taille):
+            print(" ",self.deck[i])
+        print("}")
