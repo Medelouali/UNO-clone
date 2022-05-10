@@ -5,6 +5,7 @@ class Player:
         self.hand = []
         self.handCardinal = 7
         self.score = 0
+<<<<<<< HEAD
         self.hasUno == False
         self.screamedUno == False
     def isActive(self, Game):
@@ -38,6 +39,21 @@ class Player:
                 """I'm tempted to add a click counter and a while loop to make the comment more sarcastic everytime uno is clicked for no reason"""
     def getHand(self):
         return self.hand
+=======
+    def isActive(self):
+        return self.playerActive
+    def throwCard(self, playedCards, cardToPlay):
+        if self.playerActive == True:
+            card = self.hand.pop(cardToPlay) #temporary variable to hold the popped card
+            playedCards.push(card)
+    def screamUno(self):
+        if self.playerActive == True:
+            if self.hand.cardinal==1:
+                pass
+            #print("UNO!") we can either do it automatically or
+            #canClickUno= True this makes a button on screen clickable then the player can either click it or not"""
+    
+>>>>>>> 579e17aed643defee6803bdd103efc002ac088f5
         
             
             
