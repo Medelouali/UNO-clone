@@ -55,4 +55,13 @@ def createSpecialCards():
 
     #special cards :subDeckSpecial + subDeckWild
     subDeckSpecial.extend(subDeckWild)
-    return subDeckSpecial
+    return subDeckSpecial 
+    # distribute 7 cards at the start of the game
+def distributeCard(deck,listOfPlayers):
+    # iterate over the list of players 
+    for i in range(len(listOfPlayers)):
+        # get the hand of each player
+        currentPlayerHand = listOfPlayers[i].getHand()
+        # call draw method on deck of cards to draw cards from it and into the hand of the current player
+        deck.draw(currentPlayerHand,7)
+
