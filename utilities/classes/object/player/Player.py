@@ -15,7 +15,7 @@ class Player:
         """compare self player id with active id in state returns true or false"""
     """def compareSingleCard( work in progress"""
     def throwCard(self, playedCards, cardToPlay, Game):
-        if isActive(self, game) == True:
+        if isActive(self, Game) == True:
             card = self.hand.pop(hand.index(cardToPlay)) #temporary variable to hold the popped card
             playedCards.append(card)
             Game.state.["activePlayer"] = Game.players[Game.rotation+1].ID
@@ -25,7 +25,7 @@ class Player:
     def getScreamedUno(self):
         return self.screamedUno
     def screamUno(self, Game):
-        if isActive(self) == True:
+        if isActive(self, Game) == True:
             if (Game.players[Game.rotation-1].hasUno == True) and (Game.players[Game.rotation-1].screamedUno == False):
                 Game.players[Game.rotation-1].draw(2)
                 self.screamUno = True
