@@ -4,7 +4,7 @@ from utilities.functions.path import getPath
 from utilities.functions.resize import getSize
 from utilities.classes.ai.Ai import Ai
 from utilities.classes.object.player.Player import Player
-from  utilities.classes.object.deck.Deck import Deck
+from utilities.classes.object.deck.Deck import Deck
 
 pygame.init()
 pygame.display.set_caption('UNO')
@@ -27,10 +27,10 @@ class Game:
     screenHeight=640
     screen=pygame.display.set_mode((screenWidth, screenHeight))
     objectsGroup=[
-        # Object(True, [60, 100], [10, 20], getPath('images', 'logo.png')), # just for testing
-        # Object(True, [900, 600], [20, 30], getPath('images', 'logo.png')) # just for testing
+        Object(True, [60, 100], [10, 20], getPath('images', 'logo.png')), # just for testing
+        Object(True, [900, 600], [20, 30], getPath('images', 'logo.png')) # just for testing
     ]
-    backgroundImage=pygame.image.load(getPath('images', 'backgroundCards.jpg'))
+    backgroundImage = pygame.image.load(getPath('images', 'backgroundCards.jpg'))
     backgroundImage = pygame.transform.scale(
         backgroundImage, getSize(getPath('images', 'backgroundCards.jpg'), screenWidth))
     deck=Deck()
@@ -38,6 +38,8 @@ class Game:
         Game.setState("playersList", players)
     
     def launch(self):
+        #setting the deck
+        self.setDeck()
         # generating players
         self.generatePlayers(2)               
         while(True):
