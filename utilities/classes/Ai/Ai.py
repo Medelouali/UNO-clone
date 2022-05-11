@@ -1,6 +1,6 @@
-import object.card as cards
+# import object.card as cards
 import random
-from object.player.Player import Player
+from utilities.classes.object.player.Player import Player
 
 class Ai(Player):
   
