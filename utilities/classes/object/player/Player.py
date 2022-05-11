@@ -21,15 +21,14 @@ class Player:
         if cardToPlay.type=="normal":
             if(lastPlayedCard.getColor()==cardToPlay.getColor() and lastPlayedCard.getNumbers()==cardToPlay.getNumbers()):
                 return cardToPlay
-            else:
-                return NULL
+            return None
         elif cardToPlay.type=="wild":
             return cardToPlay
         else:
             if lastPlayedCard.getColor()==cardToPlay.getColor():
                 return cardToPlay
             else:
-                return NULL
+                return None
     def throwCard(self, playedCards, lastPlayedCard, cardToPlay, Game):
         if self.isActive(self, Game) == True:
             if self.compareSingleCard(self, lastPlayedCard, cardToPlay)== cardToPlay:
