@@ -2,8 +2,9 @@ import pygame, sys
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 from utilities.functions.resize import getSize
-from classes.ai.Ai import Ai
-from classes.object.player.Player import Player
+from utilities.classes.ai.Ai import Ai
+from utilities.classes.object.player.Player import Player
+from  utilities.classes.object.deck.Deck import Deck
 
 pygame.init()
 pygame.display.set_caption('UNO')
@@ -26,23 +27,23 @@ class Game:
     screenHeight=640
     screen=pygame.display.set_mode((screenWidth, screenHeight))
     objectsGroup=[
-        Object(True, [60, 100], getPath('images', 'logo.png')), # just for testing
-        Object(True, [900, 600], getPath('images', 'logo.png')) # just for testing
+        # Object(True, [60, 100], [10, 20], getPath('images', 'logo.png')), # just for testing
+        # Object(True, [900, 600], [20, 30], getPath('images', 'logo.png')) # just for testing
     ]
     backgroundImage=pygame.image.load(getPath('images', 'backgroundCards.jpg'))
     backgroundImage = pygame.transform.scale(
         backgroundImage, getSize(getPath('images', 'backgroundCards.jpg'), screenWidth))
-    
+    deck=Deck()
     def __init__(self, players=[]):
         Game.setState("playersList", players)
     
     def launch(self):
         # generating players
-        self.generatePlayers(2)                
+        self.generatePlayers(2)               
         while(True):
             for event in pygame.event.get():
                 Game.setState("event", event)
-                if(event.type == pygame.QUIT or Game.getState(Game, "gameOver")):
+                if(event.type == pygame.QUIT or Game.state["gameOver"]):
                     pygame.quit()
                     sys.exit()
                     
@@ -72,16 +73,19 @@ class Game:
     def generatePlayers(self, numOfPlayers=2, botExists=True):
         if(botExists):    
             if(numOfPlayers==2):
-                Game.setState("playersList", Game.getState("playersList").extends([
+                Game.setState("playersList", Game.state["playersList"].extend([
                     Ai(0),
                     Player(1)
                 ]))
             else:
-                Game.setState("playersList", Game.getState("playersList").extends([Ai(0)]))    
-                Game.setState("playersList", Game.getState("playersList").extends([
+                Game.setState("playersList", Game.getState("playersList").extend([Ai(0)]))    
+                Game.setState("playersList", Game.getState("playersList").extend([
                     Player(i) for i in range(1, numOfPlayers)
                 ]))
         else:
-            Game.setState("playersList", Game.getState("playersList").extends([
+            Game.setState("playersList", Game.getState("playersList").extend([
                 Player(i) for i in range(numOfPlayers)
             ]))
+            
+    def setDeck(self):
+        print("Generatng the deck")

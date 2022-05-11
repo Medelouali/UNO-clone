@@ -20,7 +20,7 @@ class Deck():
         #tester si le deck est vide
         self.vide=False
         #shuffle the deck
-        self.deck.shuffleDeck()
+        self.shuffleDeck()
     @classmethod
         #Getters
     def getDeck(self):
@@ -34,7 +34,7 @@ class Deck():
     # avec algorithme de Fisher–Yates
     def shuffleDeck(self):
         # Commençant par le dernier élement on permute un par un 
-        for i in range(self.taille-1,0,-1):
+        for i in range(self.taille-2,0,-1):
         # indice aléatoire de 0 à i
             j = randint(0,i+1)
         # permuter self.deck[i] par celui d'indice aléatoire

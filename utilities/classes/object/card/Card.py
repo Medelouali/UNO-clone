@@ -1,8 +1,8 @@
 import numbers
-from object.Object import Object
-
+from utilities.classes.object.Object import Object
+from utilities.functions.path import getPath
 class Card(Object):
-    def __init__(self, number, color, type="Normal", coordinates=[1, 1], dimensions=[0, 0], icon=None, isVisible=False):
+    def __init__(self, number, color, type="Normal", coordinates=[1, 1], dimensions=[0, 0], icon=getPath("images", "logo.png"), isVisible=False):
         super().__init__(isVisible, coordinates, dimensions, icon)
         self.number = number
         self.color=color

@@ -1,9 +1,10 @@
 from utilities.classes.game import Game
-import object.card as cards
+# import object.card as cards
 from utilities.classes.object.deck import Deck
-from object.Object import Object
+from utilities.classes.object.Object import Object
+
 class Player:
-    def _init_(self, ID):
+    def __init__(self, ID) -> None:
         self.ID = ID
         self.hand = []
         self.handCardinal = 7
@@ -20,15 +21,14 @@ class Player:
         if cardToPlay.type=="normal":
             if(lastPlayedCard.getColor()==cardToPlay.getColor() and lastPlayedCard.getNumbers()==cardToPlay.getNumbers()):
                 return cardToPlay
-            else:
-                return NULL
+            return None
         elif cardToPlay.type=="wild":
             return cardToPlay
         else:
             if lastPlayedCard.getColor()==cardToPlay.getColor():
                 return cardToPlay
             else:
-                return NULL
+                return None
     def throwCard(self, playedCards, lastPlayedCard, cardToPlay, Game):
         if self.isActive(self, Game) == True:
             if self.compareSingleCard(self, lastPlayedCard, cardToPlay)== cardToPlay:
