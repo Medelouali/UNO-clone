@@ -1,11 +1,12 @@
-from object.player import Player
 import object.card as cards
 import random
+from object.player.Player import Player
+
 class Ai(Player):
   
-    def __init__(self):
+    def __init__(self, id):
         # calling the parent constructor to take care of initialization of attrs that are common to all players
-        Player.__init__(self)
+        Player.__init__(self, id)
         # intializing the list of playabale cards to an empty list
         self.playableCards = []
     # To compare two cards , a card in the player's hand and last played card 
