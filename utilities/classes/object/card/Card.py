@@ -7,6 +7,7 @@ class Card(Object):
         self.number = number
         self.color=color
         self.type=type
+        self.icon = icon
         
     # coloredType=["Skip", "Reverse", "Draw 2", "Draw 4", "Wild"]
     def switchCard(self):
