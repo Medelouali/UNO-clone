@@ -18,6 +18,7 @@ class Game:
             "winner": None,
             "activePlayer": None,
             "event": None,
+            "roundFinished": False,
             "gameOver": False,
             "playersList": [],
         } # this dictionary will manage the whole state of the game

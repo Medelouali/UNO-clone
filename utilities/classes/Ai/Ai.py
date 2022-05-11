@@ -27,6 +27,7 @@ class Ai(Player):
             card = self.hand.pop(cardToPlay)
             playedCards.append(card)
             Game.state["activePlayer"] = Game.players[Game.state["activePlayer"]+Game.rotation]
+            
     # overriding the screamUno method for Ai since it'll be called randomly when it's the Ai's turn 
     def screamUno(self,deck,Game):
             prevPlayer = Game.players[Game.state["activePlayer"]-Game.rotation]
