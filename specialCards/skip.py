@@ -1,8 +1,10 @@
-
-
- def skip (game,player,players =[]):
- 	game.setState("rotation",2)
- 	if getState("activePlayer") == len (players):
- 		game.setState("activePlayer",0)
- 	else: 
- 		game.setState("activePlayer",game.getState("activePlayer")+ game.getState("rotation"))
+def skip (game , player =[]):
+	temp = game.getState("rotation")
+ 	game.setState("rotation",game.getState("rotation")*2)
+    if rotation == 2:
+    	if game.getState("activePlayer") == len(players)-1: game.setState("activePlayer",1)
+        if game.getState("activePlayer") == len(players)-2: game.setState("activePlayer",0)
+    else : 
+    game.setState("activePlayer",getState("activePlayer")+ getState("rotation"))
+    
+    game.setState("rotation",temp)  	
