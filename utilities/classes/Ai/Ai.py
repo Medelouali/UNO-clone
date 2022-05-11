@@ -1,12 +1,12 @@
-from asyncio.windows_events import NULL
-from object.player import Player
 import object.card as cards
 import random
+from object.player.Player import Player
+
 class Ai(Player):
   
-    def __init__(self):
+    def __init__(self, id):
         # calling the parent constructor to take care of initialization of attrs that are common to all players
-        Player.__init__(self)
+        Player.__init__(self, id)
         # intializing the list of playabale cards to an empty list
         self.playableCards = []
    
@@ -15,7 +15,7 @@ class Ai(Player):
         # to check every card in the Ai's hand
         for card in self.hand:
             # checking if the return card is not null , if it's the case then add it to the list of playable cards
-            if self.compareSingleCard(lastPlayedCard,card)!=NULL:
+            if self.compareSingleCard(lastPlayedCard,card)!=None:
                 self.playableCards.append(card)
     # Overloading the throwCard method for Ai
     # After checking if it's an Ai and not a real player this method will be called automatically
