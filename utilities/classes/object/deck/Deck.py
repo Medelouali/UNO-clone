@@ -34,7 +34,7 @@ class Deck():
     # avec algorithme de Fisher–Yates
     def shuffleDeck(self):
         # Commençant par le dernier élement on permute un par un 
-        for i in range(self.taille-2,0,-1):
+        for i in range(self.taille-1,0,-1):
         # indice aléatoire de 0 à i
             j = randint(0,i+1)
         # permuter self.deck[i] par celui d'indice aléatoire
@@ -49,7 +49,7 @@ class Deck():
         #set la taille du deck
         self.taille=len(self.deck)
         #Shuffling 
-        self.deck.shuffleDeck()
+        self.shuffleDeck()
 
     #Draw une carte du deck aprés shuffling
     def Draw(self,handOfPlayer,numberOfCards):
