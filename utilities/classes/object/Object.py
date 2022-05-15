@@ -1,12 +1,12 @@
 import pygame
-import utilities.classes.game.Game as Game_t # to avoid circular imports
+import utilities.classes.game.Game as Game_t
+from utilities.functions.resize import getSize # to avoid circular imports
 
 class Object():
     gaps=0 # the number of destroyed of objects, it helps for insertion
     createdObjects=0
     def __init__(self, isVisible=False, coordinates=[10, 10], dimensions=[10, 10], icon=None):
-        # pygame.sprite.Sprite.__init__(self)
-        self.image=pygame.image.load(icon)
+        self.image = pygame.transform.scale(pygame.image.load(icon), getSize(icon, dimensions[0]))
         self.rect=self.image.get_rect()
         self.rect.center=coordinates
         self.isVisible=isVisible

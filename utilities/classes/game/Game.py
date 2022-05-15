@@ -8,7 +8,7 @@ from utilities.classes.object.deck.Deck import Deck
 
 pygame.init()
 pygame.display.set_caption('UNO')
-pygame.display.set_icon(pygame.image.load(getPath("images", "logo.png")))
+pygame.display.set_icon(pygame.image.load(getPath("images", "cards", "Wild.png")))
 
 class Game:
     # Class attrs
@@ -31,11 +31,11 @@ class Game:
     screen=pygame.display.set_mode((screenWidth, screenHeight))
     # contains all objects that are rendered at any given momment
     objectsGroup=[
-        Object(True, [60, 100], [10, 20], getPath('images', 'logo.png')), # just for testing
-        Object(True, [900, 600], [20, 30], getPath('images', 'logo.png')) # just for testing
+        Object(True, [60, 100], [100, 20], getPath('images', "cards", 'Blue_0.png')), # just for testing
+        Object(True, [900, 600], [100, 30], getPath('images', "cards", 'Red_0.png')) # just for testing
     ]
     # set background for game interface
-    backgroundImage = pygame.image.load(getPath('images', 'backgroundCards.jpg'))
+    backgroundImage = pygame.image.load(getPath('images', 'cards',"Table_4.png"))
     backgroundImage = pygame.transform.scale(
         backgroundImage, getSize(getPath('images', 'backgroundCards.jpg'), screenWidth))
     
