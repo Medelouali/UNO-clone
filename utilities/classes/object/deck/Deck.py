@@ -1,4 +1,4 @@
-
+import utilities.classes.game.Game as G
 from utilities.functions.functions import createNrmlCards, createSpecialCards
 from random import randint
 
@@ -34,7 +34,7 @@ class Deck():
     # avec algorithme de Fisher–Yates
     def shuffleDeck(self):
         # Commençant par le dernier élement on permute un par un 
-        for i in range(self.taille-2,0,-1):
+        for i in range(self.taille-1,0,-1):
         # indice aléatoire de 0 à i
             j = randint(0,i+1)
         # permuter self.deck[i] par celui d'indice aléatoire
@@ -49,7 +49,7 @@ class Deck():
         #set la taille du deck
         self.taille=len(self.deck)
         #Shuffling 
-        self.deck.shuffleDeck()
+        self.shuffleDeck()
 
     #Draw une carte du deck aprés shuffling
     def Draw(self,handOfPlayer,numberOfCards):
@@ -58,6 +58,7 @@ class Deck():
                 handOfPlayer.append(self.deck.pop())
                 #La diminution de la taille du deck
                 self.taille-=1
+             #Ajout des cartes a la liste objectsGroup 
 
     #Tester si le deck est vide et changer la valeur de l'attr. vide de l'instance
     def isEmpty(self):

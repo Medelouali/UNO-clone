@@ -21,6 +21,13 @@ class Card(Object):
             print("You choose a draw 4 card")
         else:
             print("Norml card was chosen")
-
-        
+    # to get position of a card 
+    def getPosition(self):
+        return self.coordinates
+    # to set new position of a card
+    def setPosition(self,coordinates):
+        self.coordinates = coordinates
+    # to get icon from a card
+    def getIcon(self):
+        return self.icon
     
