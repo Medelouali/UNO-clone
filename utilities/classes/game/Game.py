@@ -5,6 +5,7 @@ from utilities.functions.resize import getSize
 from utilities.classes.Ai.Ai import Ai
 from utilities.classes.object.player.Player import Player
 from utilities.classes.object.deck.Deck import Deck
+from utilities.functions.path import writeText
 
 pygame.init()
 pygame.display.set_caption('UNO')
@@ -23,11 +24,18 @@ class Game:
             # list of players 
             "playersList": [],
         } # this dictionary will keep track of the game state
-# iterface settings
+    # iterface settings
     framesPerSecond=60
     clock=pygame.time.Clock()
     screenWidth=1280
     screenHeight=640
+    # the space of the playground once u drag the card into it u can't move anymore 
+    playGround={
+        "topHight": screenHeight/2-300,
+        "bottomHight": screenHeight/2+300,
+        "rightWidth": screenWidth/2+200,
+        "leftWidth": screenWidth/2-200
+    }
     screen=pygame.display.set_mode((screenWidth, screenHeight))
     # contains all objects that are rendered at any given momment
     objectsGroup=[
@@ -48,12 +56,10 @@ class Game:
         
     
     def launch(self):
-        
         # generate a list of players
         self.generatePlayers() 
         # a loop that keeps running as long as we're playing the game
         while(True):
-            
             for event in pygame.event.get():
                 # set the occured event 
                 Game.setState("event", event)
@@ -70,6 +76,8 @@ class Game:
             pygame.display.update()
             Game.screen.blit(Game.backgroundImage, (0, 0))
             self.render()
+            writeText("Bot", Game.screenWidth/2, 20, 30, Game.screen)
+            writeText("Me", Game.screenWidth/2, Game.screenHeight-20, 30, Game.screen)
             self.clock.tick(Game.framesPerSecond)
          
     @classmethod # modify a value in the state by passing its key ( if it exists )
@@ -84,6 +92,7 @@ class Game:
             return cls.state[key]
     # render every object in objectGroup 
     def render(self):
+        self.renderDeck()
         for obj in Game.objectsGroup:
             if(obj==None): # None values are objects that has been destroyed
                 continue
@@ -114,7 +123,8 @@ class Game:
 
     # display deck icon 
     def renderDeck(self):
-        pass 
+        Object(True, [100, Game.screenHeight/2], [80, 20],icon=getPath("images", "cards", "Deck.png")).add()
+     
     # display results when the game has ended
     def displayResults(self):
         pass

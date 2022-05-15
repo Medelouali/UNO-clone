@@ -1,4 +1,5 @@
 from utilities.classes.object.card.Card import Card
+from utilities.functions.path import getPath
 import utilities.variables.variables as var
 
 def createCards(listColors, listNumbers, typesList=["Normal"]):
@@ -7,25 +8,26 @@ def createCards(listColors, listNumbers, typesList=["Normal"]):
     for type in typesList:
         for number in listNumbers:
             for col in listColors:
-                listOfCards.append(Card(col,number,type))
+                listOfCards.append(Card(number, col, type, 
+                    icon=getPath("images", "cards", f"{col}_{number}.png")))
     return listOfCards
 
 #construire une liste de cartes avec des clones , par défaut on considere la valeur 2
-def cloneCards(listCards,clonesPerCard=2):
+def cloneCards(listCards, clonesPerCard=2):
     #la liste des cartes qui contiendra des clones des cartes de la liste "listCards"
     listOfCards=list(listCards)
-    l=len(listCards)
+    # l=len(listCards)
     for item in listCards:
         #index de item dans la nouvelle liste
         j=listOfCards.index(item)
-        for i in range(1,clonesPerCard):
+        for i in range(1, clonesPerCard):
             #on insere les clones des cartes
             listOfCards.insert(j+i,item)
     return listOfCards
 
 # creation de wild cards traitement a part (color=None, Number=None)
 def createWildCards(numberOfwildCards):
-    listOfWildCards=[Card(type="Wild", number=10, color="Yellow")]#une carte wild est crée dans la liste
+    listOfWildCards=[Card(type="Wild", icon=getPath("images", "cards", "Wild.png"))]#une carte wild est crée dans la liste
     return cloneCards(listOfWildCards,numberOfwildCards)
 
 # Construire Normal Cards
@@ -43,7 +45,7 @@ def createNrmlCards():
 #construire des "special-cards"
 def createSpecialCards():
     # Création des cartes de type "Skip" + "Reverse" +"Draw2/4"
-    subDeck1=createCards(var.unoColors,[None],var.coloredType)
+    subDeck1=createCards(var.unoColors, var.unoNumberRange, var.coloredType)
 
     #Création des cartes de type "Wild"
     #creation de 4 wild cards

@@ -1,66 +1,78 @@
-import pygame
-import random
-from utilities.functions.path import getPath
-# --- classes --- (UpperCaseNames)
+# can we pass functioons as args in pyhton let's test it
+def callback(str=""):
+    print("Got called", str)
+    
+def funct(callback, *args):
+    if(args):
+        callback(*args)
+    else:
+        callback()
 
-class Test(pygame.sprite.Sprite):
+funct(callback, "My name is Slim Shady")
 
-    def __init__(self, w):
-        super().__init__()
+# import pygame
+# import random
+# from utilities.functions.path import getPath
+# # --- classes --- (UpperCaseNames)
 
-        self.image = pygame.image.load(getPath('images', 'logo.png'))
-        self.image = pygame.transform.scale(self.image, (w, w))
-        self.rect = self.image.get_rect()
+# class Test(pygame.sprite.Sprite):
 
-        self.last = pygame.time.get_ticks()
+#     def __init__(self, w):
+#         super().__init__()
 
-# --- main ----
+#         self.image = pygame.image.load(getPath('images', 'logo.png'))
+#         self.image = pygame.transform.scale(self.image, (w, w))
+#         self.rect = self.image.get_rect()
 
-level = 1
-cooldown = 1000
+#         self.last = pygame.time.get_ticks()
 
-# - init -
+# # --- main ----
 
-pygame.init()
-screen = pygame.display.set_mode((600, 600))
+# level = 1
+# cooldown = 1000
 
-# - items -
+# # - init -
 
-background = pygame.Surface(screen.get_size())
-background.fill((0, 0, 0))
+# pygame.init()
+# screen = pygame.display.set_mode((600, 600))
 
-screen.blit(background, (0,0))
+# # - items -
 
-all_sprites_list = pygame.sprite.Group()
+# background = pygame.Surface(screen.get_size())
+# background.fill((0, 0, 0))
 
-for x in range(10):
-    item = Test(random.randint(40, 60))
-    item.rect.x = 40 * random.randint(0, 10)
-    item.rect.y = 0
-    all_sprites_list.add(item)
+# screen.blit(background, (0,0))
 
-# - mainloop -
+# all_sprites_list = pygame.sprite.Group()
 
-clock = pygame.time.Clock()
+# for x in range(10):
+#     item = Test(random.randint(40, 60))
+#     item.rect.x = 40 * random.randint(0, 10)
+#     item.rect.y = 0
+#     all_sprites_list.add(item)
 
-running = True
+# # - mainloop -
 
-while running:
+# clock = pygame.time.Clock()
 
-    now = pygame.time.get_ticks()
+# running = True
 
-    for item in all_sprites_list:
-        item.rect.y += level
+# while running:
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            for item in all_sprites_list:
-                if item.rect.collidepoint(event.pos):
-                    item.kill()
+#     now = pygame.time.get_ticks()
 
-    pygame.display.flip()
-    all_sprites_list.clear(screen, background)
-    all_sprites_list.draw(screen)
-    all_sprites_list.update()
+#     for item in all_sprites_list:
+#         item.rect.y += level
+
+#     for event in pygame.event.get():
+#         if event.type == pygame.QUIT:
+#             running = False
+#         if event.type == pygame.MOUSEBUTTONDOWN:
+#             for item in all_sprites_list:
+#                 if item.rect.collidepoint(event.pos):
+#                     item.kill()
+
+#     pygame.display.flip()
+#     all_sprites_list.clear(screen, background)
+#     all_sprites_list.draw(screen)
+#     all_sprites_list.update()
