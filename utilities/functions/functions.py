@@ -7,7 +7,7 @@ def createCards(listColors, listNumbers, typesList=["Normal"]):
     for type in typesList:
         for number in listNumbers:
             for col in listColors:
-                listOfCards.append(Card(col,number,type))
+                listOfCards.append(Card(color=col,number=number,type))
     return listOfCards
 
 #construire une liste de cartes avec des clones , par défaut on considere la valeur 2
@@ -25,7 +25,7 @@ def cloneCards(listCards,clonesPerCard=2):
 
 # creation de wild cards traitement a part (color=None, Number=None)
 def createWildCards(numberOfwildCards):
-    listOfWildCards=[Card(type="Wild", number=10, color="Yellow")]#une carte wild est crée dans la liste
+    listOfWildCards=[Card(type="Wild")]#une carte wild est crée dans la liste
     return cloneCards(listOfWildCards,numberOfwildCards)
 
 # Construire Normal Cards
