@@ -63,5 +63,5 @@ def distributeCard(deck,listOfPlayers):
         # get the hand of each player
         currentPlayerHand = listOfPlayers[i].getHand()
         # call draw method on deck of cards to draw cards from it and into the hand of the current player
-        deck.draw(currentPlayerHand,7)
+        deck.draw(currentPlayerHand, 7)
 

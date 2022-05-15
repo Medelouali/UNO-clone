@@ -10,6 +10,7 @@ def funct(callback, *args):
 
 funct(callback, "My name is Slim Shady")
 
+print([1, 2]+[23,23])
 # import pygame
 # import random
 # from utilities.functions.path import getPath
