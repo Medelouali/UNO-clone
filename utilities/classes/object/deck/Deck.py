@@ -1,4 +1,4 @@
-
+import utilities.classes.game.Game as G
 from utilities.functions.functions import createNrmlCards, createSpecialCards
 from random import randint
 
@@ -58,6 +58,7 @@ class Deck():
                 handOfPlayer.append(self.deck.pop())
                 #La diminution de la taille du deck
                 self.taille-=1
+             #Ajout des cartes a la liste objectsGroup 
 
     #Tester si le deck est vide et changer la valeur de l'attr. vide de l'instance
     def isEmpty(self):
