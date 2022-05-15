@@ -27,4 +27,7 @@ class Card(Object):
     # to set new position of a card
     def setPosition(self,coordinates):
         self.coordinates = coordinates
+    # to get icon from a card
+    def getIcon(self):
+        return self.icon
     
