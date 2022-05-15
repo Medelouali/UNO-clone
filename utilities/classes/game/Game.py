@@ -31,10 +31,10 @@ class Game:
     screenHeight=640
     # the space of the playground once u drag the card into it u can't move anymore 
     playGround={
-        "topHight": screenHeight/2-300,
-        "bottomHight": screenHeight/2+300,
-        "rightWidth": screenWidth/2+200,
-        "leftWidth": screenWidth/2-200
+        "topHight": screenHeight/2-100,
+        "bottomHight": screenHeight/2+100,
+        "rightWidth": screenWidth/2+100,
+        "leftWidth": screenWidth/2-100
     }
     screen=pygame.display.set_mode((screenWidth, screenHeight))
     # contains all objects that are rendered at any given momment
