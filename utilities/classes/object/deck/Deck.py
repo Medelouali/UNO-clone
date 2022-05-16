@@ -51,13 +51,17 @@ class Deck():
 
     #Draw une carte du deck aprés shuffling
     def Draw(self, handOfPlayer, numberOfCards):
-            #suppression du dernier element + son ajout a la main du joueur
-            for i in range(0, numberOfCards):
-                handOfPlayer.append(self.deck.pop())
-                #La diminution de la taille du deck
-                self.taille-=1
-             #Ajout des cartes a la liste objectsGroup 
-
+             #liste pour stocker les cartes supprimées par pop()
+               for i in range(0,numberOfCards):
+                      temp = self.deck.pop()
+                 #on ajoute les cartes piochées dans la main du joueur
+                    handOfPlayer.append(temp)
+                  # add card to ObjectGroup 
+                  # add is a setter 
+                  object.add(temp)
+                  #La diminution de la taille du deck
+                  self.taille
+    
     #Tester si le deck est vide et changer la valeur de l'attr. vide de l'instance
     def isEmpty(self):
         if self.taille==0:
