@@ -21,8 +21,12 @@ class Object():
         Object.createdObjects+=1
         
     def update(self):
-        event= Game_t.Game.getState(Game_t.Game, 'event')
+        event= Game_t.Game.getState('event')
         pos = pygame.mouse.get_pos()
+        if(self.callback):
+            if pygame.mouse.get_pressed()[0] == 1:  # testing if Card clicked
+                self.callback()
+                
         if self.rect.collidepoint(pos):  # testing if mouse hovering over Card
             if pygame.mouse.get_pressed()[0] == 1 and self.isDraggable:  # testing if Card clicked
                 if event.type ==  pygame.MOUSEMOTION:  # testing if mouse moving

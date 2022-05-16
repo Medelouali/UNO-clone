@@ -39,8 +39,8 @@ class Game:
     screen=pygame.display.set_mode((screenWidth, screenHeight))
     # contains all objects that are rendered at any given momment
     objectsGroup=[
-        Object(True, [60, 100], [100, 20], getPath('images', "cards", 'Blue_0.png')), # just for testing
-        Object(True, [900, 600], [100, 30], getPath('images', "cards", 'Red_0.png')) # just for testing
+        # Object(True, [60, 100], [100, 20], getPath('images', "cards", 'Blue_0.png')), # just for testing
+        # Object(True, [900, 600], [100, 30], getPath('images', "cards", 'Red_0.png')) # just for testing
     ]
     # set background for game interface
     backgroundImage = pygame.image.load(getPath('images', 'cards',"Table_4.png"))
@@ -53,11 +53,11 @@ class Game:
     def __init__(self):
     # Will add gameMode as attr later 
        pass
-        
     
     def launch(self):
         # generate a list of players
         self.generatePlayers() 
+        # distributeCard(Game.deck, Game.getState(Game, "playersList"))
         # a loop that keeps running as long as we're playing the game
         while(True):
             for event in pygame.event.get():
@@ -69,15 +69,15 @@ class Game:
                     pygame.quit()
                     sys.exit()
                 # check if game has ended
-                elif(Game.state["gameEnded"]):
+                elif(Game.getState("gameEnded")):
                     # call displayResults()
                     pass
             # rendering the game
             pygame.display.update()
             Game.screen.blit(Game.backgroundImage, (0, 0))
             self.render()
-            writeText("Bot", Game.screenWidth/2, 20, 30, Game.screen)
-            writeText("Me", Game.screenWidth/2, Game.screenHeight-20, 30, Game.screen)
+            writeText("10 Cards Left", 100, 120, 30, Game.screen)
+            writeText("Me", Game.screenWidth-100, Game.screenHeight-120, 30, Game.screen)
             self.clock.tick(Game.framesPerSecond)
          
     @classmethod # modify a value in the state by passing its key ( if it exists )
@@ -86,13 +86,14 @@ class Game:
             cls.state[key]=value
        
     # None is returned implicitly if the key doesn't exist in the state
-    @staticmethod
+    @classmethod
     def getState(cls, key):
         if(key in cls.state.keys()):
             return cls.state[key]
+        
     # render every object in objectGroup 
     def render(self):
-        self.renderDeck()
+        self.renderDeckUnoAvatars()
         for obj in Game.objectsGroup:
             if(obj==None): # None values are objects that has been destroyed
                 continue
@@ -122,11 +123,12 @@ class Game:
             ]))
 
     # display deck icon 
-    def renderDeck(self):
+    def renderDeckUnoAvatars(self):
         Object(True, [100, Game.screenHeight/2], [80, 20],icon=getPath("images", "cards", "Deck.png")).add()
+        Object(True, [100, 50], [100, 20],icon=getPath("images", "icons", "avatar10.png")).add()
+        Object(True, [Game.screenWidth-100, Game.screenHeight-50], [100, 20],icon=getPath("images", "icons", "avatar6.png")).add()
      
-    # display results when the game has ended
+    # display the results of the game
     def displayResults(self):
         pass
-    # 
     
