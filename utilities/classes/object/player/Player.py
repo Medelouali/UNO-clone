@@ -43,7 +43,7 @@ class Player:
     def screamUno(self):
         if self.isActive(self):
             if (Game.players[Game.state["activePlayer"]-Game.rotation].hasUno == True) and (Game.players[Game.state["activePlayer"]-Game.rotation].screamedUno == False):
-                Game.players[Game.state["activePlayer"]-Game.rotation].deck.draw(deck, self.hand, 2)
+                Game.players[Game.state["activePlayer"]-Game.rotation].deck.draw(Game.deck, self.hand, 2)
                 self.screamUno = True
                 print("player ", self.ID, "screamed UNO\n")
             elif self.hasUno:
