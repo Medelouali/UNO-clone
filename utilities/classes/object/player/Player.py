@@ -11,14 +11,14 @@ class Player:
         self.score = 0
         self.hasUno = False
         self.screamedUno = False
-    def isActive(self, Game):
+    def isActive(self):
         if Game.state["activePlayer"] == self.ID:
             return True
         else:
             return False
         """compare self player id with active id in state returns true or false"""
     def compareSingleCard(self,lastPlayedCard,cardToPlay):
-        if cardToPlay.type=="normal":
+        if cardToPlay.type=="Normal":
             if(lastPlayedCard.getColor()==cardToPlay.getColor() and lastPlayedCard.getNumbers()==cardToPlay.getNumbers()):
                 return cardToPlay
             return None
@@ -29,8 +29,8 @@ class Player:
                 return cardToPlay
             else:
                 return None
-    def throwCard(self, playedCards, lastPlayedCard, cardToPlay, Game):
-        if self.isActive(self, Game) == True:
+    def throwCard(self, playedCards, lastPlayedCard, cardToPlay):
+        if self.isActive(self):
             if self.compareSingleCard(self, lastPlayedCard, cardToPlay)== cardToPlay:
                 card = self.hand.pop(hand.index(cardToPlay)) #temporary variable to hold the popped card
                 playedCards.append(card)
@@ -40,13 +40,13 @@ class Player:
         return self.hasUno
     def getScreamedUno(self):
         return self.screamedUno
-    def screamUno(self, Game):
-        if self.isActive(self, Game) == True:
+    def screamUno(self):
+        if self.isActive(self):
             if (Game.players[Game.state["activePlayer"]-Game.rotation].hasUno == True) and (Game.players[Game.state["activePlayer"]-Game.rotation].screamedUno == False):
                 Game.players[Game.state["activePlayer"]-Game.rotation].deck.draw(deck, self.hand, 2)
                 self.screamUno = True
                 print("player ", self.ID, "screamed UNO\n")
-            elif self.hasUno == True:
+            elif self.hasUno:
                 self.screamUno = True
                 print("player ", self.ID, "screamed UNO\n")
             else:
@@ -54,6 +54,8 @@ class Player:
                 """I'm tempted to add a click counter and a while loop to make the comment more sarcastic everytime uno is clicked for no reason"""
     def getHand(self):
         return self.hand
+    def setHand(self, hand[]):
+        self.hand=hand
         
             
             
