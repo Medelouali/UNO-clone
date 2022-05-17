@@ -53,14 +53,14 @@ class Deck():
     def Draw(self, handOfPlayer, numberOfCards):
              #liste pour stocker les cartes supprimées par pop()
                for i in range(0,numberOfCards):
-                      temp = self.deck.pop()
+                    temp = self.deck.pop()
                  #on ajoute les cartes piochées dans la main du joueur
                     handOfPlayer.append(temp)
                   # add card to ObjectGroup 
                   # add is a setter 
-                  object.add(temp)
+                    object.add(temp)
                   #La diminution de la taille du deck
-                  self.taille
+                    self.taille
     
     #Tester si le deck est vide et changer la valeur de l'attr. vide de l'instance
     def isEmpty(self):
