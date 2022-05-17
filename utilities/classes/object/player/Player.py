@@ -54,7 +54,7 @@ class Player:
                 """I'm tempted to add a click counter and a while loop to make the comment more sarcastic everytime uno is clicked for no reason"""
     def getHand(self):
         return self.hand
-    def setHand(self, hand[]):
+    def setHand(self, hand):
         self.hand=hand
         
             
