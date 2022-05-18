@@ -1,7 +1,6 @@
 from random import randint
 from utilities.functions.path import getPath
 from utilities.classes.object.card.Card import Card
-# import utilities.classes.game.Game as Game_t
 # from utilities.classes.game.Game import Game
 
 class Deck():
@@ -84,9 +83,10 @@ class Deck():
         return subDeckSpecial + subDeckWild
     
     # Game_t.Game.getState("playersList") cercular import bug should be fixed
-    def distributeCard(self, listOfPlayers=[]):
-        for i in range(len(listOfPlayers)):
-            currentPlayerHand = listOfPlayers[i].getHand()
-            self.draw(currentPlayerHand, 7)
+    # fixed the method :D 
+    def distributeCard(self):
+        import utilities.classes.game.Game as Game_t
+        for i in range(len(Game_t.Game.getState("playersList"))):
+            self.draw(Game_t.Game.getState("playersList")[i].getHand(), 7)
 
         

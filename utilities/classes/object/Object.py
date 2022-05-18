@@ -6,11 +6,10 @@ from utilities.functions.resize import getSize # to avoid circular imports
 class Object():
     gaps=0 # the number of destroyed of objects, it helps for insertion
     createdObjects=0
-    def __init__(self, isVisible=False, coordinates=[10, 10], dimensions=[10, 10], icon=None, callback=None):
+    def __init__(self,coordinates=[10, 10], dimensions=[10, 10], icon=None, callback=None):
         self.image = pygame.transform.scale(pygame.image.load(icon), getSize(icon, dimensions[0]))
         self.rect=self.image.get_rect()
         self.rect.center=coordinates
-        self.isVisible=isVisible
         self.dimensions=dimensions
         self.callback=callback
         # canMove will be used to test if we can drag the object with the mouse or not

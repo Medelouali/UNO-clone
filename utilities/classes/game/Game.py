@@ -22,7 +22,7 @@ class Game:
             # equals true when the game is finished
             "gameEnded": False,
             # list of players 
-            "playersList": [],
+            "playersList": []
         } # this dictionary will keep track of the game state
     # iterface settings
     framesPerSecond=60
@@ -45,21 +45,25 @@ class Game:
     # set background for game interface
     backgroundImage = pygame.image.load(getPath('images', 'cards',"Table_4.png"))
     backgroundImage = pygame.transform.scale(
-        backgroundImage, getSize(getPath('images', 'backgroundCards.jpg'), screenWidth))
+    backgroundImage, getSize(getPath('images', 'backgroundCards.jpg'), screenWidth))
     
-    # initialize a deck of cards at the start of the game
-    deck=Deck()
+   
 
     def __init__(self):
     # Will add gameMode as attr later 
        pass
-    
+    # initialize a deck of cards at the start of the game
+    deck=Deck()
     def launch(self):
         # generate a list of players
         self.generatePlayers() 
-        # distributeCard(Game.deck, Game.getState(Game, "playersList"))
+        # stock players list in a list 
+        players = Game.getState("playersList")
+        # affect 7 cards to each player 
+        Game.deck.distributeCard()
         # a loop that keeps running as long as we're playing the game
         while(True):
+
             for event in pygame.event.get():
                 # set the occured event 
                 Game.setState("event", event)
@@ -75,6 +79,7 @@ class Game:
             # rendering the game
             pygame.display.update()
             Game.screen.blit(Game.backgroundImage, (0, 0))
+            # self.renderPlayerHand(players[0])
             self.render()
             writeText("10 Cards Left", 100, 120, 30, Game.screen)
             writeText("Me", Game.screenWidth-100, Game.screenHeight-120, 30, Game.screen)
@@ -93,6 +98,7 @@ class Game:
         
     # render every object in objectGroup 
     def render(self):
+        self.renderPlayerHand()
         self.renderDeckUnoAvatars()
         for obj in Game.objectsGroup:
             if(obj==None): # None values are objects that has been destroyed
@@ -106,10 +112,9 @@ class Game:
         if(botExists):    
             if(numOfPlayers==2):
                 # set list of players ( Ai and real player in this case )
-                Game.setState("playersList", Game.state["playersList"].extend([
+                Game.getState("playersList").extend([
                     Ai(0),
-                    Player(1)
-                ]))
+                    Player(1)])
             # more than two players
             else:
                 Game.setState("playersList", Game.getState("playersList").extend([Player(0)]))    
@@ -121,13 +126,21 @@ class Game:
             Game.setState("playersList", Game.getState("playersList").extend([
                 Player(i) for i in range(numOfPlayers)
             ]))
+    # display player's hand
+    def renderPlayerHand(self):
+        hand =Game.getState("playersList")[0].getHand()
+        for i in range(len(hand)) :
+            shiftX = 50
+            Game.getState("playersList")[0].getHand()[i].setPosition([Game.screenWidth/2+i*shiftX,Game.screenHeight-100])
+            Game.getState("playersList")[0].getHand()[i].add()
+            
+    
 
     # display deck icon 
     def renderDeckUnoAvatars(self):
         Object(True, [100, Game.screenHeight/2], [80, 20],icon=getPath("images", "cards", "Deck.png")).add()
         Object(True, [100, 50], [100, 20],icon=getPath("images", "icons", "avatar10.png")).add()
-        Object(True, [Game.screenWidth-100, Game.screenHeight-50], [100, 20],icon=getPath("images", "icons", "avatar6.png")).add()
-     
+        Object(True, [Game.screenWidth-100, Game.screenHeight-50], [100, 20],icon=getPath("images", "icons", "avatar6.png")).add()        
     # display the results of the game
     def displayResults(self):
         pass
