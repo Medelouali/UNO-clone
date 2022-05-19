@@ -68,13 +68,12 @@ class Deck():
 
     def createWildCards(self, numberOfwildCards):
         listOfWildCards=[Card(type="Wild", icon=getPath("images", "cards", "Wild.png"))]#une carte wild est crée dans la liste
-        return self.cloneCards(listOfWildCards,numberOfwildCards)
+        return self.cloneCards(listOfWildCards, numberOfwildCards)
 
     def createNrmlCards(self):
         subDeck1=self.createCards(Deck.cardsColors, Deck.numbersRange)
         subDeck=self.cloneCards(subDeck1[4:],2)
-        subDeck.extend(subDeck1[:4])
-        return subDeck
+        return subDeck + subDeck1[:4]
 
     def createSpecialCards(self):
         subDeck1=self.createCards(Deck.cardsColors, Deck.numbersRange, Deck.coloredTypes)
@@ -84,9 +83,9 @@ class Deck():
     
     # Game_t.Game.getState("playersList") cercular import bug should be fixed
     # fixed the method :D 
-    def distributeCard(self):
+    def distributeCard(self, number=7):
         import utilities.classes.game.Game as Game_t
         for i in range(len(Game_t.Game.getState("playersList"))):
-            self.draw(Game_t.Game.getState("playersList")[i].getHand(), 7)
+            self.draw(Game_t.Game.getState("playersList")[i].getHand(), number)
 
         

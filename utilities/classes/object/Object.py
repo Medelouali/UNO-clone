@@ -57,7 +57,6 @@ class Object():
             Game_t.Game.objectsGroup.append(self)
         
     def updateCoord(self):
-        self.readyToPut()
         if(self.objectId>=len(Game_t.Game.objectsGroup)):
             Game_t.Game.objectsGroup.append(self)
         else:
@@ -73,13 +72,3 @@ class Object():
     def setCallback(self, callback):
         self.callback=callback
         
-    def readyToPut(self):
-        pos=self.rect.center
-        isOnPlayGround1=pos[0] >= Game_t.Game.playGround["leftWidth"] and pos[1] >= Game_t.Game.playGround["leftWidth"]
-        isOnPlayGround2=pos[0] <= Game_t.Game.playGround["rightWidth"] and pos[1] <= Game_t.Game.playGround["rightWidth"]
-        isOnPlayGround3=pos[0] >= Game_t.Game.playGround["topHight"] and pos[1] >= Game_t.Game.playGround["topHight"]
-        isOnPlayGround4=pos[0] <= Game_t.Game.playGround["bottomHight"] and pos[1] <= Game_t.Game.playGround["bottomHight"]
-        if(isOnPlayGround1 and isOnPlayGround2 and isOnPlayGround3 and isOnPlayGround4): 
-            self.isDraggable=False
-            return True
-        return False
