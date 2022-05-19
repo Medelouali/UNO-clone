@@ -17,7 +17,7 @@ class Game:
     state={
             "rotation": 1, # it could be 1, -1, or eventially 2
             "winner": None,
-            "activePlayer": None,#contains the id of the active player
+            "activePlayer": 1,#contains the id of the active player
             # representes an event that player can trigger 
             "event": None, 
             # equals true when the game is finished
@@ -58,7 +58,6 @@ class Game:
         Game.deck.distributeCard()
         # a loop that keeps running as long as we're playing the game
         while(True):
-
             for event in pygame.event.get():
                 # set the occured event 
                 Game.setState("event", event)
@@ -76,7 +75,8 @@ class Game:
             Game.screen.blit(Game.backgroundImage, (0, 0))
             # self.renderPlayerHand(players[0])
             self.render()
-            writeText("10 Cards Left", 100, 120, 30, Game.screen)
+            botCardsNumber=len(Game.getState("playersList")[0].getHand())
+            writeText(f"{botCardsNumber} Cards Left", 100, 120, 30, Game.screen)
             writeText("Me", Game.screenWidth-100, Game.screenHeight-120, 30, Game.screen)
             self.clock.tick(Game.framesPerSecond)
          
@@ -90,6 +90,22 @@ class Game:
     def getState(cls, key):
         if(key in cls.state.keys()):
             return cls.state[key]
+        
+    @classmethod
+    def rotate(cls, rotateBy=1):
+        numOfPlayers=len(Game.getState("playersList"))
+        activeId=Game.getState("activePlayer")
+        if(rotateBy>1 or rotateBy<-1): return
+        if(activeId + rotateBy>=numOfPlayers):
+            Game.setState("activePlayer", 0)
+            Game.state["rotation"]=1
+            return
+        if(activeId + rotateBy<0):
+            Game.setState("activePlayer", numOfPlayers-1)
+            Game.state["rotation"]=-1
+            return
+        Game.setState("activePlayer", activeId + rotateBy)
+        Game.state["rotation"]=1
         
     # render every object in objectGroup 
     def render(self):
@@ -109,20 +125,21 @@ class Game:
         if(botExists):    
             if(numOfPlayers==2):
                 # set list of players ( Ai and real player in this case )
-                Game.getState("playersList").extend([
+                Game.setState("playersList", [
                     Ai(0),
-                    Player(1)])
+                    Player(1)]
+                    )
             # more than two players
             else:
-                Game.setState("playersList", Game.getState("playersList").extend([Player(0)]))    
-                Game.setState("playersList", Game.getState("playersList").extend([
+                Game.setState("playersList", Game.getState("playersList") + [Player(0)])    
+                Game.setState("playersList", Game.getState("playersList") + [
                     Ai(i) for i in range(1, numOfPlayers)
-                ]))
+                ])
         # all players are real 
         else:
-            Game.setState("playersList", Game.getState("playersList").extend([
+            Game.setState("playersList", Game.getState("playersList") + [
                 Player(i) for i in range(numOfPlayers)
-            ]))
+            ])
             
     # display player's hand
     def renderPlayerHand(self):
@@ -130,14 +147,11 @@ class Game:
         len_t=len(hand)
         for i in range(len_t) :
             shiftX = 50
-            Game.getState("playersList")[1].getHand()[i].setPosition([Game.screenWidth/3+i*shiftX,Game.screenHeight-100])
-            Game.getState("playersList")[1].getHand()[i].add()
+            hand[i].setPosition([Game.screenWidth/3+i*shiftX,Game.screenHeight-100]).add()
             
-    
-
     # display deck icon 
     def renderDeckUnoAvatars(self):
-        Object([100, Game.screenHeight/2], [80, 20],icon=getPath("images", "cards", "Deck.png")).add()
+        Object(Game.positions["deck"], [80, 20],icon=getPath("images", "cards", "Deck.png")).add()
         Object([100, 50], [100, 20],icon=getPath("images", "icons", "avatar10.png")).add()
         Object([Game.screenWidth-100, Game.screenHeight-50], [100, 20],icon=getPath("images", "icons", "avatar6.png")).add()        
         Object([Game.screenWidth-300, Game.screenHeight-100], [100, 20],icon=getPath("images", "icons", "unoButton.png")).add()        
@@ -154,10 +168,25 @@ class Game:
     
     # generate a deck of cards when the deck runs out of cards
     def regenerateDeck(self):
-        if(Game.deck.isEmpty):
+        if(Game.deck.isEmpty()):
             Game.deck.setDeck([
                 card.setPosition(Game.positions["deck"]) for card in Game.playedCards
             ])
             for card in Game.playedCards:
                 card.desroyObject()
             Game.playedCards=[]
+            
+    @classmethod
+    def ifAiPlay(cls):
+        if Game.getState("activePlayer")==0:
+            hasPlayed=False
+            for card in Game.getState("playersList"):
+                if(card.compareSingleCard()):
+                    card.throwCard(0)
+                    hasPlayed=True
+                    break
+            if(not hasPlayed):
+                card=Game.deck.draw(Game.getState("playersList")[0].getHand(), 1)
+                if(card.compareSingleCard()):
+                    card.throwCard(0)
+            Game.rotate(Game.getState("rotation"))

@@ -4,38 +4,39 @@ from utilities.classes.object.deck import Deck
 from utilities.classes.object.Object import Object
 
 class Player:
-    def __init__(self, ID) -> None:
-        self.ID = ID
+    def __init__(self, id) -> None:
+        self.id = id
         self.hand = []
         self.handCardinal = 7
         self.score = 0
         self.hasUno = False
         self.screamedUno = False
     def isActive(self):
-        if Game.state["activePlayer"] == self.ID:
+        if Game.state["activePlayer"] == self.id:
             return True
         else:
             return False
         """compare self player id with active id in state returns true or false"""
-    def compareSingleCard(self,lastPlayedCard,cardToPlay):
+    def compareSingleCard(self, lastPlayedCard, cardToPlay):
         if cardToPlay.type=="Normal":
             if(lastPlayedCard.getColor()==cardToPlay.getColor() and lastPlayedCard.getNumbers()==cardToPlay.getNumbers()):
                 return cardToPlay
             return None
-        elif cardToPlay.type=="wild":
+        elif cardToPlay.type=="Wild":
             return cardToPlay
         else:
             if lastPlayedCard.getColor()==cardToPlay.getColor():
                 return cardToPlay
-            else:
-                return None
+            return None
+        
     def throwCard(self, playedCards, lastPlayedCard, cardToPlay):
         if self.isActive(self):
             if self.compareSingleCard(self, lastPlayedCard, cardToPlay)== cardToPlay:
-                card = self.hand.pop(hand.index(cardToPlay)) #temporary variable to hold the popped card
+                card = self.hand.pop(self.hand.index(cardToPlay)) #temporary variable to hold the popped card
                 playedCards.append(card)
                 Game.state["activePlayer"] += Game.rotation
-            """changes playerActive to next player hence this player's to false"""        
+            """changes playerActive to next player hence this player's to false"""  
+                  
     def getHasUno(self):
         return self.hasUno
     def getScreamedUno(self):

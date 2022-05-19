@@ -14,22 +14,24 @@ class Object():
         self.callback=callback
         # canMove will be used to test if we can drag the object with the mouse or not
         # it'll be False by default but here it's True just for testing purposes
-        self.isDraggable=True
         self.clicked=False
         self.objectId=Object.createdObjects
         Object.createdObjects+=1
         
     def update(self):
-        event= Game_t.Game.getState('event')
+        # from utilities.classes.game.Game import Game as Game
+        # event= Game_t.Game.getState('event')
         pos = pygame.mouse.get_pos()
-        if(self.callback):
-            if pygame.mouse.get_pressed()[0] == 1:  # testing if Card clicked
-                self.callback()
-                
+        # Game.ifAiPlay()
         if self.rect.collidepoint(pos):  # testing if mouse hovering over Card
-            if pygame.mouse.get_pressed()[0] == 1 and self.isDraggable:  # testing if Card clicked
-                if event.type ==  pygame.MOUSEMOTION:  # testing if mouse moving
-                    self.rect.move_ip(event.rel)
+            if pygame.mouse.get_pressed()[0] == 1:  # testing if Card clicked
+                if(self.callback):
+                    self.callback()
+                
+        # if self.rect.collidepoint(pos):  # testing if mouse hovering over Card
+        #     if pygame.mouse.get_pressed()[0] == 1:  # testing if Card clicked
+        #         if event.type ==  pygame.MOUSEMOTION:  # testing if mouse moving
+        #             self.rect.move_ip(event.rel)
                     
         Game_t.Game.screen.blit(self.image, self.rect)
         self.updateCoord()
