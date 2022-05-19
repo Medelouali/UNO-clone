@@ -1,3 +1,4 @@
+from turtle import position
 import pygame, sys
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
@@ -22,44 +23,42 @@ class Game:
             # equals true when the game is finished
             "gameEnded": False,
             # list of players 
-            "playersList": [],
+            "playersList": []
         } # this dictionary will keep track of the game state
     # iterface settings
     framesPerSecond=60
     clock=pygame.time.Clock()
     screenWidth=1280
     screenHeight=640
-    # the space of the playground once u drag the card into it u can't move anymore 
-    playGround={
-        "topHight": screenHeight/2-100,
-        "bottomHight": screenHeight/2+100,
-        "rightWidth": screenWidth/2+100,
-        "leftWidth": screenWidth/2-100
-    }
     screen=pygame.display.set_mode((screenWidth, screenHeight))
     # contains all objects that are rendered at any given momment
-    objectsGroup=[
-        # Object(True, [60, 100], [100, 20], getPath('images', "cards", 'Blue_0.png')), # just for testing
-        # Object(True, [900, 600], [100, 30], getPath('images', "cards", 'Red_0.png')) # just for testing
-    ]
+    objectsGroup=[]
+    playedCards=[]
     # set background for game interface
     backgroundImage = pygame.image.load(getPath('images', 'cards',"Table_4.png"))
     backgroundImage = pygame.transform.scale(
-        backgroundImage, getSize(getPath('images', 'backgroundCards.jpg'), screenWidth))
-    
-    # initialize a deck of cards at the start of the game
-    deck=Deck()
+    backgroundImage, getSize(getPath('images', 'backgroundCards.jpg'), screenWidth))
+    positions={
+        "deck": (100, screenHeight/2),
+        "playedCards": (screenWidth/2, screenHeight/2)
+    }
+   
 
     def __init__(self):
     # Will add gameMode as attr later 
        pass
-    
+    # initialize a deck of cards at the start of the game
+    deck=Deck()
     def launch(self):
         # generate a list of players
         self.generatePlayers() 
-        # distributeCard(Game.deck, Game.getState(Game, "playersList"))
+        # stock players list in a list 
+        players = Game.getState("playersList")
+        # affect 7 cards to each player 
+        Game.deck.distributeCard()
         # a loop that keeps running as long as we're playing the game
         while(True):
+
             for event in pygame.event.get():
                 # set the occured event 
                 Game.setState("event", event)
@@ -75,6 +74,7 @@ class Game:
             # rendering the game
             pygame.display.update()
             Game.screen.blit(Game.backgroundImage, (0, 0))
+            # self.renderPlayerHand(players[0])
             self.render()
             writeText("10 Cards Left", 100, 120, 30, Game.screen)
             writeText("Me", Game.screenWidth-100, Game.screenHeight-120, 30, Game.screen)
@@ -93,6 +93,9 @@ class Game:
         
     # render every object in objectGroup 
     def render(self):
+        self.regenerateDeck()
+        self.renderPlayerHand()
+        self.renderPlayedCards()
         self.renderDeckUnoAvatars()
         for obj in Game.objectsGroup:
             if(obj==None): # None values are objects that has been destroyed
@@ -106,10 +109,9 @@ class Game:
         if(botExists):    
             if(numOfPlayers==2):
                 # set list of players ( Ai and real player in this case )
-                Game.setState("playersList", Game.state["playersList"].extend([
+                Game.getState("playersList").extend([
                     Ai(0),
-                    Player(1)
-                ]))
+                    Player(1)])
             # more than two players
             else:
                 Game.setState("playersList", Game.getState("playersList").extend([Player(0)]))    
@@ -121,14 +123,41 @@ class Game:
             Game.setState("playersList", Game.getState("playersList").extend([
                 Player(i) for i in range(numOfPlayers)
             ]))
+            
+    # display player's hand
+    def renderPlayerHand(self):
+        hand =Game.getState("playersList")[1].getHand() # index 0 not 1, 1 is the AI
+        len_t=len(hand)
+        for i in range(len_t) :
+            shiftX = 50
+            Game.getState("playersList")[1].getHand()[i].setPosition([Game.screenWidth/3+i*shiftX,Game.screenHeight-100])
+            Game.getState("playersList")[1].getHand()[i].add()
+            
+    
 
     # display deck icon 
     def renderDeckUnoAvatars(self):
-        Object(True, [100, Game.screenHeight/2], [80, 20],icon=getPath("images", "cards", "Deck.png")).add()
-        Object(True, [100, 50], [100, 20],icon=getPath("images", "icons", "avatar10.png")).add()
-        Object(True, [Game.screenWidth-100, Game.screenHeight-50], [100, 20],icon=getPath("images", "icons", "avatar6.png")).add()
-     
+        Object([100, Game.screenHeight/2], [80, 20],icon=getPath("images", "cards", "Deck.png")).add()
+        Object([100, 50], [100, 20],icon=getPath("images", "icons", "avatar10.png")).add()
+        Object([Game.screenWidth-100, Game.screenHeight-50], [100, 20],icon=getPath("images", "icons", "avatar6.png")).add()        
+        Object([Game.screenWidth-300, Game.screenHeight-100], [100, 20],icon=getPath("images", "icons", "unoButton.png")).add()        
+    
     # display the results of the game
     def displayResults(self):
-        pass
+        pass # Will add this method later on
     
+    # display the cards that have already been played
+    def renderPlayedCards(self):
+        # No need to render all the cards, just the one on the top
+        if(Game.playedCards):
+            Game.playedCards[-1].setPosition(Game.positions["playedCards"]).add()
+    
+    # generate a deck of cards when the deck runs out of cards
+    def regenerateDeck(self):
+        if(Game.deck.isEmpty):
+            Game.deck.setDeck([
+                card.setPosition(Game.positions["deck"]) for card in Game.playedCards
+            ])
+            for card in Game.playedCards:
+                card.desroyObject()
+            Game.playedCards=[]

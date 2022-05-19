@@ -2,8 +2,8 @@ import numbers
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 class Card(Object):
-    def __init__(self, number=None, color=None, type="Normal", coordinates=[1, 1], dimensions=[0, 0], icon=getPath("images", "logo.png"), isVisible=False):
-        super().__init__(isVisible, coordinates, dimensions, icon)
+    def __init__(self, number=None, color=None, type="Normal", coordinates=[1, 1], dimensions=[100, 100], icon=getPath("images", "logo.png"), callback=None):
+        super().__init__(coordinates, dimensions, icon, callback)
         self.number = number
         self.color=color
         self.type=type
@@ -21,13 +21,20 @@ class Card(Object):
             print("You choose a draw 4 card")
         else:
             print("Norml card was chosen")
+            
     # to get position of a card 
     def getPosition(self):
-        return self.coordinates
+        return self.rect.center
+    
     # to set new position of a card
-    def setPosition(self,coordinates):
-        self.coordinates = coordinates
+    def setPosition(self, coordinates):
+        self.rect.center = coordinates
     # to get icon from a card
+    
     def getIcon(self):
         return self.icon
+    
+    def getDimensions(self):
+        return self.dimensions
+    
     
