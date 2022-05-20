@@ -4,7 +4,7 @@ import utilities.classes.game.Game as Game_t
 from utilities.functions.resize import getSize # to avoid circular imports
 
 class Object():
-    createdObjects=0
+    createdObjects=0 # a unique identifier for each object(id)
     def __init__(self,coordinates=[10, 10], dimensions=[10, 10], icon=None, callback=None):
         self.image = pygame.transform.scale(pygame.image.load(icon), getSize(icon, dimensions[0]))
         self.rect=self.image.get_rect()
@@ -38,9 +38,6 @@ class Object():
         Game_t.Game.objectsGroup[self.getId()]=self
             
     def updateCoord(self):
-        # if(self.objectId>=len(Game_t.Game.objectsGroup)):
-        #     Game_t.Game.objectsGroup.append(self)
-        # else:
         Game_t.Game.objectsGroup[self.objectId]=self
     
     def triggerCallback(self, *args):
