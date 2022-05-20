@@ -1,6 +1,7 @@
 from random import randint
 from utilities.functions.path import getPath
 from utilities.classes.object.card.Card import Card
+# import utilities.classes.game.Game as Game_t
 # from utilities.classes.game.Game import Game
 
 class Deck():
@@ -38,28 +39,12 @@ class Deck():
         self.shuffleDeck()
 
     #Draw une carte du deck aprés shuffling
-<<<<<<< HEAD
-    def Draw(self, handOfPlayer, numberOfCards):
-             #liste pour stocker les cartes supprimées par pop()
-               for i in range(0,numberOfCards):
-                    temp = self.deck.pop()
-                 #on ajoute les cartes piochées dans la main du joueur
-                    handOfPlayer.append(temp)
-                  # add card to ObjectGroup 
-                  # add is a setter 
-                    object.add(temp)
-                  #La diminution de la taille du deck
-                    self.taille
-    
-    #Tester si le deck est vide et changer la valeur de l'attr. vide de l'instance
-=======
     def draw(self, handOfPlayer, numberOfCards):
             for i in range(0, numberOfCards):
                 handOfPlayer.append(self.deck.pop())
                 self.size-=1
 
     #Tester si le deck est isEmpty et changer la valeur de l'attr. isEmpty de l'instance
->>>>>>> 941e77904001d04579f676b8f8ec96795f9b33ed
     def isEmpty(self):
         if self.size==0:
             self.isEmpty=True
@@ -84,12 +69,13 @@ class Deck():
 
     def createWildCards(self, numberOfwildCards):
         listOfWildCards=[Card(type="Wild", icon=getPath("images", "cards", "Wild.png"))]#une carte wild est crée dans la liste
-        return self.cloneCards(listOfWildCards, numberOfwildCards)
+        return self.cloneCards(listOfWildCards,numberOfwildCards)
 
     def createNrmlCards(self):
         subDeck1=self.createCards(Deck.cardsColors, Deck.numbersRange)
         subDeck=self.cloneCards(subDeck1[4:],2)
-        return subDeck + subDeck1[:4]
+        subDeck.extend(subDeck1[:4])
+        return subDeck
 
     def createSpecialCards(self):
         subDeck1=self.createCards(Deck.cardsColors, Deck.numbersRange, Deck.coloredTypes)
@@ -98,10 +84,9 @@ class Deck():
         return subDeckSpecial + subDeckWild
     
     # Game_t.Game.getState("playersList") cercular import bug should be fixed
-    # fixed the method :D 
-    def distributeCard(self, number=7):
-        import utilities.classes.game.Game as Game_t
-        for i in range(len(Game_t.Game.getState("playersList"))):
-            self.draw(Game_t.Game.getState("playersList")[i].getHand(), number)
+    def distributeCard(self, listOfPlayers=[]):
+        for i in range(len(listOfPlayers)):
+            currentPlayerHand = listOfPlayers[i].getHand()
+            self.draw(currentPlayerHand, 7)
 
         
