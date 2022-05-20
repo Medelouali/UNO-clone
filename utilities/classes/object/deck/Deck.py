@@ -14,7 +14,7 @@ class Deck():
         self.specialCards=self.createSpecialCards()
         self.deck=self.normalCards + self.specialCards
         self.size=len(self.deck)
-        self.isEmpty=False
+        self.isDeckEmpty=False
         self.shuffleDeck()
         
     # it means nothing to make this method a class method
@@ -40,15 +40,17 @@ class Deck():
 
     #Draw une carte du deck aprés shuffling
     def draw(self, handOfPlayer, numberOfCards):
-            for i in range(0, numberOfCards):
-                handOfPlayer.append(self.deck.pop())
-                self.size-=1
+        topCard=self.deck.pop()
+        for i in range(0, numberOfCards):
+            handOfPlayer.append(topCard)
+            self.size-=1
+        return topCard
 
     #Tester si le deck est isEmpty et changer la valeur de l'attr. isEmpty de l'instance
     def isEmpty(self):
         if self.size==0:
-            self.isEmpty=True
-        return self.isEmpty
+            self.isDeckEmpty=True
+        return self.isDeckEmpty
     
     def createCards(self, listColors, listNumbers, typesList=["Normal"]):
         listOfCards=[]
