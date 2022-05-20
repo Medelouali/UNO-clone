@@ -32,8 +32,8 @@ class Game:
     screenHeight=640
     screen=pygame.display.set_mode((screenWidth, screenHeight))
     # contains all objects that are rendered at any given momment
-    objectsGroup=[]
-    playedCards=[]
+    objectsGroup={} #maps ids to obj
+    playedCards={} #maps ids to obj too
     # set background for game interface
     backgroundImage = pygame.image.load(getPath('images', 'cards',"Table_4.png"))
     backgroundImage = pygame.transform.scale(
@@ -113,12 +113,12 @@ class Game:
         self.renderPlayerHand()
         self.renderPlayedCards()
         self.renderDeckUnoAvatars()
-        for obj in Game.objectsGroup:
-            if(obj==None): # None values are objects that has been destroyed
-                continue
-            else:
+        for objId in Game.objectsGroup.keys():
+            # if(obj==None): # None values are objects that has been destroyed
+            #     continue
+            # else:
                 # render an object to the screen
-                obj.update()
+            Game.objectsGroup[objId].update()
         
     def generatePlayers(self, numOfPlayers=2, botExists=True):
         # bot here representes Ai 
@@ -164,17 +164,22 @@ class Game:
     def renderPlayedCards(self):
         # No need to render all the cards, just the one on the top
         if(Game.playedCards):
-            Game.playedCards[-1].setPosition(Game.positions["playedCards"]).add()
+            global topCard_t # to avoid TypeError: 'dict_items' object is not subscriptable
+            for value in Game.playedCards.values():
+                topCard_t=value
+            topCard_t.setPosition(Game.positions["playedCards"]).add()
+            
     
+
     # generate a deck of cards when the deck runs out of cards
     def regenerateDeck(self):
         if(Game.deck.isEmpty()):
             Game.deck.setDeck([
-                card.setPosition(Game.positions["deck"]) for card in Game.playedCards
+                card.setPosition(Game.positions["deck"]) for card in Game.playedCards.values()
             ])
-            for card in Game.playedCards:
+            for card in Game.playedCards.values():
                 card.desroyObject()
-            Game.playedCards=[]
+            Game.playedCards={}
             
     @classmethod
     def ifAiPlay(cls):

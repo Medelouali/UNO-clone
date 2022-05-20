@@ -58,7 +58,7 @@ class Card(Object):
         #     return
         if playerId==Game_t.state["activePlayer"]:
             if self.compareSingleCard():
-                Game_t.playedCards.append(self)
+                Game_t.playedCards[self.getId()]=self
                 print("it's happinning")
                 Game_t.rotate(Game_t.state["rotation"])
             """changes playerActive to next player hence this player's to false""" 

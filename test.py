@@ -77,3 +77,9 @@ print([1, 2]+[23,23])
 #     all_sprites_list.clear(screen, background)
 #     all_sprites_list.draw(screen)
 #     all_sprites_list.update()
+
+
+dic={"name": "El Ouali", "Color": "XXX"}
+print(dic)
+print(dic.pop("name"))
+print(dic)
