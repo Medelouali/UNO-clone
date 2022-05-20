@@ -19,20 +19,14 @@ class Object():
         Object.createdObjects+=1
         
     def update(self):
-        # from utilities.classes.game.Game import Game as Game
         # event= Game_t.Game.getState('event')
         pos = pygame.mouse.get_pos()
-        # Game.ifAiPlay()
+        # Game_t.Game.ifAiPlay()
         if self.rect.collidepoint(pos):  # testing if mouse hovering over Card
             if pygame.mouse.get_pressed()[0] == 1:  # testing if Card clicked
                 if(self.callback):
                     self.callback()
-                
-        # if self.rect.collidepoint(pos):  # testing if mouse hovering over Card
-        #     if pygame.mouse.get_pressed()[0] == 1:  # testing if Card clicked
-        #         if event.type ==  pygame.MOUSEMOTION:  # testing if mouse moving
-        #             self.rect.move_ip(event.rel)
-                    
+        
         Game_t.Game.screen.blit(self.image, self.rect)
         self.updateCoord()
                 
