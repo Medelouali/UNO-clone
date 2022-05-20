@@ -1,6 +1,6 @@
-from utilities.classes.game import Game
+from utilities.classes.game.Game import Game
 # import object.card as cards
-from utilities.classes.object.deck import Deck
+"""from utilities.classes.object.deck import Deck"""
 from utilities.classes.object.Object import Object
 
 class Player:
