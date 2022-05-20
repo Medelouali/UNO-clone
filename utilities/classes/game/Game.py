@@ -113,12 +113,8 @@ class Game:
         self.renderPlayerHand()
         self.renderPlayedCards()
         self.renderDeckUnoAvatars()
-        for objId in Game.objectsGroup.keys():
-            # if(obj==None): # None values are objects that has been destroyed
-            #     continue
-            # else:
-                # render an object to the screen
-            Game.objectsGroup[objId].update()
+        for value in Game.objectsGroup.values():
+            value.update()
         
     def generatePlayers(self, numOfPlayers=2, botExists=True):
         # bot here representes Ai 
@@ -145,9 +141,11 @@ class Game:
     def renderPlayerHand(self):
         hand =Game.getState("playersList")[1].getHand() # index 0 not 1, 1 is the AI
         len_t=len(hand)
-        for i in range(len_t) :
-            shiftX = 50
-            hand[i].setPosition([Game.screenWidth/3+i*shiftX,Game.screenHeight-100]).add()
+        shiftX = 50
+        width = shiftX * len_t
+        margin=(Game.screenWidth-width)/2
+        for i in range(len_t):
+            hand[i].setPosition([margin+i*shiftX, Game.screenHeight-100]).add()
             
     # display deck icon 
     def renderDeckUnoAvatars(self):
