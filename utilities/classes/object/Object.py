@@ -29,12 +29,6 @@ class Object():
         
         Game_t.Game.screen.blit(self.image, self.rect)
         self.updateCoord()
-                
-    def fixIt(self):
-        self.isDraggable=False
-    
-    def makeItMovable(self):
-        self.isDraggable=True
         
     def destroyObject(self):
         # this is more efficient than deleting an item of a list
