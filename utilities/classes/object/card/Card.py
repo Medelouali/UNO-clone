@@ -2,8 +2,13 @@ import numbers
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 class Card(Object):
+<<<<<<< HEAD
+    def __init__(self, number=None, color=None, type="Normal", coordinates=[1, 1], dimensions=[100, 100], icon=getPath("images", "logo.png")):
+        super().__init__(coordinates, dimensions, icon)
+=======
     def __init__(self, number=None, color=None, type="Normal", coordinates=[1, 1], dimensions=[100, 100], icon=getPath("images", "logo.png"), callback=None, ownerId=None):
         super().__init__(coordinates, dimensions, icon, callback=lambda : self.throwCard(1))
+>>>>>>> 0158966c35fd5547c527abf281f4f1af394529c2
         self.number = number
         self.color=color
         self.type=type
