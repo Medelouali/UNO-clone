@@ -39,8 +39,9 @@ class Game:
     screen=pygame.display.set_mode((screenWidth, screenHeight))
     # contains all objects that are rendered at any given momment
     objectsGroup=[
-        # Object(True, [60, 100], [100, 20], getPath('images', "cards", 'Blue_0.png')), # just for testing
-        # Object(True, [900, 600], [100, 30], getPath('images', "cards", 'Red_0.png')) # just for testing
+        Object([100,screenHeight/2], [80, 20],icon=getPath("images", "cards", "Deck.png")),
+        Object([100, 50], [100, 20],icon=getPath("images", "icons", "avatar10.png")),
+        Object([screenWidth-100, screenHeight-50], [100, 20],icon=getPath("images", "icons", "avatar6.png"))
     ]
     # set background for game interface
     backgroundImage = pygame.image.load(getPath('images', 'cards',"Table_4.png"))
@@ -61,9 +62,12 @@ class Game:
         players = Game.getState("playersList")
         # affect 7 cards to each player 
         Game.deck.distributeCard()
+        # to add player's cards to objectsGroup
         # a loop that keeps running as long as we're playing the game
+        # self.renderDeckUnoAvatars()
+        # self.renderPlayerHand()
         while(True):
-
+            
             for event in pygame.event.get():
                 # set the occured event 
                 Game.setState("event", event)
@@ -81,6 +85,7 @@ class Game:
             Game.screen.blit(Game.backgroundImage, (0, 0))
             # self.renderPlayerHand(players[0])
             self.render()
+            print(len(Game.objectsGroup))
             writeText("10 Cards Left", 100, 120, 30, Game.screen)
             writeText("Me", Game.screenWidth-100, Game.screenHeight-120, 30, Game.screen)
             self.clock.tick(Game.framesPerSecond)
@@ -98,8 +103,7 @@ class Game:
         
     # render every object in objectGroup 
     def render(self):
-        self.renderPlayerHand()
-        self.renderDeckUnoAvatars()
+    
         for obj in Game.objectsGroup:
             if(obj==None): # None values are objects that has been destroyed
                 continue
@@ -128,19 +132,18 @@ class Game:
             ]))
     # display player's hand
     def renderPlayerHand(self):
-        hand =Game.getState("playersList")[0].getHand()
+        hand =Game.getState("playersList")[1].getHand()
         for i in range(len(hand)) :
             shiftX = 50
-            Game.getState("playersList")[0].getHand()[i].setPosition([Game.screenWidth/2+i*shiftX,Game.screenHeight-100])
-            Game.getState("playersList")[0].getHand()[i].add()
+            Game.getState("playersList")[1].getHand()[i].setPosition([Game.screenWidth/2-i*len(hand)*10,Game.screenHeight-100])
+            Game.getState("playersList")[1].getHand()[i].add()
+        
             
     
 
     # display deck icon 
     def renderDeckUnoAvatars(self):
-        Object(True, [100, Game.screenHeight/2], [80, 20],icon=getPath("images", "cards", "Deck.png")).add()
-        Object(True, [100, 50], [100, 20],icon=getPath("images", "icons", "avatar10.png")).add()
-        Object(True, [Game.screenWidth-100, Game.screenHeight-50], [100, 20],icon=getPath("images", "icons", "avatar6.png")).add()        
+        pass        
     # display the results of the game
     def displayResults(self):
         pass
