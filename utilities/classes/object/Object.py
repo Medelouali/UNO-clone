@@ -4,8 +4,7 @@ import utilities.classes.game.Game as Game_t
 from utilities.functions.resize import getSize # to avoid circular imports
 
 class Object():
-    gaps=0 # the number of destroyed of objects, it helps for insertion
-    createdObjects=0
+    createdObjects=0 # a unique identifier for each object(id)
     def __init__(self,coordinates=[10, 10], dimensions=[10, 10], icon=None, callback=None):
         self.image = pygame.transform.scale(pygame.image.load(icon), getSize(icon, dimensions[0]))
         self.rect=self.image.get_rect()
@@ -29,34 +28,17 @@ class Object():
         
         Game_t.Game.screen.blit(self.image, self.rect)
         self.updateCoord()
-                
-    def fixIt(self):
-        self.isDraggable=False
-    
-    def makeItMovable(self):
-        self.isDraggable=True
         
     def destroyObject(self):
         # this is more efficient than deleting an item of a list
-        # and shiffting the items around! 
-        Game_t.Game.objectsGroup[self.objectId]=None
-        Object.gaps+=1 
+        if(self.getId() in Game_t.Game.objectsGroup.keys()):
+            Game_t.Game.objectsGroup.pop(self.getId())
         
     def add(self):
-        len_t=len(Game_t.Game.objectsGroup)
-        if(self.gaps>0):
-            for i in range(len_t):
-                if(not Game_t.Game.objectsGroup[i]):
-                    Game_t.Game.objectsGroup[i]=self
-                    break
-        else:
-            Game_t.Game.objectsGroup.append(self)
-        
+        Game_t.Game.objectsGroup[self.getId()]=self
+            
     def updateCoord(self):
-        if(self.objectId>=len(Game_t.Game.objectsGroup)):
-            Game_t.Game.objectsGroup.append(self)
-        else:
-            Game_t.Game.objectsGroup[self.objectId]=self
+        Game_t.Game.objectsGroup[self.objectId]=self
     
     def triggerCallback(self, *args):
         if self.callback:
@@ -68,3 +50,6 @@ class Object():
     def setCallback(self, callback):
         self.callback=callback
         
+        
+    def getId(self):
+        return self.objectId

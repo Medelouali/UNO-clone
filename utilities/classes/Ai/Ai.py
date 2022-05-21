@@ -20,8 +20,7 @@ class Ai(Player):
     # Overloading the throwCard method for Ai
     # After checking if it's an Ai and not a real player this method will be called automatically
     # We don't need to pass in a card to be thrown since for Ai the card will be picked randomly from a list of playableCards
-    def throwCard(self, playedCards):
-            from utilities.classes.game.Game import Game as Game_t
+    def playCard(self,playedCards,Game):
             lastPlayedCard = playedCards[0]
             self.updatePlayableCards(lastPlayedCard)
             cardToPlay = random.choice(self.playableCards)
