@@ -13,7 +13,7 @@ class Deck():
         self.specialCards=self.createSpecialCards()
         self.deck=self.normalCards + self.specialCards
         self.size=len(self.deck)
-        self.isEmpty=False
+        self.isDeckEmpty=False
         self.shuffleDeck()
         
     # it means nothing to make this method a class method
@@ -39,15 +39,18 @@ class Deck():
 
     #Draw une carte du deck aprés shuffling
     def draw(self, handOfPlayer, numberOfCards):
-            for i in range(0, numberOfCards):
-                handOfPlayer.append(self.deck.pop())
-                self.size-=1
+        topCard=None
+        for i in range(0, numberOfCards):
+            topCard=self.deck.pop()
+            handOfPlayer.append(topCard)
+            self.size-=1
+        return topCard
 
     #Tester si le deck est isEmpty et changer la valeur de l'attr. isEmpty de l'instance
     def isEmpty(self):
         if self.size==0:
-            self.isEmpty=True
-        return self.isEmpty
+            self.isDeckEmpty=True
+        return self.isDeckEmpty
     
     def createCards(self, listColors, listNumbers, typesList=["Normal"]):
         listOfCards=[]
@@ -68,13 +71,12 @@ class Deck():
 
     def createWildCards(self, numberOfwildCards):
         listOfWildCards=[Card(type="Wild", icon=getPath("images", "cards", "Wild.png"))]#une carte wild est crée dans la liste
-        return self.cloneCards(listOfWildCards,numberOfwildCards)
+        return self.cloneCards(listOfWildCards, numberOfwildCards)
 
     def createNrmlCards(self):
         subDeck1=self.createCards(Deck.cardsColors, Deck.numbersRange)
         subDeck=self.cloneCards(subDeck1[4:],2)
-        subDeck.extend(subDeck1[:4])
-        return subDeck
+        return subDeck + subDeck1[:4]
 
     def createSpecialCards(self):
         subDeck1=self.createCards(Deck.cardsColors, Deck.numbersRange, Deck.coloredTypes)
@@ -84,9 +86,9 @@ class Deck():
     
     # Game_t.Game.getState("playersList") cercular import bug should be fixed
     # fixed the method :D 
-    def distributeCard(self):
+    def distributeCard(self, number=7):
         import utilities.classes.game.Game as Game_t
         for i in range(len(Game_t.Game.getState("playersList"))):
-            self.draw(Game_t.Game.getState("playersList")[i].getHand(), 7)
+            self.draw(Game_t.Game.getState("playersList")[i].getHand(), number)
 
         
