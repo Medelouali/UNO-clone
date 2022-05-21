@@ -1,6 +1,7 @@
 import numbers
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
+
 class Card(Object):
     def __init__(self, number=None, color=None, type="Normal", coordinates=[1, 1], dimensions=[100, 100], icon=getPath("images", "logo.png"), callback=None, ownerId=None):
         super().__init__(coordinates, dimensions, icon, callback=lambda : self.throwCard(1))
@@ -58,7 +59,7 @@ class Card(Object):
         #     return
         if playerId==Game_t.state["activePlayer"]:
             if self.compareSingleCard():
-                Game_t.playedCards.append(self)
+                Game_t.playedCards[self.getId()]=self
                 print("it's happinning")
                 Game_t.rotate(Game_t.state["rotation"])
             """changes playerActive to next player hence this player's to false""" 

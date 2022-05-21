@@ -1,4 +1,4 @@
-from utilities.classes.game.Game import Game
+
 # import object.card as cards
 """from utilities.classes.object.deck import Deck"""
 from utilities.classes.object.Object import Object
@@ -12,16 +12,44 @@ class Player:
         self.hasUno = False
         self.screamedUno = False
     def isActive(self):
+        from utilities.classes.game.Game import Game
         if Game.state["activePlayer"] == self.id:
             return True
         else:
             return False
         """compare self player id with active id in state returns true or false"""
+<<<<<<< HEAD
+=======
+    def compareSingleCard(self, lastPlayedCard, cardToPlay):
+        if cardToPlay.type=="Normal":
+            if(lastPlayedCard.getColor()==cardToPlay.getColor() and lastPlayedCard.getNumbers()==cardToPlay.getNumbers()):
+                return cardToPlay
+            return None
+        elif cardToPlay.type=="Wild":
+            return cardToPlay
+        else:
+            if lastPlayedCard.getColor()==cardToPlay.getColor():
+                return cardToPlay
+            return None
+        
+    def throwCard(self, playedCards, lastPlayedCard, cardToPlay):
+        from utilities.classes.game.Game import Game
+        if self.isActive(self):
+            if self.compareSingleCard(self, lastPlayedCard, cardToPlay)== cardToPlay:
+                card = self.hand.pop(self.hand.index(cardToPlay)) #temporary variable to hold the popped card
+                playedCards.append(card)
+                Game.state["activePlayer"] += Game.rotation
+            """changes playerActive to next player hence this player's to false"""  
+                  
+>>>>>>> d74749b7ff32cf2793fc3c475da525cbff5925a6
     def getHasUno(self):
         return self.hasUno
+    
     def getScreamedUno(self):
         return self.screamedUno
+    
     def screamUno(self):
+        from utilities.classes.game.Game import Game
         if self.isActive(self):
             if (Game.players[Game.state["activePlayer"]-Game.rotation].hasUno == True) and (Game.players[Game.state["activePlayer"]-Game.rotation].screamedUno == False):
                 Game.players[Game.state["activePlayer"]-Game.rotation].deck.draw(Game.deck, self.hand, 2)
@@ -33,6 +61,7 @@ class Player:
             else:
                 print("why'd you do that?")
                 """I'm tempted to add a click counter and a while loop to make the comment more sarcastic everytime uno is clicked for no reason"""
+    
     def getHand(self):
         return self.hand
     def setHand(self, hand):

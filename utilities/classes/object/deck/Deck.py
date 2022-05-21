@@ -39,8 +39,9 @@ class Deck():
 
     #Draw une carte du deck aprés shuffling
     def draw(self, handOfPlayer, numberOfCards):
-        topCard=self.deck.pop()
+        topCard=None
         for i in range(0, numberOfCards):
+            topCard=self.deck.pop()
             handOfPlayer.append(topCard)
             self.size-=1
         return topCard
