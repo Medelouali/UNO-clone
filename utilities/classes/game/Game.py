@@ -57,6 +57,7 @@ class Game:
         # affect 7 cards to each player 
         Game.deck.distributeCard()
         # a loop that keeps running as long as we're playing the game
+
         while(True):
             for event in pygame.event.get():
                 # set the occured event 

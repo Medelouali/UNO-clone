@@ -1,14 +1,15 @@
 from utilities.classes.game import Game
 
-def skip (game , players):
-    temp = game.getState("rotation")
-    game.setState("rotation",game.getState("rotation")*2)
-    if game.getState ("rotation") == 2:
-    	if game.getState("activePlayer") == len(players)-1: 
-            game.setState("activePlayer",1)
-        if game.getState("activePlayer") == len(players)-2: 
-            game.setState("activePlayer",0)
+def skip (players):
+    temp = Game.getState("rotation")
+    Game.setState("rotation",Game.getState("rotation")*2)
+    if Game.getState ("rotation") == 2:
+    	if Game.getState("activePlayer") == len(players)-1: 
+            Game.setState("activePlayer",1)
+        if Game.getState("activePlayer") == len(players)-2: 
+            Game.setState("activePlayer",0)
+
     else : 
-        game.setState("activePlayer",game.getState("activePlayer")+ game.getState("rotation"))
+        Game.setState("activePlayer",Game.getState("activePlayer")+ Game.getState("rotation"))
     
-    game.setState("rotation",temp)  	
+    Game.setState("rotation",temp)  	
