@@ -39,7 +39,7 @@ class Card(Object):
     
     def getDimensions(self):
         return self.dimensions
-    
+        
     def compareSingleCard(self):
         from utilities.classes.game.Game import Game as Game_t
         if(not Game_t.playedCards): # this happens if it's the first card

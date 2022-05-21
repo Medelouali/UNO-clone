@@ -18,27 +18,6 @@ class Player:
         else:
             return False
         """compare self player id with active id in state returns true or false"""
-    def compareSingleCard(self, lastPlayedCard, cardToPlay):
-        if cardToPlay.type=="Normal":
-            if(lastPlayedCard.getColor()==cardToPlay.getColor() and lastPlayedCard.getNumbers()==cardToPlay.getNumbers()):
-                return cardToPlay
-            return None
-        elif cardToPlay.type=="Wild":
-            return cardToPlay
-        else:
-            if lastPlayedCard.getColor()==cardToPlay.getColor():
-                return cardToPlay
-            return None
-        
-    def throwCard(self, playedCards, lastPlayedCard, cardToPlay):
-        from utilities.classes.game.Game import Game
-        if self.isActive(self):
-            if self.compareSingleCard(self, lastPlayedCard, cardToPlay)== cardToPlay:
-                card = self.hand.pop(self.hand.index(cardToPlay)) #temporary variable to hold the popped card
-                playedCards.append(card)
-                Game.state["activePlayer"] += Game.rotation
-            """changes playerActive to next player hence this player's to false"""  
-                  
     def getHasUno(self):
         return self.hasUno
     
