@@ -26,7 +26,7 @@ class Deck():
     # Shuffling the deck
     def shuffleDeck(self):
         for i in range(self.size-1,0,-1):
-            j = randint(0,i+1) # x, y=y, x doesn't echange the value of x and y
+            j = randint(0, i+1) # x, y=y, x doesn't echange the value of x and y
             temp=self.deck[i]
             self.deck[i]=self.deck[j]
             self.deck[j]=temp

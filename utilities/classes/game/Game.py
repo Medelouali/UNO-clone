@@ -23,7 +23,8 @@ class Game:
             # equals true when the game is finished
             "gameEnded": False,
             # list of players 
-            "playersList": []
+            "playersList": [],
+            "lastPlayedCard": None,
         } # this dictionary will keep track of the game state
     # iterface settings
     framesPerSecond=60
@@ -109,10 +110,12 @@ class Game:
         
     # render every object in objectGroup 
     def render(self):
+        print("Active:\t", Game.getState("activePlayer"))
         self.regenerateDeck()
         self.renderPlayerHand()
         self.renderPlayedCards()
         self.renderDeckUnoAvatars()
+        # copyList=Game.objectsGroup.values()
         for value in Game.objectsGroup.values():
             value.update()
         
@@ -141,7 +144,7 @@ class Game:
     def renderPlayerHand(self):
         hand =Game.getState("playersList")[1].getHand() # index 0 not 1, 1 is the AI
         len_t=len(hand)
-        shiftX = 50
+        shiftX = 130
         width = shiftX * len_t
         margin=(Game.screenWidth-width)/2
         for i in range(len_t):
@@ -152,7 +155,7 @@ class Game:
         Object(Game.positions["deck"], [80, 20],icon=getPath("images", "cards", "Deck.png")).add()
         Object([100, 50], [100, 20],icon=getPath("images", "icons", "avatar10.png")).add()
         Object([Game.screenWidth-100, Game.screenHeight-50], [100, 20],icon=getPath("images", "icons", "avatar6.png")).add()        
-        Object([Game.screenWidth-300, Game.screenHeight-100], [100, 20],icon=getPath("images", "icons", "unoButton.png")).add()        
+        Object([Game.screenWidth-100, Game.screenHeight-200], [100, 20],icon=getPath("images", "icons", "unoButton.png")).add()        
     
     # display the results of the game
     def displayResults(self):
@@ -167,8 +170,6 @@ class Game:
                 topCard_t=value
             topCard_t.setPosition(Game.positions["playedCards"]).add()
             
-    
-
     # generate a deck of cards when the deck runs out of cards
     def regenerateDeck(self):
         if(Game.deck.isEmpty()):
@@ -183,13 +184,17 @@ class Game:
     def ifAiPlay(cls):
         if Game.getState("activePlayer")==0:
             hasPlayed=False
-            for card in Game.getState("playersList"):
-                if(card.compareSingleCard()):
-                    card.throwCard(0)
+            print("Got 1")
+            # print(Game.getState("playersList")[0].getHand())
+            for card in Game.getState("playersList")[0].getHand():
+                played=card.throwCard(0)
+                if(played):
                     hasPlayed=True
+                    print("Got 2")
                     break
             if(not hasPlayed):
                 card=Game.deck.draw(Game.getState("playersList")[0].getHand(), 1)
                 if(card.compareSingleCard()):
                     card.throwCard(0)
+                    print("Got 3")
             Game.rotate(Game.getState("rotation"))
