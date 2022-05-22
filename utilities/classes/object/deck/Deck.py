@@ -6,7 +6,8 @@ from utilities.classes.object.card.Card import Card
 class Deck():
     cardsColors=[ "Green", "Blue", "Red", "Yellow"]
     numbersRange=list(range(0,10)) #rang des number-cards (0-9 cards)
-    coloredTypes=["Skip", "Reverse", "Draw"]
+    # Draw type is for drawing two , Draw4 is for drawing 4
+    coloredTypes=["Skip", "Reverse", "Draw","Draw4"]
     
     def __init__(self):
         self.normalCards=self.createNrmlCards()
