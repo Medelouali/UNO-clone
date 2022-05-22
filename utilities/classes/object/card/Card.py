@@ -39,7 +39,7 @@ class Card(Object):
     
     def getDimensions(self):
         return self.dimensions
-    
+        
     def compareSingleCard(self):
         from utilities.classes.game.Game import Game as Game_t
         lastPlayedCard=Game_t.state["lastPlayedCard"]
