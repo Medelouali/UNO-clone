@@ -17,7 +17,7 @@ class Game:
     state={
             "rotation": 1, # it could be 1, -1, or eventially 2
             "winner": None,
-            "activePlayer": 1,#contains the id of the active player
+            "activePlayer": 0,#contains the id of the active player
             # representes an event that player can trigger 
             "event": None, 
             # equals true when the game is finished
@@ -57,20 +57,27 @@ class Game:
         players = Game.getState("playersList")
         # affect 7 cards to each player 
         Game.deck.distributeCard()
+        print(Game.getState("lastPlayedCard"))
         # a loop that keeps running as long as we're playing the game
         while(True):
+            # Check if the player has quit the game or if the game is over
             for event in pygame.event.get():
-                # set the occured event 
-                Game.setState("event", event)
-                # check if player quits the game
-                if(event.type == pygame.QUIT):
-                # Will add more conditions in next version
-                    pygame.quit()
-                    sys.exit()
-                # check if game has ended
-                elif(Game.getState("gameEnded")):
-                    # call displayResults()
-                    pass
+                    # set the occured event 
+                    Game.setState("event", event)
+                    # check if player quits the game
+                    if(event.type == pygame.QUIT):
+                    # Will add more conditions in next version
+                        pygame.quit()
+                        sys.exit()
+                    # check if game has ended
+                    elif(Game.getState("gameEnded")):
+                        # call displayResults()
+                        pass
+            # Check if current player is a bot 
+            currentPlayer = players[Game.getState("activePlayer")]
+            if(isinstance(currentPlayer,Ai)):
+                currentPlayer.performMove()
+                
             # rendering the game
             pygame.display.update()
             Game.screen.blit(Game.backgroundImage, (0, 0))
@@ -110,10 +117,9 @@ class Game:
         
     # render every object in objectGroup 
     def render(self):
-        print("Active:\t", Game.getState("activePlayer"))
         self.regenerateDeck()
         self.renderPlayerHand()
-        self.renderPlayedCards()
+        self.renderPlayedCard()
         self.renderDeckUnoAvatars()
         # copyList=Game.objectsGroup.values()
         for value in Game.objectsGroup.values():
@@ -162,13 +168,11 @@ class Game:
         pass # Will add this method later on
     
     # display the cards that have already been played
-    def renderPlayedCards(self):
+    def renderPlayedCard(self):
         # No need to render all the cards, just the one on the top
-        if(Game.playedCards):
-            global topCard_t # to avoid TypeError: 'dict_items' object is not subscriptable
-            for value in Game.playedCards.values():
-                topCard_t=value
-            topCard_t.setPosition(Game.positions["playedCards"]).add()
+          if(Game.getState("lastPlayedCard")):
+            Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"])
+            Game.getState("lastPlayedCard").add()
             
     # generate a deck of cards when the deck runs out of cards
     def regenerateDeck(self):
@@ -180,21 +184,4 @@ class Game:
                 card.desroyObject()
             Game.playedCards={}
             
-    @classmethod
-    def ifAiPlay(cls):
-        if Game.getState("activePlayer")==0:
-            hasPlayed=False
-            print("Got 1")
-            # print(Game.getState("playersList")[0].getHand())
-            for card in Game.getState("playersList")[0].getHand():
-                played=card.throwCard(0)
-                if(played):
-                    hasPlayed=True
-                    print("Got 2")
-                    break
-            if(not hasPlayed):
-                card=Game.deck.draw(Game.getState("playersList")[0].getHand(), 1)
-                if(card.compareSingleCard()):
-                    card.throwCard(0)
-                    print("Got 3")
-            Game.rotate(Game.getState("rotation"))
+   

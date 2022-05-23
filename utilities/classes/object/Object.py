@@ -22,7 +22,6 @@ class Object():
     def update(self):
         # event= Game_t.Game.getState('event')
         pos = pygame.mouse.get_pos()
-        Game_t.Game.ifAiPlay()
         if self.rect.collidepoint(pos):  # testing if mouse hovering over Card
             self.setActive()
             if pygame.mouse.get_pressed()[0] == 1 and self.getActive():  # testing if Card clicked

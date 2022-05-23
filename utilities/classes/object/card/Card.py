@@ -58,16 +58,24 @@ class Card(Object):
         from utilities.classes.game.Game import Game as Game_t
         if playerId==Game_t.state["activePlayer"]:
             if self.compareSingleCard():
-                newHand=[]
-                for card in Game_t.getState("playersList")[playerId].getHand():
-                    if(card.getId()!=self.getId()):
-                        newHand.append(card)
-                newPlayer=Game_t.getState("playersList")[playerId]
-                newPlayer.hand=newHand
-                Game_t.state["playersList"][playerId]=newPlayer
-                Game_t.playedCards[self.getId()]=self
+                index = Game_t.getState("playersList")[playerId].getHand().index(self)
+                cardToPlay = Game_t.getState("playersList")[playerId].getHand().pop(index)
+                # set the last played card to be this card
+                Game_t.setState("lastPlayedCard",cardToPlay)
+                # add cardToPlay to deck of played cards
+                Game_t.playedCards[cardToPlay.getId()]=cardToPlay
                 Game_t.rotate(Game_t.state["rotation"])
-                Game_t.setState("lastPlayedCard", self)
+                Game_t.getState("playersList")[playerId].printHand()
+                # newHand=[]
+                # for card in Game_t.getState("playersList")[playerId].getHand():
+                #     if(card.getId()!=self.getId()):
+                #         newHand.append(card)
+                # newPlayer=Game_t.getState("playersList")[playerId]
+                # newPlayer.hand=newHand
+                # Game_t.state["playersList"][playerId]=newPlayer
+                # Game_t.playedCards[self.getId()]=self
+                # Game_t.setState("lastPlayedCard", self)
+                # Game_t.rotate(Game_t.state["rotation"])
                 return True
             """changes playerActive to next player hence this player's to false""" 
 
@@ -76,4 +84,6 @@ class Card(Object):
     
     def getNumber(self):
         return self.number
-    
+    # to display a card for testing reasons 
+    def __str__(self):
+        return f"Color :{self.color} Number :{self.number}"

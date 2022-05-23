@@ -99,5 +99,7 @@ class Deck():
         import utilities.classes.game.Game as Game_t
         for i in range(len(Game_t.Game.getState("playersList"))):
             self.draw(Game_t.Game.getState("playersList")[i].getHand(), number)
+            Game_t.Game.setState("lastPlayedCard",self.deck[-1])
+
 
         
