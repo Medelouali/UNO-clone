@@ -6,13 +6,12 @@ from utilities.functions.resize import getSize # to avoid circular imports
 class Object():
     activeCard=None
     createdObjects=0 # a unique identifier for each object(id)
-    def __init__(self,coordinates=[10, 10], dimensions=[10, 10], icon=None, callback=None, z_index=0):
+    def __init__(self,coordinates=[10, 10], dimensions=[10, 10], icon=None, callback=None):
         self.image = pygame.transform.scale(pygame.image.load(icon), getSize(icon, dimensions[0]))
         self.rect=self.image.get_rect()
         self.rect.center=coordinates
         self.dimensions=dimensions
         self.callback=callback
-        self.z_index=z_index # z_index is used to determine the order of objects 
         # canMove will be used to test if we can drag the object with the mouse or not
         # it'll be False by default but here it's True just for testing purposes
         self.clicked=False
@@ -22,7 +21,7 @@ class Object():
     def update(self):
         # event= Game_t.Game.getState('event')
         pos = pygame.mouse.get_pos()
-        Game_t.Game.ifAiPlay()
+        # Game_t.Game.ifAiPlay()
         if self.rect.collidepoint(pos):  # testing if mouse hovering over Card
             self.setActive()
             if pygame.mouse.get_pressed()[0] == 1 and self.getActive():  # testing if Card clicked
@@ -68,3 +67,10 @@ class Object():
     
     def getActive(self):
         return Object.activeCard 
+    
+    # This is for some animations
+    def getCoordinates(self):
+        return self.rect.center
+    
+    def setCoordinates(self, to):
+        self.rect.center=to

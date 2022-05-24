@@ -1,15 +1,16 @@
 from random import randint
 from utilities.functions.path import getPath
 from utilities.classes.object.card.Card import Card
-# from utilities.classes.game.Game import Game
+from utilities.classes.object.Object import Object
 
-class Deck():
+class Deck(Object):
     cardsColors=[ "Green", "Blue", "Red", "Yellow"]
     numbersRange=list(range(0,10)) #rang des number-cards (0-9 cards)
     # Draw type is for drawing two , Draw4 is for drawing 4
     coloredTypes=["Skip", "Reverse", "Draw","Draw4"]
     
     def __init__(self):
+        super().__init__(callback=self.drawingCallback, icon=getPath("images", "cards", "Deck.png"))
         self.normalCards=self.createNrmlCards()
         self.specialCards=self.createSpecialCards()
         print(len(self.specialCards))
@@ -17,7 +18,11 @@ class Deck():
         self.size=len(self.deck)
         self.isDeckEmpty=False
         self.shuffleDeck()
-        
+            
+    def drawingCallback(self):
+        from utilities.classes.game.Game import Game
+        self.draw(1)
+        Game.rotate()
         
     # getters for deck and size
     def getDeck(self):
@@ -28,7 +33,7 @@ class Deck():
 
     # Shuffling the deck
     def shuffleDeck(self):
-        for i in range(self.size-1,0,-1):
+        for i in range(self.size-1, 0, -1):
             j = randint(0, i+1) # x, y=y, x doesn't echange the value of x and y
             temp=self.deck[i]
             self.deck[i]=self.deck[j]
@@ -41,11 +46,21 @@ class Deck():
         self.shuffleDeck()
 
     #Draw une carte du deck aprés shuffling
-    def draw(self, handOfPlayer, numberOfCards):
+    def draw(self, numberOfCards=1):
+        from utilities.classes.game.Game import Game
         topCard=None
-        for i in range(0, numberOfCards):
+        activeId=Game.getState("activePlayer")
+        if(self.isEmpty()): 
+            print("can't draw deck's empty")
+            return topCard
+        print("playerHand ", len(Game.state["playersList"][activeId].hand))
+        print("Deck number ", len(Game.deck.deck))
+        for _ in range(numberOfCards):
             topCard=self.deck.pop()
-            handOfPlayer.append(topCard)
+            newHand=Game.state["playersList"][activeId].hand
+            newHand.append(topCard)
+            Game.state["playersList"][activeId].hand=newHand
+            # print(len(Game.getState("playersList")[activeId].getHand()))
             self.size-=1
         return topCard
 
@@ -81,11 +96,13 @@ class Deck():
     def createWildCards(self, numberOfwildCards):
         listOfWildCards=[Card(type="Wild", icon=getPath("images", "cards", "Wild.png"))]#une carte wild est crée dans la liste
         return self.cloneCards(listOfWildCards, numberOfwildCards)
+    
     # create 76 normal cards , 4 for each color and number
     def createNrmlCards(self):
         subDeck1=self.createCards(Deck.cardsColors, Deck.numbersRange)
         subDeck=self.cloneCards(subDeck1[4:],2)
         return subDeck + subDeck1[:4]
+    
     # create specialCards 
     def createSpecialCards(self):
         subDeck=self.createCards(Deck.cardsColors, Deck.numbersRange, Deck.coloredTypes)
@@ -98,6 +115,7 @@ class Deck():
     def distributeCard(self, number=7):
         import utilities.classes.game.Game as Game_t
         for i in range(len(Game_t.Game.getState("playersList"))):
-            self.draw(Game_t.Game.getState("playersList")[i].getHand(), number)
+            self.draw(number)
+            Game_t.Game.rotate()
 
         
