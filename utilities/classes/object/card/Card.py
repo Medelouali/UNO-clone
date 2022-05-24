@@ -3,8 +3,8 @@ from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 
 class Card(Object):
-    def __init__(self, number=None, color=None, type="Normal", coordinates=[1, 1], dimensions=[100, 100], icon=getPath("images", "logo.png"), callback=None, ownerId=None):
-        super().__init__(coordinates, dimensions, icon, callback=lambda : self.throwCard(1))
+    def __init__(self, number=None, color=None, type="Normal", coordinates=[1, 1], dimensions=[100, 100], icon=getPath("images", "logo.png"), callback=None, ownerId=None, z_index=0):
+        super().__init__(coordinates, dimensions, icon, callback=lambda : self.throwCard(1), z_index=z_index)
         self.number = number
         self.color=color
         self.type=type
@@ -31,9 +31,9 @@ class Card(Object):
     # to set new position of a card
     def setPosition(self, coordinates):
         self.rect.center = coordinates
-        return self
-    # to get icon from a card
+        return self # We need this return value to chain methods
     
+    # to get icon from a card
     def getIcon(self):
         return self.icon
     
@@ -42,11 +42,12 @@ class Card(Object):
         
     def compareSingleCard(self):
         from utilities.classes.game.Game import Game as Game_t
-        if(not Game_t.playedCards): # this happens if it's the first card
+        lastPlayedCard=Game_t.state["lastPlayedCard"]
+        if(not lastPlayedCard): # this happens if it's the first card
             return self
-        lastPlayedCard=Game_t.playedCards[-1]
+        
         if self.type=="Normal":
-            if(lastPlayedCard.getColor()==self.getColor() or lastPlayedCard.getNumbers()==self.getNumbers()):
+            if(lastPlayedCard.getColor()==self.getColor() or lastPlayedCard.getNumber()==self.getNumber()):
                 return self
             return None
         elif self.type=="Wild":
@@ -55,15 +56,24 @@ class Card(Object):
     
     def throwCard(self, playerId):
         from utilities.classes.game.Game import Game as Game_t
-        # if(self.ownerId!=playerId):
-        #     return
         if playerId==Game_t.state["activePlayer"]:
             if self.compareSingleCard():
+                newHand=[]
+                for card in Game_t.getState("playersList")[playerId].getHand():
+                    if(card.getId()!=self.getId()):
+                        newHand.append(card)
+                newPlayer=Game_t.getState("playersList")[playerId]
+                newPlayer.hand=newHand
+                Game_t.state["playersList"][playerId]=newPlayer
                 Game_t.playedCards[self.getId()]=self
-                print("it's happinning")
                 Game_t.rotate(Game_t.state["rotation"])
+                Game_t.setState("lastPlayedCard", self)
+                return True
             """changes playerActive to next player hence this player's to false""" 
 
-
+    def getColor(self):
+        return self.color
     
+    def getNumber(self):
+        return self.number
     
