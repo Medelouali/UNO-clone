@@ -33,17 +33,17 @@ class Game:
     screenHeight=640
     screen=pygame.display.set_mode((screenWidth, screenHeight))
     # contains all objects that are rendered at any given momment
+    positions={
+        "deck": (100, screenHeight/2),
+        "playedCards": (screenWidth/2, screenHeight/2)
+    }
+   
     objectsGroup={} #maps ids to obj
     playedCards={} #maps ids to obj too
     # set background for game interface
     backgroundImage = pygame.image.load(getPath('images', 'cards',"Table_4.png"))
     backgroundImage = pygame.transform.scale(
     backgroundImage, getSize(getPath('images', 'backgroundCards.jpg'), screenWidth))
-    positions={
-        "deck": (100, screenHeight/2),
-        "playedCards": (screenWidth/2, screenHeight/2)
-    }
-   
 
     def __init__(self):
     # Will add gameMode as attr later 
@@ -53,6 +53,7 @@ class Game:
     def launch(self):
         # generate a list of players
         self.generatePlayers() 
+        self.setUp()
         # stock players list in a list 
         players = Game.getState("playersList")
         # affect 7 cards to each player 
@@ -120,7 +121,6 @@ class Game:
         self.regenerateDeck()
         self.renderPlayerHand()
         self.renderPlayedCard()
-        self.renderDeckUnoAvatars()
         # copyList=Game.objectsGroup.values()
         for value in Game.objectsGroup.values():
             value.update()
@@ -150,18 +150,21 @@ class Game:
     def renderPlayerHand(self):
         hand =Game.getState("playersList")[1].getHand() # index 0 not 1, 1 is the AI
         len_t=len(hand)
-        shiftX = 130
+        shiftX = 110
         width = shiftX * len_t
         margin=(Game.screenWidth-width)/2
         for i in range(len_t):
             hand[i].setPosition([margin+i*shiftX, Game.screenHeight-100]).add()
             
-    # display deck icon 
-    def renderDeckUnoAvatars(self):
-        Object(Game.positions["deck"], [80, 20],icon=getPath("images", "cards", "Deck.png")).add()
+    # setting up the game
+    def setUp(self):
         Object([100, 50], [100, 20],icon=getPath("images", "icons", "avatar10.png")).add()
-        Object([Game.screenWidth-100, Game.screenHeight-50], [100, 20],icon=getPath("images", "icons", "avatar6.png")).add()        
-        Object([Game.screenWidth-100, Game.screenHeight-200], [100, 20],icon=getPath("images", "icons", "unoButton.png")).add()        
+        Object(Game.positions["deck"], [80, 20],icon=getPath("images", "cards", "Deck.png"), 
+               callback=lambda: Game.deck.draw()).add()
+        Object([Game.screenWidth-100, Game.screenHeight-50], [100, 20],
+               icon=getPath("images", "icons", "avatar6.png")).add()        
+        Object([Game.screenWidth-100, Game.screenHeight-200], [100, 20],
+               icon=getPath("images", "icons", "unoButton.png")).add()        
     
     # display the results of the game
     def displayResults(self):
@@ -200,4 +203,7 @@ class Game:
             # Game.rotate(Game.state["rotation"])
         
             
-   
+            
+    def showDeck(self):
+        for card in self.deck:
+            print(f"{card.number}_{card.color}")
