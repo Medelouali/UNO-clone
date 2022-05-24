@@ -1,5 +1,5 @@
 import pygame,sys
-from PlayMenu import draw_text
+from MainMenu import draw_text
 pygame.init()
 
 ##################################    Main infos
@@ -29,8 +29,8 @@ def Play():
             ##### check mouse click
 
             if(event.type == pygame.MOUSEBUTTONDOWN):
-                if( RectDic["Play"].collidepoint(pygame.mouse.get_pos()) ):
-                    print ("test")
+                if( RectDic["test"].collidepoint(pygame.mouse.get_pos()) ):
+                    print ("hello")
         
         screen.fill((50,50,50))
 
@@ -40,3 +40,4 @@ def Play():
 
         pygame.display.update()
 
+Play()

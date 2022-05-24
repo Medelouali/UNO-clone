@@ -1,8 +1,7 @@
-from utilities.classes.game.Game import Game
+from multiprocessing.spawn import import_main_path
 import pygame,sys
-
 pygame.init()
-
+from utilities.classes.game.Game import Game
 
 ############################################################## rect's dictionnary
 RectDic ={}
