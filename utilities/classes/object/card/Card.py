@@ -3,8 +3,9 @@ from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 
 class Card(Object):
-    def __init__(self, number=None, color=None, type="Normal", coordinates=[1, 1], dimensions=[100, 100], icon=getPath("images", "logo.png"), callback=None, ownerId=None, z_index=0):
-        super().__init__(coordinates, dimensions, icon, callback=lambda : self.throwCard(1), z_index=z_index)
+    def __init__(self, number=None, color=None, type="Normal", coordinates=[1, 1], 
+                dimensions=[100, 100], icon=getPath("images", "logo.png"), callback=None, ownerId=None):
+        super().__init__(coordinates, dimensions, icon, callback=lambda : self.throwCard(1))
         self.number = number
         self.color=color
         self.type=type

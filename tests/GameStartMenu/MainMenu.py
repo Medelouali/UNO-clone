@@ -1,4 +1,4 @@
-from turtle import goto
+from utilities.classes.game.Game import Game
 import pygame,sys
 
 pygame.init()
