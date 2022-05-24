@@ -25,6 +25,8 @@ class Deck():
 
     def getSize(self):
         return self.size
+    def setSize(self,size):
+        self.size = size
 
     # Shuffling the deck
     def shuffleDeck(self):
@@ -38,7 +40,7 @@ class Deck():
     def setDeck(self, newDeckLst):
         self.deck=newDeckLst
         self.size=len(self.deck)
-        self.shuffleDeck()
+        #self.shuffleDeck()
 
     #Draw une carte du deck aprés shuffling
     def draw(self, handOfPlayer, numberOfCards):

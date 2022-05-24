@@ -57,7 +57,6 @@ class Game:
         players = Game.getState("playersList")
         # affect 7 cards to each player 
         Game.deck.distributeCard()
-        print(Game.getState("lastPlayedCard"))
         # a loop that keeps running as long as we're playing the game
         while(True):
             # Check if the player has quit the game or if the game is over
@@ -117,6 +116,7 @@ class Game:
         
     # render every object in objectGroup 
     def render(self):
+        print(Game.deck.getSize())
         self.regenerateDeck()
         self.renderPlayerHand()
         self.renderPlayedCard()
@@ -176,12 +176,28 @@ class Game:
             
     # generate a deck of cards when the deck runs out of cards
     def regenerateDeck(self):
-        if(Game.deck.isEmpty()):
-            Game.deck.setDeck([
-                card.setPosition(Game.positions["deck"]) for card in Game.playedCards.values()
-            ])
-            for card in Game.playedCards.values():
-                card.desroyObject()
+        # Check if deck is empty
+        if(Game.deck.getSize()==0):
+            # set a new deck from a set of played cards
+            Game.deck.setDeck(list(Game.playedCards.values()))
+            # set new size for this deck
+            Game.deck.setSize(len(Game.playedCards.values()))
+            # shuffle the deck 
+            Game.deck.shuffleDeck()
+            # empty playedCards
             Game.playedCards={}
+            # pick a card from new shuffeled deck to move it to terrain
+            Game.setState("lastPlayedCard",Game.deck.getDeck()[-1])
+            # add lastPlayedCard to deck
+            Game.playedCards[Game.deck.getDeck()[-1].getId()]= Game.deck.getDeck()[-1]
+            # test 
+            print("Deck : ")
+            for card in Game.deck.getDeck():
+                print(card)
+            print("Played cards : ")
+            for card in Game.playedCards.values():
+                print(card)
+            # Game.rotate(Game.state["rotation"])
+        
             
    

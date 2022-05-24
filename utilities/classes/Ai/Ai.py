@@ -9,27 +9,40 @@ class Ai(Player):
         # intializing the list of playabale cards to an empty list
         self.playableCards = []
    
-    # To update the list of playable cards by comparing every card against the last played card
-    def updatePlayableCards(self, lastPlayedCard):
-        # to check every card in the Ai's hand
-        for card in self.hand:
-            # checking if the return card is not null , if it's the case then add it to the list of playable cards
-            if self.compareSingleCard(lastPlayedCard, card):
-                self.playableCards.append(card)
+    # # To update the list of playable cards by comparing every card against the last played card
+    # def updatePlayableCards(self, lastPlayedCard):
+    #     # to check every card in the Ai's hand
+    #     for card in self.hand:
+    #         # checking if the return card is not null , if it's the case then add it to the list of playable cards
+    #         if self.compareSingleCard(lastPlayedCard, card):
+    #             self.playableCards.append(card)
     # for the Ai to play when      
     def performMove(self):
         from utilities.classes.game.Game import Game as Game_t
         for i in range(len(self.getHand())):
             if self.getHand()[i].compareSingleCard():
-                print("My hand : ")
-                self.printHand()
+                # print("My hand : ")
+                # self.printHand()
+                # pop a card to play from the Ai's hand
                 cardToPlay = self.getHand().pop(i)
                 # set the last played card to be this card
                 Game_t.setState("lastPlayedCard",cardToPlay)
                 # add cardToPlay to deck of played cards
                 Game_t.playedCards[cardToPlay.getId()]=cardToPlay
-                # Game_t.rotate(Game_t.state["rotation"])
+                Game_t.rotate(Game_t.state["rotation"])
                 return 
+        if(Game_t.deck.getSize()>=1):
+            print("I'm drawing")
+            Game_t.deck.draw(self.hand,1)
+        else :
+            print("Can't draw no more")
+            print(Game_t.deck.getSize())
+        Game_t.rotate(Game_t.state["rotation"])
+
+
+
+
+
     def printHand(self):
         for card in self.hand:
             print(card)     
