@@ -11,9 +11,10 @@ RectDic ={}
 def draw_text(text,font,color,surface,centerpos):
     TextObj = font.render(text, 1, color)
     TextRect = TextObj.get_rect()
+    
     #adding TextRects to the local dictionnary
     RectDic[text] =TextRect
-
+    
     TextRect.center = centerpos
     pygame.draw.rect(screen,(100,0,250) , pygame.Rect(TextRect))
     surface.blit(TextObj ,TextRect)
@@ -34,15 +35,12 @@ screenWidth=1280
 screenHeight=640
 screen=pygame.display.set_mode((screenWidth, screenHeight))
 
-# bg = pygame.image.load(getPath('images', 'cards',"Table_4.png"))
 
 #######################################   Buttons Positions    ##
 PlayButton = (550 ,100)
 ExitButton = (550 ,500)
 RulesButton = (550 ,300)
-DifButton = (1050 ,200)
 
-DifRect = pygame.Rect((910,280) ,(70,40))
 
 #################################################################  Game Loop
 while(True):
@@ -53,27 +51,26 @@ while(True):
             sys.exit()
         ##### check mouse click
 
-        if(event.type == pygame.MOUSEBUTTONDOWN and pygame.MOUSEBUTTONUP):
+        if(event.type == pygame.MOUSEBUTTONDOWN ):
             if( RectDic["Play"].collidepoint(pygame.mouse.get_pos()) ):
                 print ("Play")
 
                 T=True
                 Test = (550 ,300)
                 while(T):
-                    temp=True
                     for event in pygame.event.get():
                         # check if player quits the game
                         if(event.type == pygame.QUIT):
                             pygame.quit()
                             sys.exit()
                         ##### check mouse click
-                        if(event.type == pygame.MOUSEBUTTONDOWN and pygame.MOUSEBUTTONUP and temp):
+                        if(event.type == pygame.MOUSEBUTTONDOWN and pygame.MOUSEBUTTONUP):
                             if( RectDic["test"].collidepoint(pygame.mouse.get_pos()) ):
                                 print ("test")
                             if( RectDic["Exit"].collidepoint(pygame.mouse.get_pos()) ):
                                 print ("Exit")
-                                temp=False
-                        if(not temp): break
+                                T=False
+                    if(T==False): break
 
                     
                     
@@ -105,13 +102,8 @@ while(True):
     draw_text("Play" , font , (255 ,255 ,255) ,screen ,PlayButton)
     draw_text("Game Rules" , font , (255 ,255 ,255) ,screen ,RulesButton)
     draw_text("Exit" , font , (255 ,255 ,255) ,screen ,ExitButton)
-    draw_text("difficulty" , font , (255 ,255 ,255) ,screen ,DifButton)
 
-    
-    pygame.draw.line(screen , (0 , 0 , 0), (900 ,300) , (1200 ,300) , 10 )
-    pygame.draw.rect(screen,(200 ,200 ,200) , DifRect )
 
     pygame.display.update()
-    screen.blit(screen,DifRect)
 
 
