@@ -1,8 +1,9 @@
 from random import randint
 from utilities.functions.path import getPath
 from utilities.classes.object.card.Card import Card
+# import utilities.classes.game.Game as Game_t
+# from utilities.classes.game.Game import Game
 from utilities.classes.object.Object import Object
-import time
 
 class Deck(Object):
     cardsColors=[ "Green", "Blue", "Red", "Yellow"]
@@ -18,14 +19,13 @@ class Deck(Object):
         self.size=len(self.deck)
         self.isDeckEmpty=False
         self.shuffleDeck()
-            
+        
     def drawingCallback(self):
         from utilities.classes.game.Game import Game
         self.draw()
         Game.rotate()
         
     # getters for deck and size
-
     def getDeck(self):
         return self.deck
 
@@ -92,13 +92,6 @@ class Deck(Object):
         listOfWildCards=[Card(type="Wild", icon=getPath("images", "cards", "Wild.png"))]#une carte wild est crée dans la liste
         return self.cloneCards(listOfWildCards,numberOfwildCards)
 
-    def createNrmlCards(self):
-        subDeck1=self.createCards(Deck.cardsColors, Deck.numbersRange)
-        subDeck=self.cloneCards(subDeck1[4:],2)
-        subDeck.extend(subDeck1[:4])
-        return subDeck
-        return self.cloneCards(listOfWildCards, numberOfwildCards)
-    
     # create 76 normal cards , 4 for each color and number
     def createNrmlCards(self):
         subDeck1=self.createCards(Deck.cardsColors, Deck.numbersRange)
@@ -117,3 +110,4 @@ class Deck(Object):
         for i in range(len(Game_t.Game.getState("playersList"))):
             self.draw(number)
             Game_t.Game.rotate()
+
