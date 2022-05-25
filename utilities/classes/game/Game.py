@@ -159,7 +159,9 @@ class Game:
         Object([Game.screenWidth-100, Game.screenHeight-50], [100, 20],
                icon=getPath("images", "icons", "avatar6.png")).add()        
         Object([Game.screenWidth-100, Game.screenHeight-200], [100, 20],
-               icon=getPath("images", "icons", "unoButton.png")).add()        
+               icon=getPath("images", "icons", "unoButton.png")).add()  
+        if(not Game.deck.isEmpty()):
+            Game.setState("lastPlayedCard", Game.deck.deck.pop())
     
     # display the results of the game
     def displayResults(self):

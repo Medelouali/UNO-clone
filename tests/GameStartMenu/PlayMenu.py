@@ -2,7 +2,7 @@ import pygame,sys
 from Functions import draw_text
 from Functions import font
 from Functions import screen
-# from utilities.classes.game.Game import Game
+from utilities.classes.game.Game import Game
 
 pygame.init()
 
@@ -33,9 +33,9 @@ def PlayMenu(ActMenu,RectDic):
                 #    Start of the GAME
                 if( RectDic["play a bit"].collidepoint(pygame.mouse.get_pos()) and ActMenu=="PlayMenu" ):
                     print("Start a game")
-                    # if(__name__ == '__main__'):
-                    #     game = Game()
-                    #     game.launch()
+                    if(__name__ == '__main__'):
+                        game = Game()
+                        game.launch()
                                 
 
         #Screen blit and updating                

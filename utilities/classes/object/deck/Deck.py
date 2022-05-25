@@ -19,6 +19,7 @@ class Deck(Object):
         self.size=len(self.deck)
         self.isDeckEmpty=False
         self.shuffleDeck()
+        print(f"Cards created {len(self.deck)}")
         
     # it means nothing to make this method a class method
 

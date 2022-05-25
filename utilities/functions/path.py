@@ -10,7 +10,7 @@ def writeText(string, coordx, coordy, fontSize, window):
     #set the font to write with
     font = pygame.font.Font('freesansbold.ttf', fontSize) 
     #(0, 0, 0) is black, to make black text
-    text = font.render(string, True, (0, 0, 0))
+    text = font.render(string, True, (255, 255, 255))
     #get the rect of the text
     textRect = text.get_rect()
     #set the position of the text
