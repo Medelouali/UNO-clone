@@ -78,9 +78,6 @@ class Game:
             Game.screen.blit(Game.backgroundImage, (0, 0))
             # self.renderPlayerHand(players[0])
             self.render()
-            botCardsNumber=len(Game.getState("playersList")[0].getHand())
-            writeText(f"{botCardsNumber} Cards Left", 100, 120, 30, Game.screen)
-            writeText("Me", Game.screenWidth-100, Game.screenHeight-120, 30, Game.screen)
             self.clock.tick(Game.framesPerSecond)
          
     @classmethod # modify a value in the state by passing its key ( if it exists )
@@ -116,6 +113,9 @@ class Game:
         self.regenerateDeck()
         self.renderPlayerHand()
         self.renderPlayedCards()
+        botCardsNumber=len(Game.getState("playersList")[0].getHand())
+        writeText(f"{botCardsNumber} Cards Left", 100, 120, 30, Game.screen)
+        writeText("Me", Game.screenWidth-100, Game.screenHeight-120, 30, Game.screen)
         # copyList=Game.objectsGroup.values()
         for value in Game.objectsGroup.values():
             value.update()
@@ -168,11 +168,13 @@ class Game:
     # display the cards that have already been played
     def renderPlayedCards(self):
         # No need to render all the cards, just the one on the top
-        if(Game.playedCards):
-            global topCard_t # to avoid TypeError: 'dict_items' object is not subscriptable
-            for value in Game.playedCards.values():
-                topCard_t=value
-            topCard_t.setPosition(Game.positions["playedCards"]).add()
+        if(Game.getState("lastPlayedCard")):
+            Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).add()
+        # if(Game.playedCards):
+        #     global topCard_t # to avoid TypeError: 'dict_items' object is not subscriptable
+        #     for value in Game.playedCards.values():
+        #         topCard_t=value
+        #     topCard_t.setPosition(Game.positions["playedCards"]).add()
             
     # generate a deck of cards when the deck runs out of cards
     def regenerateDeck(self):
