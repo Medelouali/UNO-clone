@@ -7,7 +7,7 @@ class Ai(Player):
         # calling the parent constructor to take care of initialization of attrs that are common to all players
         Player.__init__(self, id)
         # intializing the list of playabale cards to an empty list
-        self.playableCards = []
+        # self.playableCards = []
    
     # # To update the list of playable cards by comparing every card against the last played card
     # def updatePlayableCards(self, lastPlayedCard):
@@ -19,10 +19,10 @@ class Ai(Player):
     # for the Ai to play when      
     def performMove(self):
         from utilities.classes.game.Game import Game as Game_t
+
+
         for i in range(len(self.getHand())):
             if self.getHand()[i].compareSingleCard():
-                # print("My hand : ")
-                # self.printHand()
                 # pop a card to play from the Ai's hand
                 cardToPlay = self.getHand().pop(i)
                 # set the last played card to be this card
@@ -30,19 +30,17 @@ class Ai(Player):
                 # add cardToPlay to deck of played cards
                 Game_t.playedCards[cardToPlay.getId()]=cardToPlay
                 Game_t.rotate(Game_t.state["rotation"])
+                print("I played",cardToPlay)
+                print("Last played card",Game_t.getState("lastPlayedCard"))
                 return 
         if(Game_t.deck.getSize()>=1):
             print("I'm drawing")
-            Game_t.deck.draw(self.hand,1)
+            Game_t.deck.draw()
+            Game_t.rotate(Game_t.state["rotation"])
         else :
             print("Can't draw no more")
             print(Game_t.deck.getSize())
-        Game_t.rotate(Game_t.state["rotation"])
-
-
-
-
-
+        
     def printHand(self):
         for card in self.hand:
             print(card)     

@@ -17,7 +17,7 @@ class Game:
     state={
             "rotation": 1, # it could be 1, -1, or eventially 2
             "winner": None,
-            "activePlayer": 0,#contains the id of the active player
+            "activePlayer": 1,#contains the id of the active player
             # representes an event that player can trigger 
             "event": None, 
             # equals true when the game is finished
@@ -60,6 +60,11 @@ class Game:
         Game.deck.distributeCard()
         # a loop that keeps running as long as we're playing the game
         while(True):
+            print(Game.getState("lastPlayedCard"))
+            self.renderPlayedCard()
+            # print("My hand :")
+            # for card in players[Game.getState("activePlayer")].hand:
+            #     print(card)  
             # Check if the player has quit the game or if the game is over
             for event in pygame.event.get():
                     # set the occured event 
@@ -76,10 +81,11 @@ class Game:
             # Check if current player is a bot 
             currentPlayer = players[Game.getState("activePlayer")]
             if(isinstance(currentPlayer,Ai)):
+                print("Ai is playing")
                 currentPlayer.performMove()
-                
             # rendering the game
             pygame.display.update()
+            
             Game.screen.blit(Game.backgroundImage, (0, 0))
             # self.renderPlayerHand(players[0])
             self.render()
@@ -117,10 +123,8 @@ class Game:
         
     # render every object in objectGroup 
     def render(self):
-        print(Game.deck.getSize())
         self.regenerateDeck()
-        self.renderPlayerHand()
-        self.renderPlayedCard()
+        self.renderPlayerHand() 
         # copyList=Game.objectsGroup.values()
         for value in Game.objectsGroup.values():
             value.update()
@@ -160,11 +164,12 @@ class Game:
     def setUp(self):
         Object([100, 50], [100, 20],icon=getPath("images", "icons", "avatar10.png")).add()
         Object(Game.positions["deck"], [80, 20],icon=getPath("images", "cards", "Deck.png"), 
-               callback=lambda: Game.deck.draw()).add()
+               callback=lambda: Game.deck.drawingCallback()).add()
         Object([Game.screenWidth-100, Game.screenHeight-50], [100, 20],
                icon=getPath("images", "icons", "avatar6.png")).add()        
         Object([Game.screenWidth-100, Game.screenHeight-200], [100, 20],
-               icon=getPath("images", "icons", "unoButton.png")).add()        
+               icon=getPath("images", "icons", "unoButton.png")).add()    
+           
     
     # display the results of the game
     def displayResults(self):
@@ -174,8 +179,8 @@ class Game:
     def renderPlayedCard(self):
         # No need to render all the cards, just the one on the top
           if(Game.getState("lastPlayedCard")):
-            Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"])
-            Game.getState("lastPlayedCard").add()
+            Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).add()
+            # print(Game.getState("lastPlayedCard"))
             
     # generate a deck of cards when the deck runs out of cards
     def regenerateDeck(self):
@@ -201,7 +206,6 @@ class Game:
             for card in Game.playedCards.values():
                 print(card)
             # Game.rotate(Game.state["rotation"])
-        
             
             
     def showDeck(self):

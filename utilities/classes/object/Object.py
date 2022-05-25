@@ -21,15 +21,13 @@ class Object():
     def update(self):
         # event= Game_t.Game.getState('event')
         pos = pygame.mouse.get_pos()
-<<<<<<< HEAD
-=======
         # Game_t.Game.ifAiPlay()
->>>>>>> main
         if self.rect.collidepoint(pos):  # testing if mouse hovering over Card
             self.setActive()
             if pygame.mouse.get_pressed()[0] == 1 and self.getActive():  # testing if Card clicked
                 if(self.callback):
                     self.callback()
+                    pygame.time.delay(200)
         else :
             if(self.getActive()==self.objectId):
                 Object.activeCard=None

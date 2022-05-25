@@ -53,38 +53,31 @@ class Card(Object):
             return None
         elif self.type=="Wild":
             return self
+        elif self.type=="Draw" or self.type=="Draw4" or self.type=="Skip" or self.type=="Reverse":
+            if(lastPlayedCard.getColor()==self.getColor()):
+                return self
         return None
     
     def throwCard(self, playerId):
         from utilities.classes.game.Game import Game as Game_t
         if playerId==Game_t.state["activePlayer"]:
             if self.compareSingleCard():
-                index = Game_t.getState("playersList")[playerId].getHand().index(self)
-                cardToPlay = Game_t.getState("playersList")[playerId].getHand().pop(index)
-                # set the last played card to be this card
-                Game_t.setState("lastPlayedCard",cardToPlay)
-                # add cardToPlay to deck of played cards
-                Game_t.playedCards[cardToPlay.getId()]=cardToPlay
+                newHand=[]
+                for card in Game_t.getState("playersList")[playerId].getHand():
+                    if(card.getId()!=self.getId()):
+                        newHand.append(card)
+                newPlayer=Game_t.getState("playersList")[playerId]
+                newPlayer.hand=newHand
+                Game_t.state["playersList"][playerId]=newPlayer
+                Game_t.playedCards[self.getId()]=self
                 Game_t.rotate(Game_t.state["rotation"])
-                Game_t.getState("playersList")[playerId].printHand()
-                # newHand=[]
-                # for card in Game_t.getState("playersList")[playerId].getHand():
-                #     if(card.getId()!=self.getId()):
-                #         newHand.append(card)
-                # newPlayer=Game_t.getState("playersList")[playerId]
-                # newPlayer.hand=newHand
-                # Game_t.state["playersList"][playerId]=newPlayer
-                # Game_t.playedCards[self.getId()]=self
-                # Game_t.setState("lastPlayedCard", self)
-                # Game_t.rotate(Game_t.state["rotation"])
+                Game_t.setState("lastPlayedCard", self)
                 return True
-            """changes playerActive to next player hence this player's to false""" 
-
+            """changes playerActive to next player hence this player's to false"""
     def getColor(self):
         return self.color
     
     def getNumber(self):
         return self.number
-    # to display a card for testing reasons 
     def __str__(self):
-        return f"Color :{self.color} Number :{self.number}"
+        return f"Number : {self.number} Color : {self.color}"

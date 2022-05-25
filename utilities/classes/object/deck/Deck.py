@@ -2,6 +2,7 @@ from random import randint
 from utilities.functions.path import getPath
 from utilities.classes.object.card.Card import Card
 from utilities.classes.object.Object import Object
+import pygame
 
 class Deck(Object):
     cardsColors=[ "Green", "Blue", "Red", "Yellow"]
@@ -21,8 +22,10 @@ class Deck(Object):
             
     def drawingCallback(self):
         from utilities.classes.game.Game import Game
-        self.draw(1)
-        Game.rotate()
+        print("Drawing a card")
+        if(Game.getState("activePlayer")==1):
+            self.draw()
+            Game.rotate(Game.state["rotation"])
         
     # getters for deck and size
     def getDeck(self):
@@ -55,8 +58,8 @@ class Deck(Object):
         if(self.isEmpty()): 
             print("can't draw deck's empty")
             return topCard
-        print("playerHand ", len(Game.state["playersList"][activeId].hand))
-        print("Deck number ", len(Game.deck.deck))
+        # print("playerHand ", len(Game.state["playersList"][activeId].hand))
+        # print("Deck number ", len(Game.deck.deck))
         for _ in range(numberOfCards):
             topCard=self.deck.pop()
             newHand=Game.state["playersList"][activeId].hand
@@ -78,11 +81,13 @@ class Deck(Object):
             if(type=="Normal"):
                 for number in listNumbers:
                     for col in listColors:
-                        listOfCards.append(Card(number, col, type, 
-                            icon=getPath("images", "cards", f"{col}_{number}.png")))
+                        for i in range(2):
+                            listOfCards.append(Card(number, col, type, 
+                                icon=getPath("images", "cards", f"{col}_{number}.png")))
             else:
                 for col in listColors:
-                        listOfCards.append(Card(0, col, type,
+                    for i in range(2):
+                        listOfCards.append(Card(None, col, type,
                         icon=getPath("images","cards", f"{col}_{type}.png")))
 
         return listOfCards
@@ -95,22 +100,24 @@ class Deck(Object):
                 listOfCards.insert(j+i,item)
         return listOfCards
     # create 4 wild cards
-    def createWildCards(self, numberOfwildCards):
-        listOfWildCards=[Card(type="Wild", icon=getPath("images", "cards", "Wild.png"))]#une carte wild est crée dans la liste
-        return self.cloneCards(listOfWildCards, numberOfwildCards)
+    def createWildCards(self):
+        listOfWildCards=[]
+        for i in range(4):
+            listOfWildCards.append(Card(type="Wild", icon=getPath("images", "cards", "Wild.png")))
+            #une carte wild est crée dans la liste
+        return listOfWildCards
     
     # create 76 normal cards , 4 for each color and number
     def createNrmlCards(self):
-        subDeck1=self.createCards(Deck.cardsColors, Deck.numbersRange)
-        subDeck=self.cloneCards(subDeck1[4:],2)
-        return subDeck + subDeck1[:4]
+        # subDeck=self.cloneCards(subDeck1[4:],2)
+        return self.createCards(Deck.cardsColors, Deck.numbersRange)
     
     # create specialCards 
     def createSpecialCards(self):
-        subDeck=self.createCards(Deck.cardsColors, Deck.numbersRange, Deck.coloredTypes)
-        subDeckWild=self.createWildCards(4)
-        subDeckSpecial=self.cloneCards(subDeck,2)
-        return subDeckSpecial + subDeckWild
+        subDeck=self.createCards(Deck.cardsColors, [None], Deck.coloredTypes)
+        subDeckWild=self.createWildCards()
+        # subDeckSpecial=self.cloneCards(subDeck,2)
+        return subDeck + subDeckWild
     
     # Game_t.Game.getState("playersList") cercular import bug should be fixed
     # fixed the method :D 
@@ -119,6 +126,6 @@ class Deck(Object):
         for i in range(len(Game_t.Game.getState("playersList"))):
             self.draw(number)
             Game_t.Game.rotate()
-        Game_t.Game.setState("lastPlayedCard",self.deck[-1])
+        Game_t.Game.setState("lastPlayedCard",self.deck.pop(-1))
 
         
