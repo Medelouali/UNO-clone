@@ -1,6 +1,8 @@
 from random import randint
 from utilities.functions.path import getPath
 from utilities.classes.object.card.Card import Card
+# import utilities.classes.game.Game as Game_t
+# from utilities.classes.game.Game import Game
 from utilities.classes.object.Object import Object
 
 class Deck(Object):
@@ -17,6 +19,9 @@ class Deck(Object):
         self.size=len(self.deck)
         self.isDeckEmpty=False
         self.shuffleDeck()
+        
+    # it means nothing to make this method a class method
+
             
     def drawingCallback(self):
         from utilities.classes.game.Game import Game
@@ -88,8 +93,8 @@ class Deck(Object):
 
     def createWildCards(self, numberOfwildCards):
         listOfWildCards=[Card(type="Wild", icon=getPath("images", "cards", "Wild.png"))]#une carte wild est crée dans la liste
-        return self.cloneCards(listOfWildCards, numberOfwildCards)
-    
+        return self.cloneCards(listOfWildCards,numberOfwildCards)
+
     # create 76 normal cards , 4 for each color and number
     def createNrmlCards(self):
         subDeck1=self.createCards(Deck.cardsColors, Deck.numbersRange)
@@ -104,11 +109,8 @@ class Deck(Object):
         return subDeckSpecial + subDeckWild
     
     # Game_t.Game.getState("playersList") cercular import bug should be fixed
-    # fixed the method :D 
     def distributeCard(self, number=7):
         import utilities.classes.game.Game as Game_t
         for i in range(len(Game_t.Game.getState("playersList"))):
             self.draw(number)
             Game_t.Game.rotate()
-
-        
