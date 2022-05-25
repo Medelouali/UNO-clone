@@ -1,12 +1,7 @@
 from random import randint
 from utilities.functions.path import getPath
 from utilities.classes.object.card.Card import Card
-<<<<<<< HEAD
-# import utilities.classes.game.Game as Game_t
-# from utilities.classes.game.Game import Game
-=======
 from utilities.classes.object.Object import Object
->>>>>>> b91604c435c459f27e6f4eed046f800b46dde761
 
 class Deck(Object):
     cardsColors=[ "Green", "Blue", "Red", "Yellow"]
@@ -22,10 +17,6 @@ class Deck(Object):
         self.size=len(self.deck)
         self.isDeckEmpty=False
         self.shuffleDeck()
-<<<<<<< HEAD
-        
-    # it means nothing to make this method a class method
-=======
             
     def drawingCallback(self):
         from utilities.classes.game.Game import Game
@@ -33,7 +24,6 @@ class Deck(Object):
         Game.rotate()
         
     # getters for deck and size
->>>>>>> b91604c435c459f27e6f4eed046f800b46dde761
     def getDeck(self):
         return self.deck
 
@@ -98,16 +88,6 @@ class Deck(Object):
 
     def createWildCards(self, numberOfwildCards):
         listOfWildCards=[Card(type="Wild", icon=getPath("images", "cards", "Wild.png"))]#une carte wild est crée dans la liste
-<<<<<<< HEAD
-        return self.cloneCards(listOfWildCards,numberOfwildCards)
-
-    def createNrmlCards(self):
-        subDeck1=self.createCards(Deck.cardsColors, Deck.numbersRange)
-        subDeck=self.cloneCards(subDeck1[4:],2)
-        subDeck.extend(subDeck1[:4])
-        return subDeck
-
-=======
         return self.cloneCards(listOfWildCards, numberOfwildCards)
     
     # create 76 normal cards , 4 for each color and number
@@ -117,7 +97,6 @@ class Deck(Object):
         return subDeck + subDeck1[:4]
     
     # create specialCards 
->>>>>>> b91604c435c459f27e6f4eed046f800b46dde761
     def createSpecialCards(self):
         subDeck1=self.createCards(Deck.cardsColors, Deck.numbersRange, Deck.coloredTypes)
         subDeckWild=self.createWildCards(4)
@@ -125,13 +104,6 @@ class Deck(Object):
         return subDeckSpecial + subDeckWild
     
     # Game_t.Game.getState("playersList") cercular import bug should be fixed
-<<<<<<< HEAD
-    def distributeCard(self, listOfPlayers=[]):
-        for i in range(len(listOfPlayers)):
-            currentPlayerHand = listOfPlayers[i].getHand()
-            self.draw(currentPlayerHand, 7)
-
-=======
     # fixed the method :D 
     def distributeCard(self, number=7):
         import utilities.classes.game.Game as Game_t
@@ -140,4 +112,3 @@ class Deck(Object):
             Game_t.Game.rotate()
 
         
->>>>>>> b91604c435c459f27e6f4eed046f800b46dde761
