@@ -168,11 +168,7 @@ class Game:
     # display the cards that have already been played
     def renderPlayedCards(self):
         # No need to render all the cards, just the one on the top
-        if(Game.playedCards):
-            global topCard_t # to avoid TypeError: 'dict_items' object is not subscriptable
-            for value in Game.playedCards.values():
-                topCard_t=value
-            topCard_t.setPosition(Game.positions["playedCards"]).add()
+        Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).add()
             
     # generate a deck of cards when the deck runs out of cards
     def regenerateDeck(self):
