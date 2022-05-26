@@ -1,4 +1,4 @@
-from turtle import position
+from random import random
 import pygame, sys
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
@@ -25,6 +25,7 @@ class Game:
             # list of players 
             "playersList": [],
             "lastPlayedCard": None,
+            "toggler": False
         } # this dictionary will keep track of the game state
     # iterface settings
     framesPerSecond=60
@@ -87,6 +88,7 @@ class Game:
     def setState(cls, key, value):
         if(key in cls.state.keys()):
             cls.state[key]=value
+            return value
        
     # None is returned implicitly if the key doesn't exist in the state
     @classmethod
@@ -170,6 +172,8 @@ class Game:
     # display the cards that have already been played
     def renderPlayedCards(self):
         # No need to render all the cards, just the one on the top
+        # posX=Game.positions["playedCards"][0]+random.randint(0,10)/11
+        # posY=Game.positions["playedCards"][1]+random.randint(0,10)/11
         Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).add()
             
     # generate a deck of cards when the deck runs out of cards

@@ -19,14 +19,17 @@ class Object():
         Object.createdObjects+=1
         
     def update(self):
-        # event= Game_t.Game.getState('event')
+        event= Game_t.Game.getState('event')
         pos = pygame.mouse.get_pos()
+        if(Game_t.Game.getState('activePlayer')!=1):
+            return
         # Game_t.Game.ifAiPlay()
         if self.rect.collidepoint(pos):  # testing if mouse hovering over Card
             self.setActive()
-            if pygame.mouse.get_pressed()[0] == 1 and self.getActive():  # testing if Card clicked
+            if pygame.mouse.get_pressed()[0] == 1  and self.getActive():  # testing if Card clicked
                 if(self.callback):
                     self.callback()
+            # pygame.mouse.get_pressed()[0] == 1
         else :
             if(self.getActive()==self.objectId):
                 Object.activeCard=None
