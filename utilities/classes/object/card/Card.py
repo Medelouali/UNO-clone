@@ -11,6 +11,7 @@ class Card(Object):
         self.type=type
         self.icon = icon
         self.ownerId=ownerId
+        self.played=False
         
     # coloredType=["Skip", "Reverse", "Draw 2", "Draw 4", "Wild"]
     def switchCard(self):
@@ -24,11 +25,18 @@ class Card(Object):
             print("You choose a draw 4 card")
         else:
             print("Norml card was chosen")
-            
+    # get card's type 
+    def getCardType(self):
+        return self.type
+    # if a card is played this method returns True
+    def isPlayed(self):
+        return self.played
+    # set played attr to True when a card is played
+    def setPlayed(self):
+        self.played = True
     # to get position of a card 
     def getPosition(self):
         return self.rect.center
-    
     # to set new position of a card
     def setPosition(self, coordinates):
         self.rect.center = coordinates

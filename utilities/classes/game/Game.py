@@ -7,6 +7,7 @@ from utilities.classes.Ai.Ai import Ai
 from utilities.classes.object.player.Player import Player
 from utilities.classes.object.deck.Deck import Deck
 from utilities.functions.path import writeText
+from utilities.functions.Reverse import reverseOrder
 
 pygame.init()
 pygame.display.set_caption('UNO')
@@ -60,8 +61,8 @@ class Game:
         Game.deck.distributeCard()
         # a loop that keeps running as long as we're playing the game
         while(True):
-            print(Game.getState("lastPlayedCard"))
             self.renderPlayedCard()
+            self.applyEffect()
             # print("My hand :")
             # for card in players[Game.getState("activePlayer")].hand:
             #     print(card)  
@@ -207,7 +208,23 @@ class Game:
                 print(card)
             # Game.rotate(Game.state["rotation"])
             
-            
+    # to apply last played card special effect 
+    def applyEffect(self): 
+        if(Game.getState("lastPlayedCard").getCardType() is not "Normal" and not Game.getState("lastPlayedCard").isPlayed()):
+                print("This is a special card")
+                Game.getState("lastPlayedCard").setPlayed()
+                if(Game.getState("lastPlayedCard").getCardType()=="Draw"):
+                    print("Next player draws 2")
+                elif(Game.getState("lastPlayedCard").getCardType()=="Draw4"):
+                    print("Next player draws 4")
+                elif(Game.getState("lastPlayedCard").getCardType()=="Reverse"):
+                    print("Reverse order")
+                    reverseOrder()
+                elif(Game.getState("lastPlayedCard").getCardType()=="Skip"):
+                    print("Skip to next player")
+                elif(Game.getState("lastPlayedCard").getCardType()=="Wild"):
+                    print("I'm wild baby!")
+
     def showDeck(self):
         for card in self.deck:
             print(f"{card.number}_{card.color}")
