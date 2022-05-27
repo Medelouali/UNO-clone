@@ -4,7 +4,6 @@ import utilities.classes.game.Game as Game_t
 from utilities.functions.resize import getSize # to avoid circular imports
 
 class Object():
-    activeCard=None
     createdObjects=0 # a unique identifier for each object(id)
     def __init__(self,coordinates=[10, 10], dimensions=[10, 10], icon=None, callback=None):
         self.image = pygame.transform.scale(pygame.image.load(icon), getSize(icon, dimensions[0]))
@@ -19,21 +18,15 @@ class Object():
         Object.createdObjects+=1
         
     def update(self):
-        event= Game_t.Game.getState('event')
+        # event= Game_t.Game.getState('event')
         pos = pygame.mouse.get_pos()
         if(Game_t.Game.getState('activePlayer')!=1):
             return
         # Game_t.Game.ifAiPlay()
         if self.rect.collidepoint(pos):  # testing if mouse hovering over Card
-            self.setActive()
-            if pygame.mouse.get_pressed()[0] == 1  and self.getActive():  # testing if Card clicked
+            if pygame.mouse.get_pressed()[0] == 1:  # testing if Card clicked
                 if(self.callback):
                     self.callback()
-            # pygame.mouse.get_pressed()[0] == 1
-        else :
-            if(self.getActive()==self.objectId):
-                Object.activeCard=None
-        
         Game_t.Game.screen.blit(self.image, self.rect)
         self.updateCoord()
         
@@ -62,14 +55,6 @@ class Object():
     def getId(self):
         return self.objectId
     
-    def getIndex(self):
-        return self.z_index
-    
-    def setActive(self):
-        Object.activeCard=self.objectId
-    
-    def getActive(self):
-        return Object.activeCard 
     
     # This is for some animations
     def getCoordinates(self):

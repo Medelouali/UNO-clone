@@ -21,24 +21,11 @@ class Deck(Object):
         self.size=len(self.deck)
         self.isDeckEmpty=False
         self.shuffleDeck()
-        
         print(f"Cards created {len(self.deck)}")
         
-    # it means nothing to make this method a class method
-
-    # def draw_deck(text, font, color, surface, centerpos, RectDic, callback=None):
-    #     TextObj = font.render(text, 1, color)
-    #     TextRect = TextObj.get_rect()
-    #     #adding TextRects to the local dictionnary
-    #     RectDic[text] =TextRect
-        
-    #     TextRect.center = centerpos
-    #     pygame.draw.rect(screen,(100,0,250) , pygame.Rect(TextRect))
-    #     surface.blit(TextObj ,TextRect)
-            
     def drawingCallback(self):
         from utilities.classes.game.Game import Game
-        self.draw(1)
+        self.draw()
         Game.rotate()
         
     # getters for deck and size
@@ -110,7 +97,6 @@ class Deck(Object):
         subDeck=self.cloneCards(subDeck1[4:],2)
         return subDeck + subDeck1[:4]
     
-    # create specialCards 
     def createSpecialCards(self):
         subDeck1=self.createCards(Deck.cardsColors, [None], Deck.coloredTypes)
         subDeckWild=self.createWildCards(4)
@@ -123,3 +109,4 @@ class Deck(Object):
         for _ in range(len(Game_t.Game.getState("playersList"))):
             self.draw(number)
             Game_t.Game.rotate()
+
