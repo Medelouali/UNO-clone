@@ -70,7 +70,7 @@ class Card(Object):
                 newPlayer.hand=newHand
                 Game_t.state["playersList"][playerId]=newPlayer
                 Game_t.playedCards[self.getId()]=self
-                # Game_t.rotate(Game_t.state["rotation"])
+                Game_t.rotate(Game_t.state["rotation"])
                 Game_t.state["lastPlayedCard"]=self
                 return True
             """changes playerActive to next player hence this player's to false""" 

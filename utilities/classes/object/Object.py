@@ -24,9 +24,13 @@ class Object():
             return
         # Game_t.Game.ifAiPlay()
         if self.rect.collidepoint(pos):  # testing if mouse hovering over Card
-            if pygame.mouse.get_pressed()[0] == 1:  # testing if Card clicked
+            if pygame.mouse.get_pressed()[0] == 1 and not self.clicked:  # testing if Card clicked
+                self.clicked=True
                 if(self.callback):
                     self.callback()
+        if(pygame.mouse.get_pressed()[0] == 0):
+            self.clicked=False
+            
         Game_t.Game.screen.blit(self.image, self.rect)
         self.updateCoord()
         

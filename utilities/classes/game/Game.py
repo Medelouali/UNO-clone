@@ -171,6 +171,7 @@ class Game:
     
     # display the cards that have already been played
     def renderPlayedCards(self):
+        # print(len(Game.playedCards.values()))
         if(Game.getState("lastPlayedCard")):
             Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).add()
             
