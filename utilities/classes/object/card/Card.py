@@ -1,6 +1,7 @@
 import numbers
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
+import pygame
 
 class Card(Object):
     def __init__(self, number=None, color=None, type="Normal", coordinates=[1, 1], 
@@ -78,6 +79,7 @@ class Card(Object):
                 newPlayer.hand=newHand
                 Game_t.state["playersList"][playerId]=newPlayer
                 Game_t.playedCards[self.getId()]=self
+                pygame.time.delay(200)
                 Game_t.rotate(Game_t.state["rotation"])
                 Game_t.setState("lastPlayedCard", self)
                 return True

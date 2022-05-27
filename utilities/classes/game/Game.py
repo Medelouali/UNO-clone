@@ -219,7 +219,7 @@ class Game:
                     print("Next player draws 4")
                 elif(Game.getState("lastPlayedCard").getCardType()=="Reverse"):
                     print("Reverse order")
-                    reverseOrder()
+                    # reverseOrder()
                 elif(Game.getState("lastPlayedCard").getCardType()=="Skip"):
                     print("Skip to next player")
                 elif(Game.getState("lastPlayedCard").getCardType()=="Wild"):

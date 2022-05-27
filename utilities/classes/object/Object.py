@@ -24,6 +24,12 @@ class Object():
         # Game_t.Game.ifAiPlay()
         if self.rect.collidepoint(pos):  # testing if mouse hovering over Card
             self.setActive()
+            # from utilities.classes.object.card.Card import Card
+            # if(isinstance(self,Card)):
+            #     if self.getPosition()[1]==640/2 :
+            #         print("I'm hovering over Card")
+            #         pygame.time.delay(100)
+            # self.setPosition([self.getPosition()[0], self.getPosition()[1]-50])
             if pygame.mouse.get_pressed()[0] == 1 and self.getActive():  # testing if Card clicked
                 if(self.callback):
                     self.callback()
