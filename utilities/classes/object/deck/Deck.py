@@ -5,7 +5,7 @@ import pygame
 # import utilities.classes.game.Game as Game_t
 # from utilities.classes.game.Game import Game
 from utilities.classes.object.Object import Object
-font = pygame.font.SysFont("gillsanscondensed",70)
+# font = pygame.font.SysFont("gillsanscondensed",70)
 
 class Deck(Object):
     cardsColors=[ "Green", "Blue", "Red", "Yellow"]
@@ -69,7 +69,7 @@ class Deck(Object):
         for _ in range(numberOfCards):
             if(self.isEmpty()): return topCard
             topCard=self.deck.pop()
-            Game.state["playersList"][activeId].hand=+ [topCard]
+            Game.state["playersList"][activeId].hand+= [topCard] # add deck top card into player's hand
             self.size-=1
         return topCard
 
@@ -120,6 +120,6 @@ class Deck(Object):
     # Game_t.Game.getState("playersList") cercular import bug should be fixed
     def distributeCard(self, number=7):
         import utilities.classes.game.Game as Game_t
-        for i in range(len(Game_t.Game.getState("playersList"))):
+        for _ in range(len(Game_t.Game.getState("playersList"))):
             self.draw(number)
             Game_t.Game.rotate()
