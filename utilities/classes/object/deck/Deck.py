@@ -22,7 +22,8 @@ class Deck(Object):
         self.isDeckEmpty=False
         self.shuffleDeck()
         print(f"Cards created {len(self.deck)}")
-        
+    #draws one card by default
+    #we can choose the number of cards to draw 
     def drawingCallback(self):
         from utilities.classes.game.Game import Game
         self.draw()
@@ -31,7 +32,7 @@ class Deck(Object):
     # getters for deck and size
     def getDeck(self):
         return self.deck
-
+    #getters : numbers of card in  the deck
     def getSize(self):
         return self.size
 
@@ -52,12 +53,19 @@ class Deck(Object):
     # Draw a card from the deck if it's not empty
     def draw(self, numberOfCards=1):
         from utilities.classes.game.Game import Game
-        topCard, activeId=None, Game.getState("activePlayer")
+        topCard, activeId = None, Game.getState("activePlayer")
+        #activeId :current active player
+        # _ is used to replace i since we won't be using it again 
         for _ in range(numberOfCards):
+           #if the deck is empty topCard =None 
             if(self.isEmpty()): return topCard
             topCard=self.deck.pop()
-            Game.state["playersList"][activeId].hand+= [topCard] # add deck top card into player's hand
+             # add deck top card into player's hand
+            Game.state["playersList"][activeId].hand+= [topCard]
+            #decmente size of the deck
             self.size-=1
+        #we will need topCard for the AI to compare when he draws the card no need to go again and 
+        #compare all the cards in his hand 
         return topCard
 
     #Tester si le deck est isEmpty et changer la valeur de l'attr. isEmpty de l'instance
@@ -78,7 +86,7 @@ class Deck(Object):
                         listOfCards.append(Card(number, col, type, 
                         icon=getPath("images", "cards", f"{col}_{number}.png")))
         return listOfCards
-
+    #create deck from the cards already played 
     def cloneCards(self, listCards, clonesPerCard=2):
         listOfCards=list(listCards)
         for item in listCards:
@@ -106,6 +114,7 @@ class Deck(Object):
     # Game_t.Game.getState("playersList") cercular import bug should be fixed
     def distributeCard(self, number=7):
         import utilities.classes.game.Game as Game_t
+        #we loop on the players  to distribute the card
         for _ in range(len(Game_t.Game.getState("playersList"))):
             self.draw(number)
             Game_t.Game.rotate()

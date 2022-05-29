@@ -25,9 +25,9 @@ class Game:
             # list of players 
             "playersList": [],
             "lastPlayedCard": None,
-            "toggler": False
         } # this dictionary will keep track of the game state
-    # iterface settings
+    
+    #interface settings
     framesPerSecond=60
     clock=pygame.time.Clock()
     screenWidth=1280
@@ -38,9 +38,13 @@ class Game:
         "deck": (100, screenHeight/2),
         "playedCards": (screenWidth/2, screenHeight/2)
     }
-   
-    objectsGroup={} #maps ids to obj
-    playedCards={} #maps ids to obj too
+    #dict foe object ID 
+    objectsGroup={} 
+    ##dict for object ID 
+    playedCards={} 
+    deck = Deck()
+    #running used to go from oe interface to another 
+    running = True 
     # set background for game interface
     backgroundImage = pygame.image.load(getPath('images', 'cards',"Table_4.png"))
     backgroundImage = pygame.transform.scale(
@@ -50,18 +54,20 @@ class Game:
     # Will add gameMode as attr later 
        pass
     # initialize a deck of cards at the start of the game
-    deck=Deck()
-    def launch(self):
+    
+    def run(self):
         # generate a list of players
         self.generatePlayers() 
         self.setUp()
         # stock players list in a list 
         players = Game.getState("playersList")
+        
         # affect 7 cards to each player 
         Game.deck.distributeCard()
+        
         # a loop that keeps running as long as we're playing the game
 
-        while(True):
+        while(Game.running):
             for event in pygame.event.get():
                 # set the occured event 
                 Game.setState("event", event)
@@ -77,6 +83,7 @@ class Game:
             # rendering the game
             pygame.display.update()
             Game.screen.blit(Game.backgroundImage, (0, 0))
+            
             # self.renderPlayerHand(players[0])
             self.render()
             self.clock.tick(Game.framesPerSecond)
@@ -92,33 +99,39 @@ class Game:
     def getState(cls, key):
         if(key in cls.state.keys()):
             return cls.state[key]
-        
+
+     #method to review !!!   
     @classmethod
-    def rotate(cls, rotateBy=1):
+    def rotate(cls):
+        #rotateBy 
         numOfPlayers=len(Game.getState("playersList"))
+        rotateBy=Game.getState("rotation")
         activeId=Game.getState("activePlayer")
+        
         if(rotateBy>1 or rotateBy<-1): return
-        if(activeId + rotateBy>=numOfPlayers):
+        #to be reviewed
+        if(activeId + rotateBy>numOfPlayers-1):
             Game.setState("activePlayer", 0)
-            Game.state["rotation"]=1
             return
+        
         if(activeId + rotateBy<0):
             Game.setState("activePlayer", numOfPlayers-1)
-            Game.state["rotation"]=-1
             return
+        
         Game.setState("activePlayer", activeId + rotateBy)
-        Game.state["rotation"]=1
         
     # render every object in objectGroup 
     def render(self):
-        print("Active:\t", Game.getState("activePlayer"))
         self.regenerateDeck()
         self.renderPlayerHand()
         self.renderPlayedCards()
+        #show how many cards are left in the AI's hand 
         botCardsNumber=len(Game.getState("playersList")[0].getHand())
+
         writeText(f"{botCardsNumber} Cards Left", 100, 120, 30, Game.screen)
         writeText("Me", Game.screenWidth-100, Game.screenHeight-120, 30, Game.screen)
-        # copyList=Game.objectsGroup.values()
+
+        #loop to update the objects in the game 
         for value in Game.objectsGroup.values():
             value.update()
         
@@ -129,6 +142,7 @@ class Game:
                 # set list of players ( Ai and real player in this case )
                 Game.setState("playersList", [
                     Ai(0),
+                    #the human player starts first 
                     Player(1)]
                     )
             # more than two players
@@ -139,21 +153,28 @@ class Game:
                 ])
         # all players are real 
         else:
+            
             Game.setState("playersList", Game.getState("playersList") + [
                 Player(i) for i in range(numOfPlayers)
             ])
             
-    # display player's hand
+    # display player's hand, it's responsive now
     def renderPlayerHand(self):
         hand =Game.getState("playersList")[1].getHand() # index 0 not 1, 1 is the AI
-        len_t=len(hand)
-        shiftX = 110
-        width = shiftX * len_t
-        margin=(Game.screenWidth-width)/2
+        len_t=len(hand) #how many cards in hand
+        if(not len_t): return # if no cards in hand, return nothing
+        cardMargin=10 # space left between cards
+        handMargin= 200 # space left between hand and screen
+        cardWith=(Game.screenWidth-2*handMargin-(len_t-1)*cardMargin)/len_t #dynamic card width
+        moveBy=handMargin
+        # to limit the width of the card
+        if(cardWith>100): 
+            cardWith=100
         for i in range(len_t):
-            hand[i].setPosition([margin+i*shiftX, Game.screenHeight-100]).add()
+            hand[i].setPosition([moveBy, Game.screenHeight-100]).setDimentions((cardWith, 100)).add()
+            moveBy+=cardMargin+cardWith
             
-    # setting up the game
+    # adds object to the screen 
     def setUp(self):
         Object([100, 50], [100, 20],icon=getPath("images", "icons", "avatar10.png")).add()
         Object(Game.positions["deck"], [80, 20],icon=getPath("images", "cards", "Deck.png"), 
@@ -178,9 +199,11 @@ class Game:
     # generate a deck of cards when the deck runs out of cards
     def regenerateDeck(self):
         if(Game.deck.isEmpty()):
+           #to add directly cards in  setDeck
             Game.deck.setDeck([
                 card.setPosition(Game.positions["deck"]) for card in Game.playedCards.values()
             ])
+            #destroy the cards of the playground
             for card in Game.playedCards.values():
                 card.destroyObject()
             Game.playedCards={}
@@ -188,17 +211,20 @@ class Game:
     @classmethod
     def ifAiPlay(cls):
         if Game.getState("activePlayer")==0:
-            hasPlayed=False
+            hasPlayed=False #becomes false when the ai throws a card
             print("Got 1")
             # print(Game.getState("playersList")[0].getHand())
             for card in Game.getState("playersList")[0].getHand():
+                #ThrowCard returns a card otherwise none 
                 played=card.throwCard(0)
                 if(played):
                     hasPlayed=True
                     print("Got 2")
                     break
             if(not hasPlayed):
-                card=Game.deck.draw(Game.getState("playersList")[0].getHand(), 1)
+            #if ai doesn't have the card in his hand he will draw one
+                card=Game.deck.draw(1)
+                # check if the card is matching 
                 if(card.compareSingleCard()):
                     card.throwCard(0)
                     print("Got 3")

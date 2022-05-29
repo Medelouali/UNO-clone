@@ -6,21 +6,26 @@ class Card(Object):
     def __init__(self, number=None, color=None, type="Normal", coordinates=[1, 1], 
                 dimensions=[100, 100], icon=getPath("images", "logo.png"), callback=None, ownerId=None):
         super().__init__(coordinates, dimensions, icon, callback=lambda : self.throwCard(1))
+        #callback=lambda : self.throwCard(1) : when we click the card it must be played
         self.number = number
         self.color=color
         self.type=type
         self.icon = icon
+        #to know who throwed the card (still not used)
         self.ownerId=ownerId
         
     # coloredType=["Skip", "Reverse", "Draw 2", "Draw 4", "Wild"]
+    
+    
+    # to be reviewed
     def switchCard(self):
         if(self.type=="Skip"):
             print("You choose a skip card")
         elif(self.type=="Reverse"):
             print("You choose a reverse card")
-        elif(self.type=="Draw 2"):
+        elif(self.type=="Draw2"):
             print("You choose draw 2 card")
-        elif(self.type=="Draw 4"):
+        elif(self.type=="Draw4"):
             print("You choose a draw 4 card")
         else:
             print("Norml card was chosen")
@@ -32,45 +37,56 @@ class Card(Object):
     # to set new position of a card
     def setPosition(self, coordinates):
         self.rect.center = coordinates
+    #we need this return value to add the ( ex card) to the ObjGrp        
         return self # We need this return value to chain methods
     
     # to get icon from a card
     def getIcon(self):
         return self.icon
-    
+    #getter for dim
     def getDimensions(self):
         return self.dimensions
-        
+
+
     def compareSingleCard(self):
         from utilities.classes.game.Game import Game as Game_t
         lastPlayedCard=Game_t.state["lastPlayedCard"]
-        if(not lastPlayedCard): # this happens if it's the first card
+        #if this the first card on the game nothing happens 
+        if(not lastPlayedCard):
             return self
         
         if self.type=="Normal":
             if(lastPlayedCard.getColor()==self.getColor() or lastPlayedCard.getNumber()==self.getNumber()):
                 return self
             return None
+        #for wild card
         elif self.type=="Wild":
-            # w will add some code here 
+            # we will add some code here 
             return self
-        elif self.type in ["Skip", "Reverse", "Draw 2", "Draw 4", "Wild"]:
+        #if it's a special card
+        elif self.type in ["Skip", "Reverse", "Draw 2", "Draw 4"]:
             return self
         return None
     
     def throwCard(self, playerId):
         from utilities.classes.game.Game import Game as Game_t
+    #we need the playerId in case not the activePlayer
         if playerId==Game_t.state["activePlayer"]:
+            #if compareSingleCard() returns a card
             if self.compareSingleCard():
                 newHand=[]
+                #we want to know which cards will be in the new hand  so we
+                #by detecting the clicked card 
                 for card in Game_t.getState("playersList")[playerId].getHand():
                     if(card.getId()!=self.getId()):
                         newHand.append(card)
+                #the nexPlayer is the same activePlayer 
+                #but we want to update his hand 
                 newPlayer=Game_t.getState("playersList")[playerId]
                 newPlayer.hand=newHand
                 Game_t.state["playersList"][playerId]=newPlayer
                 Game_t.playedCards[self.getId()]=self
-                Game_t.rotate(Game_t.state["rotation"])
+                Game_t.rotate()
                 Game_t.state["lastPlayedCard"]=self
                 return True
             """changes playerActive to next player hence this player's to false""" 
