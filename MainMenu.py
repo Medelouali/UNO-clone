@@ -40,7 +40,7 @@ def MainMenu(ActMenu,RectDic):
 
 
 
-        screen.fill((50,50,50))
+        screen.fill((160,160,160))
         
         #    drawing the buttons
         draw_text("Play" , font , (255 ,255 ,255) ,screen ,PlayButton,RectDic)
