@@ -1,9 +1,11 @@
 from random import randint
 from utilities.functions.path import getPath
 from utilities.classes.object.card.Card import Card
+import pygame
 # import utilities.classes.game.Game as Game_t
 # from utilities.classes.game.Game import Game
 from utilities.classes.object.Object import Object
+# font = pygame.font.SysFont("gillsanscondensed",70)
 
 class Deck(Object):
     cardsColors=[ "Green", "Blue", "Red", "Yellow"]
@@ -20,8 +22,19 @@ class Deck(Object):
         self.isDeckEmpty=False
         self.shuffleDeck()
         
+        print(f"Cards created {len(self.deck)}")
+        
     # it means nothing to make this method a class method
 
+    # def draw_deck(text, font, color, surface, centerpos, RectDic, callback=None):
+    #     TextObj = font.render(text, 1, color)
+    #     TextRect = TextObj.get_rect()
+    #     #adding TextRects to the local dictionnary
+    #     RectDic[text] =TextRect
+        
+    #     TextRect.center = centerpos
+    #     pygame.draw.rect(screen,(100,0,250) , pygame.Rect(TextRect))
+    #     surface.blit(TextObj ,TextRect)
             
     def drawingCallback(self):
         from utilities.classes.game.Game import Game
@@ -49,22 +62,14 @@ class Deck(Object):
         self.size=len(self.deck)
         self.shuffleDeck()
 
-    #Draw une carte du deck aprés shuffling
+    # Draw a card from the deck if it's not empty
     def draw(self, numberOfCards=1):
         from utilities.classes.game.Game import Game
-        topCard=None
-        activeId=Game.getState("activePlayer")
-        if(self.isEmpty()): 
-            print("can't draw deck's empty")
-            return topCard
-        print("playerHand ", len(Game.state["playersList"][activeId].hand))
-        print("Deck number ", len(Game.deck.deck))
+        topCard, activeId=None, Game.getState("activePlayer")
         for _ in range(numberOfCards):
+            if(self.isEmpty()): return topCard
             topCard=self.deck.pop()
-            newHand=Game.state["playersList"][activeId].hand
-            newHand.append(topCard)
-            Game.state["playersList"][activeId].hand=newHand
-            # print(len(Game.getState("playersList")[activeId].getHand()))
+            Game.state["playersList"][activeId].hand+= [topCard] # add deck top card into player's hand
             self.size-=1
         return topCard
 
@@ -79,7 +84,11 @@ class Deck(Object):
         for type in typesList:
             for number in listNumbers:
                 for col in listColors:
-                    listOfCards.append(Card(number, col, type, 
+                    if(number==None):
+                        listOfCards.append(Card(number, col, type, 
+                        icon=getPath("images", "cards", f"{col}_{type}.png")))
+                    else:
+                        listOfCards.append(Card(number, col, type, 
                         icon=getPath("images", "cards", f"{col}_{number}.png")))
         return listOfCards
 
@@ -88,21 +97,13 @@ class Deck(Object):
         for item in listCards:
             j=listOfCards.index(item)
             for i in range(1, clonesPerCard):
-                listOfCards.insert(j+i,item)
+                listOfCards.insert(j+i, item)
         return listOfCards
 
     def createWildCards(self, numberOfwildCards):
         listOfWildCards=[Card(type="Wild", icon=getPath("images", "cards", "Wild.png"))]#une carte wild est crée dans la liste
         return self.cloneCards(listOfWildCards,numberOfwildCards)
 
-    def createNrmlCards(self):
-        subDeck1=self.createCards(Deck.cardsColors, Deck.numbersRange)
-        subDeck=self.cloneCards(subDeck1[4:],2)
-        subDeck.extend(subDeck1[:4])
-        return subDeck
-
-        return self.cloneCards(listOfWildCards, numberOfwildCards)
-    
     # create 76 normal cards , 4 for each color and number
     def createNrmlCards(self):
         subDeck1=self.createCards(Deck.cardsColors, Deck.numbersRange)
@@ -111,14 +112,14 @@ class Deck(Object):
     
     # create specialCards 
     def createSpecialCards(self):
-        subDeck1=self.createCards(Deck.cardsColors, Deck.numbersRange, Deck.coloredTypes)
+        subDeck1=self.createCards(Deck.cardsColors, [None], Deck.coloredTypes)
         subDeckWild=self.createWildCards(4)
         subDeckSpecial=self.cloneCards(subDeck1)
         return subDeckSpecial + subDeckWild
     
     # Game_t.Game.getState("playersList") cercular import bug should be fixed
-    def distributeCard(self, listOfPlayers=[]):
-        for i in range(len(listOfPlayers)):
-            currentPlayerHand = listOfPlayers[i].getHand()
-            self.draw(currentPlayerHand, 7)
-
+    def distributeCard(self, number=7):
+        import utilities.classes.game.Game as Game_t
+        for _ in range(len(Game_t.Game.getState("playersList"))):
+            self.draw(number)
+            Game_t.Game.rotate()

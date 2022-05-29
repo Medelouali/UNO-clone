@@ -1,4 +1,4 @@
-from turtle import position
+from random import random
 import pygame, sys
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
@@ -25,6 +25,7 @@ class Game:
             # list of players 
             "playersList": [],
             "lastPlayedCard": None,
+            "toggler": False
         } # this dictionary will keep track of the game state
     # iterface settings
     framesPerSecond=60
@@ -87,6 +88,7 @@ class Game:
     def setState(cls, key, value):
         if(key in cls.state.keys()):
             cls.state[key]=value
+            return value
        
     # None is returned implicitly if the key doesn't exist in the state
     @classmethod
@@ -159,7 +161,9 @@ class Game:
         Object([Game.screenWidth-100, Game.screenHeight-50], [100, 20],
                icon=getPath("images", "icons", "avatar6.png")).add()        
         Object([Game.screenWidth-100, Game.screenHeight-200], [100, 20],
-               icon=getPath("images", "icons", "unoButton.png")).add()        
+               icon=getPath("images", "icons", "unoButton.png")).add()  
+        if(not Game.deck.isEmpty()):
+            Game.setState("lastPlayedCard", Game.deck.deck.pop())
     
     # display the results of the game
     def displayResults(self):
@@ -168,11 +172,9 @@ class Game:
     # display the cards that have already been played
     def renderPlayedCards(self):
         # No need to render all the cards, just the one on the top
-        if(Game.playedCards):
-            global topCard_t # to avoid TypeError: 'dict_items' object is not subscriptable
-            for value in Game.playedCards.values():
-                topCard_t=value
-            topCard_t.setPosition(Game.positions["playedCards"]).add()
+        # posX=Game.positions["playedCards"][0]+random.randint(0,10)/11
+        # posY=Game.positions["playedCards"][1]+random.randint(0,10)/11
+        Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).add()
             
     # generate a deck of cards when the deck runs out of cards
     def regenerateDeck(self):
