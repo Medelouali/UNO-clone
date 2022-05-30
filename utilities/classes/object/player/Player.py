@@ -37,7 +37,9 @@ class Player:
             else:
                 print("why'd you do that?")
                 """I'm tempted to add a click counter and a while loop to make the comment more sarcastic everytime uno is clicked for no reason"""
-    
+    def printHand(self):
+        for card in self.hand:
+            print(card)
     def getHand(self):
         return self.hand
     def setHand(self, hand):

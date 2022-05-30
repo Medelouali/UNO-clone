@@ -1,6 +1,7 @@
 import numbers
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
+import pygame
 
 class Card(Object):
     def __init__(self, number=None, color=None, type="Normal", coordinates=[1, 1], 
@@ -13,6 +14,7 @@ class Card(Object):
         self.icon = icon
         #to know who throwed the card (still not used)
         self.ownerId=ownerId
+        self.played=False
         
     # coloredType=["Skip", "Reverse", "Draw 2", "Draw 4", "Wild"]
     
@@ -29,11 +31,21 @@ class Card(Object):
             print("You choose a draw 4 card")
         else:
             print("Norml card was chosen")
-            
+    # get card's type 
+    def getCardType(self):
+        return self.type
+    # set card's color
+    def setCardColor(self,color):
+        self.color = color
+    # if a card is played this method returns True
+    def isPlayed(self):
+        return self.played
+    # set played attr to True when a card is played
+    def setPlayed(self):
+        self.played = True
     # to get position of a card 
     def getPosition(self):
         return self.rect.center
-    
     # to set new position of a card
     def setPosition(self, coordinates):
         self.rect.center = coordinates
@@ -66,6 +78,9 @@ class Card(Object):
         #if it's a special card
         elif self.type in ["Skip", "Reverse", "Draw 2", "Draw 4"]:
             return self
+        elif self.type=="Draw" or self.type=="Draw4" or self.type=="Skip" or self.type=="Reverse":
+            if(lastPlayedCard.getColor()==self.getColor()):
+                return self
         return None
     
     def throwCard(self, playerId):
@@ -89,11 +104,11 @@ class Card(Object):
                 Game_t.rotate()
                 Game_t.state["lastPlayedCard"]=self
                 return True
-            """changes playerActive to next player hence this player's to false""" 
-
+            """changes playerActive to next player hence this player's to false"""
     def getColor(self):
         return self.color
     
     def getNumber(self):
         return self.number
-    
+    def __str__(self):
+        return f"Number : {self.number} Color : {self.color}"

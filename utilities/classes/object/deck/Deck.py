@@ -35,6 +35,8 @@ class Deck(Object):
     #getters : numbers of card in  the deck
     def getSize(self):
         return self.size
+    def setSize(self,size):
+        self.size = size
 
     # Shuffling the deck
     def shuffleDeck(self):
@@ -48,7 +50,7 @@ class Deck(Object):
     def setDeck(self, newDeckLst):
         self.deck=newDeckLst
         self.size=len(self.deck)
-        self.shuffleDeck()
+        #self.shuffleDeck()
 
     # Draw a card from the deck if it's not empty
     def draw(self, numberOfCards=1):
@@ -77,14 +79,18 @@ class Deck(Object):
     def createCards(self, listColors, listNumbers, typesList=["Normal"]):
         listOfCards=[]
         for type in typesList:
-            for number in listNumbers:
+            if(type=="Normal"):
+                for number in listNumbers:
+                    for col in listColors:
+                        for i in range(2):
+                            listOfCards.append(Card(number, col, type, 
+                                icon=getPath("images", "cards", f"{col}_{number}.png")))
+            else:
                 for col in listColors:
-                    if(number==None):
-                        listOfCards.append(Card(number, col, type, 
-                        icon=getPath("images", "cards", f"{col}_{type}.png")))
-                    else:
-                        listOfCards.append(Card(number, col, type, 
-                        icon=getPath("images", "cards", f"{col}_{number}.png")))
+                    for i in range(2):
+                        listOfCards.append(Card(None, col, type,
+                        icon=getPath("images","cards", f"{col}_{type}.png")))
+
         return listOfCards
     #create deck from the cards already played 
     def cloneCards(self, listCards, clonesPerCard=2):
@@ -94,22 +100,24 @@ class Deck(Object):
             for i in range(1, clonesPerCard):
                 listOfCards.insert(j+i, item)
         return listOfCards
-
-    def createWildCards(self, numberOfwildCards):
-        listOfWildCards=[Card(type="Wild", icon=getPath("images", "cards", "Wild.png"))]#une carte wild est crée dans la liste
-        return self.cloneCards(listOfWildCards,numberOfwildCards)
-
+    # create 4 wild cards
+    def createWildCards(self):
+        listOfWildCards=[]
+        for i in range(4):
+            listOfWildCards.append(Card(type="Wild", icon=getPath("images", "cards", "Wild.png")))
+            #une carte wild est crée dans la liste
+        return listOfWildCards
+    
     # create 76 normal cards , 4 for each color and number
     def createNrmlCards(self):
-        subDeck1=self.createCards(Deck.cardsColors, Deck.numbersRange)
-        subDeck=self.cloneCards(subDeck1[4:],2)
-        return subDeck + subDeck1[:4]
+        # subDeck=self.cloneCards(subDeck1[4:],2)
+        return self.createCards(Deck.cardsColors, Deck.numbersRange)
     
     def createSpecialCards(self):
-        subDeck1=self.createCards(Deck.cardsColors, [None], Deck.coloredTypes)
-        subDeckWild=self.createWildCards(4)
-        subDeckSpecial=self.cloneCards(subDeck1)
-        return subDeckSpecial + subDeckWild
+        subDeck=self.createCards(Deck.cardsColors, [None], Deck.coloredTypes)
+        subDeckWild=self.createWildCards()
+        # subDeckSpecial=self.cloneCards(subDeck,2)
+        return subDeck + subDeckWild
     
     # Game_t.Game.getState("playersList") cercular import bug should be fixed
     def distributeCard(self, number=7):
@@ -118,4 +126,5 @@ class Deck(Object):
         for _ in range(len(Game_t.Game.getState("playersList"))):
             self.draw(number)
             Game_t.Game.rotate()
+        Game_t.Game.setState("lastPlayedCard",self.deck.pop(-1))
 
