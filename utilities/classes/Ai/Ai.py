@@ -29,14 +29,14 @@ class Ai(Player):
                 Game_t.setState("lastPlayedCard",cardToPlay)
                 # add cardToPlay to deck of played cards
                 Game_t.playedCards[cardToPlay.getId()]=cardToPlay
-                Game_t.rotate(Game_t.state["rotation"])
+                Game_t.rotate()
                 print("I played",cardToPlay)
                 print("Last played card",Game_t.getState("lastPlayedCard"))
                 return 
         if(Game_t.deck.getSize()>=1):
             print("I'm drawing")
             Game_t.deck.draw()
-            Game_t.rotate(Game_t.state["rotation"])
+            Game_t.rotate()
         else :
             print("Can't draw no more")
             print(Game_t.deck.getSize())
