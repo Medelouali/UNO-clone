@@ -90,7 +90,7 @@ class Game:
                         pass
             # Check if current player is a bot 
             currentPlayer = players[Game.getState("activePlayer")]
-            if(isinstance(currentPlayer,Ai)):
+            if(isinstance(currentPlayer, Ai)):
                 print("Ai is playing")
                 currentPlayer.performMove()
             # rendering the game
@@ -183,7 +183,7 @@ class Game:
         # to limit the width of the card
         if(cardWith>100): 
             cardWith=100
-            moveBy+=(Game.screenWidth-2*handMargin-cardWith*len_t-cardMargin*len_t)/2
+            moveBy+=(Game.screenWidth-2*handMargin-(cardWith+cardMargin)*len_t)/2
         for i in range(len_t):
             hand[i].setPosition([moveBy, Game.screenHeight-100]).setDimentions((cardWith, 100)).add()
             moveBy+=cardMargin+cardWith
