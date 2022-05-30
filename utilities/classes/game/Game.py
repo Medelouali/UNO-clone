@@ -4,6 +4,7 @@ from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 from utilities.functions.resize import getSize
 from utilities.classes.Ai.Ai import Ai
+from utilities.classes.Ai.advanced_ai import advanced_ai
 from utilities.classes.object.player.Player import Player
 from utilities.classes.object.deck.Deck import Deck
 from utilities.functions.path import writeText
@@ -61,8 +62,9 @@ class Game:
         Game.deck.distributeCard()
         # a loop that keeps running as long as we're playing the game
         while(True):
-            self.renderPlayedCard()
             self.applyEffect()
+            print("Last played card: ",Game.getState("lastPlayedCard"))
+            self.renderPlayedCard()
             # print("My hand :")
             # for card in players[Game.getState("activePlayer")].hand:
             #     print(card)  
@@ -86,7 +88,6 @@ class Game:
                 currentPlayer.performMove()
             # rendering the game
             pygame.display.update()
-            
             Game.screen.blit(Game.backgroundImage, (0, 0))
             # self.renderPlayerHand(players[0])
             self.render()
@@ -181,6 +182,7 @@ class Game:
         # No need to render all the cards, just the one on the top
           if(Game.getState("lastPlayedCard")):
             Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).add()
+            Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).update()
             # print(Game.getState("lastPlayedCard"))
             
     # generate a deck of cards when the deck runs out of cards
@@ -215,13 +217,18 @@ class Game:
                 Game.getState("lastPlayedCard").setPlayed()
                 if(Game.getState("lastPlayedCard").getCardType()=="Draw"):
                     print("Next player draws 2")
+                    Game.deck.draw(2)
+                    Game.rotate(Game.state["rotation"])
                 elif(Game.getState("lastPlayedCard").getCardType()=="Draw4"):
                     print("Next player draws 4")
+                    Game.deck.draw(4)
+                    Game.rotate(Game.state["rotation"])
                 elif(Game.getState("lastPlayedCard").getCardType()=="Reverse"):
                     print("Reverse order")
                     # reverseOrder()
                 elif(Game.getState("lastPlayedCard").getCardType()=="Skip"):
                     print("Skip to next player")
+                    Game.rotate(Game.state["rotation"])
                 elif(Game.getState("lastPlayedCard").getCardType()=="Wild"):
                     print("I'm wild baby!")
 
