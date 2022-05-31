@@ -70,7 +70,7 @@ class Game:
         
         # a loop that keeps running as long as we're playing the game
         while(True):
-            # Game.state["playersList"][1].hand=[]
+            # Game.state["playersList"][1].hand=[] #for testing
             if(Game.getState("lastPlayedCard")): self.applyEffect()
             print("Last played card: ",Game.getState("lastPlayedCard"))
             self.renderPlayedCard()
@@ -273,6 +273,10 @@ class Game:
             writeText(f"The Bot Wins, You May Win Next Time;)", Game.screenWidth/2, Game.screenHeight/3, 50, Game.screen)
             Object(Game.positions["playedCards"], (150, 0), 
                     getPath("images", "icons", "avatar10.png"), None).add()
+            Object((Game.screenWidth/2, Game.screenHeight/2+150), (150, 0), 
+                    getPath("images", "continue2.jpg"), Game.reset).add()
+            Object((Game.screenWidth/2, Game.screenHeight/2+250), (150, 0), 
+                    getPath("images", "exit.jpg"), Game.quit).add()
             return True
             
         if(not Game.getState("playersList")[1].getHand()):
@@ -280,16 +284,38 @@ class Game:
             Object(Game.positions["playedCards"], (150, 0), 
                     getPath("images", "icons", "avatar6.png"), None).add()
             
-            Object((Game.screenWidth/2, Game.screenHeight/2+100), (150, 0), 
-                    getPath("images", "continue2.jpg"), lambda:Game.reset).add()
-            Object((Game.screenWidth/2, Game.screenHeight/2+200), (150, 0), 
-                    getPath("images", "exit.jpg"), lambda:Game.quit).add()
+            Object((Game.screenWidth/2, Game.screenHeight/2+150), (150, 0), 
+                    getPath("images", "continue2.jpg"), Game.reset).add()
+            Object((Game.screenWidth/2, Game.screenHeight/2+250), (150, 0), 
+                    getPath("images", "exit.jpg"), Game.quit).add()
             return True
     
     @classmethod
     def reset(cls):
-        pass
+        print("Resetting the game")
+        # Class attrs
+        Game.state={
+                "rotation": 1, # it could be 1, -1, or eventially 2
+                "winner": None,
+                "activePlayer": 1,#contains the id of the active player
+                # representes an event that player can trigger 
+                "event": None, 
+                # equals true when the game is finished
+                "gameEnded": False,
+                # list of players 
+                "playersList": [],
+                "lastPlayedCard": None,
+            } # this dictionary will keep track of the game state
+        
+        #dict foe object ID 
+        Game.objectsGroup={} 
+        ##dict for object ID 
+        Game.playedCards={} 
+        Game.deck = Deck()
+        #running used to go from oe interface to another 
+        Game.running = True 
     
     @classmethod
     def quit(cls):
-        pass
+        pygame.quit()
+        sys.exit()
