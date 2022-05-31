@@ -79,7 +79,17 @@ print([1, 2]+[23,23])
 #     all_sprites_list.update()
 
 
-dic={"name": "El Ouali", "Color": "XXX"}
-print(dic)
-print(dic.pop("name"))
-print(dic)
+# dic={"name": "El Ouali", "Color": "XXX"}
+# print(dic)
+# print(dic.pop("name"))
+# print(dic)
+
+# list_t=[]
+
+# for item in range(10):
+#     list_t.append(item)
+    
+# print(list_t)
+
+# list_p=[x for x in range(10)]
+# print(list_p)
