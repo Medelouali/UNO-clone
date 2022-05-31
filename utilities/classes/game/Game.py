@@ -38,7 +38,8 @@ class Game:
     # contains all objects that are rendered at any given momment
     positions={
         "deck": (100, screenHeight/2),
-        "playedCards": (screenWidth/2, screenHeight/2)
+        "playedCards": (screenWidth/2, screenHeight/2),
+        "winningText": (screenWidth/2, screenHeight/3)
     }
     #dict foe object ID 
     objectsGroup={} 
@@ -88,10 +89,10 @@ class Game:
                         # call displayResults()
                         pass
             # Check if current player is a bot 
-            currentPlayer = players[Game.getState("activePlayer")]
-            if(isinstance(currentPlayer,Ai)):
+            self.displayWinner()
+            if(isinstance(players[Game.getState("activePlayer")], Ai)):
                 print("Ai is playing")
-                currentPlayer.performMove()
+                players[Game.getState("activePlayer")].performMove()
             # rendering the game
             pygame.display.update()
             Game.screen.blit(Game.backgroundImage, (0, 0))
@@ -182,6 +183,7 @@ class Game:
         # to limit the width of the card
         if(cardWith>100): 
             cardWith=100
+            moveBy+=(Game.screenWidth-2*handMargin-(cardWith+cardMargin)*len_t)/2
         for i in range(len_t):
             hand[i].setPosition([moveBy, Game.screenHeight-100]).setDimentions((cardWith, 100)).add()
             moveBy+=cardMargin+cardWith
@@ -206,7 +208,7 @@ class Game:
     def renderPlayedCard(self):
         # No need to render all the cards, just the one on the top
           if(Game.getState("lastPlayedCard")):
-            Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).add()
+            Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).muteObject().add()
             Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).update()
             # print(Game.getState("lastPlayedCard"))
             
@@ -215,7 +217,7 @@ class Game:
         # Check if deck is empty
         if(Game.deck.getSize()==0):
             # set a new deck from a set of played cards
-            Game.deck.setDeck(list(Game.playedCards.values()))
+            Game.deck.setDeck([card.unmuteObject() for card in list(Game.playedCards.values())])
             # set new size for this deck
             Game.deck.setSize(len(Game.playedCards.values()))
             # shuffle the deck 
@@ -237,7 +239,7 @@ class Game:
             
     # to apply last played card special effect 
     def applyEffect(self): 
-        if(Game.getState("lastPlayedCard").getCardType() is not "Normal" and not Game.getState("lastPlayedCard").isPlayed()):
+        if(Game.getState("lastPlayedCard").getCardType() != "Normal" and not Game.getState("lastPlayedCard").isPlayed()):
                 print("This is a special card")
                 Game.getState("lastPlayedCard").setPlayed()
                 if(Game.getState("lastPlayedCard").getCardType()=="Draw"):
@@ -260,3 +262,19 @@ class Game:
     def showDeck(self):
         for card in self.deck:
             print(f"{card.number}_{card.color}")
+            
+    def displayWinner(self):
+        if(Game.getState("playersList")[0].getHand() and Game.getState("playersList")[1].getHand()):
+            return
+        Game.setState("lastPlayedCard", None)
+        if(not Game.getState("playersList")[0].getHand()):
+            writeText(f"The Bot Wins, You May Win Next Time;)", Game.screenWidth/2, Game.screenHeight/3, 50, Game.screen)
+            Object(Game.positions["playedCards"], (150, 0), 
+                    getPath("images", "icons", "avatar10.png"), None).add()
+            return True
+            
+        if(not Game.getState("playersList")[1].getHand()):
+            writeText(f"You Won, Good Boy;)", Game.screenWidth/2, Game.screenHeight/3, 50, Game.screen)
+            Object(Game.positions["playedCards"], (150, 0), 
+                    getPath("images", "icons", "avatar6.png"), None).add()
+            return True

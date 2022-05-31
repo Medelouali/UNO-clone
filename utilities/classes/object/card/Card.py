@@ -101,6 +101,7 @@ class Card(Object):
                 Game_t.playedCards[self.getId()]=self
                 Game_t.rotate()
                 Game_t.state["lastPlayedCard"]=self
+                pygame.time.delay(1000)
                 return True
             """changes playerActive to next player hence this player's to false"""
     def getColor(self):

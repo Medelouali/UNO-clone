@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> 47542510a83281c7f477ba3c5b10a189f5572809
 import pygame,sys
 from PlayMenu import PlayMenu
 from Functions import draw_text

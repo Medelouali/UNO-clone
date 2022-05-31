@@ -21,7 +21,8 @@ class Object():
         #the first created object will have an id = 0 and so on 
         self.objectId=Object.createdObjects
         Object.createdObjects+=1
-       
+        self.isReactive=True
+               
     #  
     def update(self):
         # event= Game_t.Game.getState('event')
@@ -37,7 +38,7 @@ class Object():
             if pygame.mouse.get_pressed()[0] == 1 and not self.clicked: 
                 self.clicked=True
             #depends on the effect of the object (ex :reverse card)
-                if(self.callback):
+                if(self.callback and self.isReactive):
                     self.callback()
         if(pygame.mouse.get_pressed()[0] == 0):
             self.clicked=False
@@ -89,3 +90,11 @@ class Object():
     
     def setCoordinates(self, to):
         self.rect.center=to
+        
+    def muteObject(self):
+        self.isReactive=False
+        return self
+        
+    def unmuteObject(self):
+        self.isReactive=True
+        return self
