@@ -76,9 +76,7 @@ class Card(Object):
             # we will add some code here 
             return self
         #if it's a special card
-        elif self.type in ["Skip", "Reverse", "Draw 2", "Draw 4"]:
-            return self
-        elif self.type=="Draw" or self.type=="Draw4" or self.type=="Skip" or self.type=="Reverse":
+        elif self.type in ["Skip", "Reverse", "Draw", "Draw4"]:
             if(lastPlayedCard.getColor()==self.getColor()):
                 return self
         return None

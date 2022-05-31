@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, random
 from utilities.functions.path import getPath
 from utilities.classes.object.card.Card import Card
 import pygame
@@ -126,5 +126,9 @@ class Deck(Object):
         for _ in range(len(Game_t.Game.getState("playersList"))):
             self.draw(number)
             Game_t.Game.rotate()
-        Game_t.Game.setState("lastPlayedCard",self.deck.pop(-1))
+            i=1
+            while(self.deck[-i].type!="Normal"):
+                i+=1
+            Game_t.Game.setState("lastPlayedCard",self.deck.pop(-i))
+        
 

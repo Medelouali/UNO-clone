@@ -70,7 +70,6 @@ class Game:
         # a loop that keeps running as long as we're playing the game
         while(True):
             self.applyEffect()
-            print("Last played card: ",Game.getState("lastPlayedCard"))
             self.renderPlayedCard()
             # print("My hand :")
             # for card in players[Game.getState("activePlayer")].hand:
