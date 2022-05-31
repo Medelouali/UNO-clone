@@ -208,7 +208,7 @@ class Game:
     def renderPlayedCard(self):
         # No need to render all the cards, just the one on the top
           if(Game.getState("lastPlayedCard")):
-            Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).add()
+            Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).muteObject().add()
             Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).update()
             # print(Game.getState("lastPlayedCard"))
             
@@ -217,7 +217,7 @@ class Game:
         # Check if deck is empty
         if(Game.deck.getSize()==0):
             # set a new deck from a set of played cards
-            Game.deck.setDeck(list(Game.playedCards.values()))
+            Game.deck.setDeck([card.unmuteObject() for card in list(Game.playedCards.values())])
             # set new size for this deck
             Game.deck.setSize(len(Game.playedCards.values()))
             # shuffle the deck 
