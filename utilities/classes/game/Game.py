@@ -70,7 +70,7 @@ class Game:
         
         # a loop that keeps running as long as we're playing the game
         while(True):
-            Game.state["playersList"][1].hand=[]
+            # Game.state["playersList"][1].hand=[]
             if(Game.getState("lastPlayedCard")): self.applyEffect()
             print("Last played card: ",Game.getState("lastPlayedCard"))
             self.renderPlayedCard()
