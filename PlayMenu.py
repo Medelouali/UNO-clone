@@ -37,7 +37,7 @@ def PlayMenu(ActMenu,RectDic):
                 if( RectDic["play a bit"].collidepoint(pygame.mouse.get_pos()) and ActMenu=="PlayMenu" ):
                     print("Start a game")
                     game = Game()
-                    game.launch()
+                    game.run()
                                 
 
         #Screen blit and updating                
