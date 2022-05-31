@@ -279,4 +279,17 @@ class Game:
             writeText(f"You Won, Good Boy;)", Game.screenWidth/2, Game.screenHeight/3, 50, Game.screen)
             Object(Game.positions["playedCards"], (150, 0), 
                     getPath("images", "icons", "avatar6.png"), None).add()
+            
+            Object((Game.screenWidth/2, Game.screenHeight/2+100), (150, 0), 
+                    getPath("images", "continue2.jpg"), lambda:Game.reset).add()
+            Object((Game.screenWidth/2, Game.screenHeight/2+200), (150, 0), 
+                    getPath("images", "exit.jpg"), lambda:Game.quit).add()
             return True
+    
+    @classmethod
+    def reset(cls):
+        pass
+    
+    @classmethod
+    def quit(cls):
+        pass
