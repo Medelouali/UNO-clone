@@ -15,6 +15,7 @@ pygame.display.set_caption('UNO')
 pygame.display.set_icon(pygame.image.load(getPath("images", "cards", "Wild.png")))
 
 class Game:
+
     # Class attrs
     state={
             "rotation": 1, # it could be 1, -1, or eventially 2
@@ -27,6 +28,8 @@ class Game:
             # list of players 
             "playersList": [],
             "lastPlayedCard": None,
+            "numOfPlayers":2,
+            "difficulty":"Normal"
         } # this dictionary will keep track of the game state
     
     #interface settings
@@ -55,10 +58,11 @@ class Game:
 
     def __init__(self):
     # Will add gameMode as attr later 
-       pass
+        pass
     # initialize a deck of cards at the start of the game
     
     def run(self):
+        print(Game.getState("numOfPlayers"))
         # generate a list of players
         self.generatePlayers() 
         self.setUp()
@@ -70,6 +74,7 @@ class Game:
         
         # a loop that keeps running as long as we're playing the game
         while(True):
+
             self.applyEffect()
             self.renderPlayedCard()
             # print("My hand :")
@@ -88,8 +93,8 @@ class Game:
                     elif(Game.getState("gameEnded")):
                         # call displayResults()
                         pass
-            # Check if current player is a bot 
             self.displayWinner()
+            # Check if current player is a bot 
             if(isinstance(players[Game.getState("activePlayer")], Ai)):
                 print("Ai is playing")
                 players[Game.getState("activePlayer")].performMove()

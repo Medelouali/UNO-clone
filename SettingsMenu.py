@@ -12,8 +12,8 @@ def SettingsMenu(ActMenu,RectDic):
     Difficult=(1100 ,100)
     NumPlayers=(250 ,100)
     NumScreen=(250,300)
-    Num=2
-    Diff="Normal"
+    Num=Game.getState("numOfPlayers")
+    Diff=Game.getState("difficulty")
     DiffScreen=(1100,300)
     #Positive and negative button needed variables
     PosButton =pygame.transform.scale(pygame.image.load("assets/images/Buttons/PlusButton.png"),(30,30))
@@ -36,6 +36,8 @@ def SettingsMenu(ActMenu,RectDic):
             if(event.type == pygame.MOUSEBUTTONDOWN ):
                 if( RectDic["Back"].collidepoint(pygame.mouse.get_pos()) and ActMenu=="SettingsMenu"):
                     print ("Back")
+                    Game.setState("numOfPlayers",Num)
+                    Game.setState("difficulty",Diff)
                     Q=False
                 if( RectDic["Difficulty"].collidepoint(pygame.mouse.get_pos()) and ActMenu=="SettingsMenu" ):
                     print ("changing difficulty")
@@ -43,7 +45,8 @@ def SettingsMenu(ActMenu,RectDic):
                     print ("changing the number of players")
                 if( RectDic["Pos"].collidepoint(pygame.mouse.get_pos()) and ActMenu=="SettingsMenu" ):
                     print("ADD")
-                    if (Num<7): Num+=1
+                    if (Num<4): 
+                        Num+=1
                 if( RectDic["Min"].collidepoint(pygame.mouse.get_pos()) and ActMenu=="SettingsMenu" ):
                     print ("DELETE")
                     if (Num>2): Num-=1
