@@ -28,8 +28,7 @@ class Game:
             # list of players 
             "playersList": [],
             "lastPlayedCard": None,
-            "numOfPlayers":2,
-            "difficulty":"Normal"
+            "timer": 5
         } # this dictionary will keep track of the game state
     
     #interface settings
@@ -144,6 +143,7 @@ class Game:
         #show how many cards are left in the AI's hand 
         botCardsNumber=len(Game.getState("playersList")[0].getHand())
 
+        self.renderTimer()
         writeText(f"{botCardsNumber} Cards Left", 100, 120, 30, Game.screen)
         writeText("Me", Game.screenWidth-100, Game.screenHeight-120, 30, Game.screen)
 
@@ -322,3 +322,8 @@ class Game:
     def quit(cls):
         pygame.quit()
         sys.exit()
+        
+    def renderTimer(self):
+        passed_time=Game.getState("timer")
+        writeText(f"Time Left", 100, Game.screenWidth-100, 50, Game.screen)
+        writeText(f"{passed_time}", 100, Game.screenWidth-100, 100, Game.screen)
