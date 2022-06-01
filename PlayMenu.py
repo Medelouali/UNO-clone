@@ -2,8 +2,8 @@ import pygame,sys
 from Functions import draw_text
 from Functions import font
 from Functions import screen
-
-# from utilities.classes.game.Game import Game
+from utilities.classes.game.Game import Game
+from SettingsMenu import SettingsMenu
 
 pygame.init()
 
@@ -13,11 +13,11 @@ def PlayMenu(ActMenu,RectDic):
     T=True# this loop while variable
     #Buttons positions
     PlayGButton =(600 ,100)
-    Test = (600 ,300)
+    Settings = (600 ,300)
     Backbutton=(600 ,500)
     
     while(T):
-
+        ActMenu="PlayMenu"
         for event in pygame.event.get():
         # check if player quits the game
             if(event.type == pygame.QUIT):
@@ -28,33 +28,22 @@ def PlayMenu(ActMenu,RectDic):
                 if( RectDic["Back"].collidepoint(pygame.mouse.get_pos()) and ActMenu=="PlayMenu"):
                         print ("Back")
                         T=False
-                if( RectDic["Difficulty settings"].collidepoint(pygame.mouse.get_pos()) and ActMenu=="PlayMenu" ):
-                        print ("not yet implemented!")
+                if( RectDic["Settings"].collidepoint(pygame.mouse.get_pos()) and ActMenu=="PlayMenu" ):
+                        print ("Settings")
+                        ActMenu="SettingsMenu"
+                        SettingsMenu(ActMenu,RectDic)
                 
                 #    Start of the GAME
                 if( RectDic["play a bit"].collidepoint(pygame.mouse.get_pos()) and ActMenu=="PlayMenu" ):
                     print("Start a game")
-<<<<<<< HEAD
-<<<<<<< HEAD
                     game = Game()
-                    game.launch()
-=======
-                    if(__name__ == '__main__'):
-                        game = Game()
-                        game.launch()
->>>>>>> 478185237a371f8e4a11c53ebc0785fe1aa7bd0d
-=======
-                    # if(__name__ == '__main__'):
-                        # game = Game()
-                        # game.launch()
-                    print("Hlloo")
->>>>>>> 02a1cfe83f7afc62cfa8c5f393e6bc83c420c90a
+                    game.run()
                                 
 
         #Screen blit and updating                
-        screen.fill((50,50,50))
+        screen.fill((160,160,160))
         draw_text("play a bit",font,(255 ,255 ,255),screen,PlayGButton,RectDic)
-        draw_text("Difficulty settings" , font , (255 ,255 ,255) ,screen ,Test,RectDic)
+        draw_text("Settings" , font , (255 ,255 ,255) ,screen ,Settings,RectDic)
         draw_text("Back" , font , (255 ,255 ,255) ,screen ,Backbutton,RectDic)
         pygame.display.update()
 
