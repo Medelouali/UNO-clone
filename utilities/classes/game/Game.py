@@ -38,7 +38,8 @@ class Game:
     # contains all objects that are rendered at any given momment
     positions={
         "deck": (100, screenHeight/2),
-        "playedCards": (screenWidth/2, screenHeight/2)
+        "playedCards": (screenWidth/2, screenHeight/2),
+        "winningText": (screenWidth/2, screenHeight/3)
     }
     #dict foe object ID 
     objectsGroup={} 
@@ -69,7 +70,8 @@ class Game:
         
         # a loop that keeps running as long as we're playing the game
         while(True):
-            self.applyEffect()
+            # Game.state["playersList"][1].hand=[] #for testing
+            if(Game.getState("lastPlayedCard")): self.applyEffect()
             print("Last played card: ",Game.getState("lastPlayedCard"))
             self.renderPlayedCard()
             # print("My hand :")
@@ -89,10 +91,10 @@ class Game:
                         # call displayResults()
                         pass
             # Check if current player is a bot 
-            currentPlayer = players[Game.getState("activePlayer")]
-            if(isinstance(currentPlayer, Ai)):
+            self.displayWinner()
+            if(isinstance(players[Game.getState("activePlayer")], Ai)):
                 print("Ai is playing")
-                currentPlayer.performMove()
+                players[Game.getState("activePlayer")].performMove()
             # rendering the game
             pygame.display.update()
             Game.screen.blit(Game.backgroundImage, (0, 0))
@@ -239,7 +241,7 @@ class Game:
             
     # to apply last played card special effect 
     def applyEffect(self): 
-        if(Game.getState("lastPlayedCard").getCardType() is not "Normal" and not Game.getState("lastPlayedCard").isPlayed()):
+        if(Game.getState("lastPlayedCard").getCardType() != "Normal" and not Game.getState("lastPlayedCard").isPlayed()):
                 print("This is a special card")
                 Game.getState("lastPlayedCard").setPlayed()
                 if(Game.getState("lastPlayedCard").getCardType()=="Draw"):
@@ -262,3 +264,58 @@ class Game:
     def showDeck(self):
         for card in self.deck:
             print(f"{card.number}_{card.color}")
+            
+    def displayWinner(self):
+        if(Game.getState("playersList")[0].getHand() and Game.getState("playersList")[1].getHand()):
+            return
+        Game.setState("lastPlayedCard", None)
+        if(not Game.getState("playersList")[0].getHand()):
+            writeText(f"The Bot Wins, You May Win Next Time;)", Game.screenWidth/2, Game.screenHeight/3, 50, Game.screen)
+            Object(Game.positions["playedCards"], (150, 0), 
+                    getPath("images", "icons", "avatar10.png"), None).add()
+            Object((Game.screenWidth/2, Game.screenHeight/2+150), (150, 0), 
+                    getPath("images", "continue2.jpg"), Game.reset).add()
+            Object((Game.screenWidth/2, Game.screenHeight/2+250), (150, 0), 
+                    getPath("images", "exit.jpg"), Game.quit).add()
+            return True
+            
+        if(not Game.getState("playersList")[1].getHand()):
+            writeText(f"You Won, Good Boy;)", Game.screenWidth/2, Game.screenHeight/3, 50, Game.screen)
+            Object(Game.positions["playedCards"], (150, 0), 
+                    getPath("images", "icons", "avatar6.png"), None).add()
+            
+            Object((Game.screenWidth/2, Game.screenHeight/2+150), (150, 0), 
+                    getPath("images", "continue2.jpg"), Game.reset).add()
+            Object((Game.screenWidth/2, Game.screenHeight/2+250), (150, 0), 
+                    getPath("images", "exit.jpg"), Game.quit).add()
+            return True
+    
+    @classmethod
+    def reset(cls):
+        print("Resetting the game")
+        # Class attrs
+        Game.state={
+                "rotation": 1, # it could be 1, -1, or eventially 2
+                "winner": None,
+                "activePlayer": 1,#contains the id of the active player
+                # representes an event that player can trigger 
+                "event": None, 
+                # equals true when the game is finished
+                "gameEnded": False,
+                # list of players 
+                "playersList": [],
+                "lastPlayedCard": None,
+            } # this dictionary will keep track of the game state
+        
+        #dict foe object ID 
+        Game.objectsGroup={} 
+        ##dict for object ID 
+        Game.playedCards={} 
+        Game.deck = Deck()
+        #running used to go from oe interface to another 
+        Game.running = True 
+    
+    @classmethod
+    def quit(cls):
+        pygame.quit()
+        sys.exit()
