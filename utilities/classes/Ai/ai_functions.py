@@ -12,10 +12,10 @@ def TypeHand(self , playableCards ) :
     Normal=False
     Special=False
     hand=self.getHand
-    for i in range (len(playableCards)) :
+    for i in (playableCards) :
         if (Normal==True and Special==True):break
-        if (self.hand[playableCards[i]].type =="Normal") : Normal=True 
-        if (self.hand[playableCards[i]].type in ["Skip", "Reverse", "Draw","Draw4"]) : Special=True
+        if (hand[playableCards[i]].type =="Normal") : Normal=True 
+        if (hand[playableCards[i]].type in ["Skip", "Reverse", "Draw","Draw4"]) : Special=True
     if(Normal==True and Special==True) : print("MixedCards")
     if(Normal==True and Special==False) : print ("NormalOnly")
     if(Normal==False and Special==True) : print ("SpecialOnly")

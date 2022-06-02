@@ -10,6 +10,8 @@ from utilities.classes.object.player.Player import Player
 from utilities.classes.object.deck.Deck import Deck
 from utilities.functions.path import writeText
 # from utilities.functions.Reverse import reverseOrder
+from utilities.classes.Ai.ai_functions import TypeHand
+
 
 pygame.init()
 pygame.display.set_caption('UNO')
@@ -144,6 +146,7 @@ class Game:
         self.regenerateDeck()
         #show how many cards are left in the AI's hand 
         botCardsNumber=len(Game.getState("playersList")[0].getHand())
+        TypeHand(Game.getState("playersList")[0] ,Game.getState("playersList")[0].getHand())
 
         self.renderTimer()
         writeText(f"{botCardsNumber} Cards Left", 100, 120, 30, Game.screen)
