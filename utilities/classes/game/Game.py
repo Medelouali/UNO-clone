@@ -1,4 +1,5 @@
 from random import random
+import time
 import pygame, sys
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
@@ -28,7 +29,8 @@ class Game:
             # list of players 
             "playersList": [],
             "lastPlayedCard": None,
-            "timer": 5
+            "timer": 10,
+            "lastCheckedTime": 0
         } # this dictionary will keep track of the game state
     
     #interface settings
@@ -36,6 +38,7 @@ class Game:
     clock=pygame.time.Clock()
     screenWidth=1280
     screenHeight=640
+    maxWaitingTime=10
     screen=pygame.display.set_mode((screenWidth, screenHeight))
     # contains all objects that are rendered at any given momment
     positions={
@@ -324,6 +327,24 @@ class Game:
         sys.exit()
         
     def renderTimer(self):
+        if(Game.getState("timer")==0):
+            Game.deck.draw()
+            Game.rotate()
+            return self.restTimer()
+        current = time.time()
+        print(current-Game.getState("lastCheckedTime"))
+        if(current-Game.getState("lastCheckedTime")>=1):
+            Game.setState("timer", Game.getState("timer")-1)
+            Game.setState("lastCheckedTime", current)
+            print("got herekkk")
         passed_time=Game.getState("timer")
-        writeText(f"Time Left", 100, Game.screenWidth-100, 50, Game.screen)
-        writeText(f"{passed_time}", 100, Game.screenWidth-100, 100, Game.screen)
+        writeText(f"Time Left", Game.screenWidth-200, 100, 40, Game.screen)
+        writeText(f"{passed_time} secondes", Game.screenWidth-200, 150, 30, Game.screen)
+    
+    def restTimer(self):
+        Game.setState("timer", Game.maxWaitingTime)
+        Game.setState("lastCheckedTime", 0)
+
+    def notify(self, message):
+        writeText(message, Game.screenWidth/2, 100, 40, Game.screen)
+        
