@@ -35,7 +35,7 @@ class Ai(Player):
                 Game_t.rotate()
                 return 
         if(Game_t.deck.getSize()>=1):
-            print("I'm drawing")
+            # print("I'm drawing")
             Game_t.deck.draw()
             Game_t.rotate()
         else :

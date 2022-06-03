@@ -98,7 +98,7 @@ class Game:
             # Check if current player is a bot 
             self.displayWinner()
             if(isinstance(players[Game.getState("activePlayer")], advanced_ai) or isinstance(players[Game.getState("activePlayer")],Ai)):
-                print("Ai is playing")
+                # print("Ai is playing")
                 players[Game.getState("activePlayer")].performMove()
             # rendering the game
             pygame.display.update()

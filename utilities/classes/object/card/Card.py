@@ -111,7 +111,7 @@ class Card(Object):
     def applyEffect(self): 
         from utilities.classes.game.Game import Game as Game
         if(self.getCardType() != "Normal"):
-                print("This is a special card")
+                # print("This is a special card")
                 Game.getState("lastPlayedCard").setPlayed()
                 if(Game.getState("lastPlayedCard").getCardType()=="Draw"):
                     print("Next player draws 2")
