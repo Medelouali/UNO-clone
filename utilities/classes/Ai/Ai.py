@@ -1,6 +1,8 @@
 # import object.card as cards
 import random
 from utilities.classes.object.player.Player import Player
+import pygame
+from utilities.functions.path import writeText
 
 class Ai(Player):  
     def __init__(self, id):
@@ -19,7 +21,7 @@ class Ai(Player):
     # for the Ai to play when      
     def performMove(self):
         from utilities.classes.game.Game import Game as Game_t
-
+    
 
         for i in range(len(self.getHand())):
             if self.getHand()[i].compareSingleCard():
@@ -27,11 +29,10 @@ class Ai(Player):
                 cardToPlay = self.getHand().pop(i)
                 # set the last played card to be this card
                 Game_t.setState("lastPlayedCard",cardToPlay)
+                Game_t.getState("lastPlayedCard").applyEffect()
                 # add cardToPlay to deck of played cards
                 Game_t.playedCards[cardToPlay.getId()]=cardToPlay
                 Game_t.rotate()
-                print("I played",cardToPlay)
-                print("Last played card",Game_t.getState("lastPlayedCard"))
                 return 
         if(Game_t.deck.getSize()>=1):
             print("I'm drawing")
@@ -39,11 +40,7 @@ class Ai(Player):
             Game_t.rotate()
         else :
             print("Can't draw no more")
-            print(Game_t.deck.getSize())
-        
-    def printHand(self):
-        for card in self.hand:
-            print(card)     
+            print(Game_t.deck.getSize()) 
     # overriding the screamUno method for Ai since it'll be called randomly when it's the Ai's turn 
     def screamUno(self,deck,Game):
             prevPlayer = Game.players[Game.state["activePlayer"]-Game.rotation]

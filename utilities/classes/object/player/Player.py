@@ -44,8 +44,9 @@ class Player:
         return self.hand
     def setHand(self, hand):
         self.hand=hand
-        
-            
+    def printHand(self):
+        for card in self.hand:
+            print(card)    
             
             
         

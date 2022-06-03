@@ -99,11 +99,40 @@ class Card(Object):
                 newPlayer.hand=newHand
                 Game_t.state["playersList"][playerId]=newPlayer
                 Game_t.playedCards[self.getId()]=self
-                Game_t.rotate()
                 Game_t.state["lastPlayedCard"]=self
+                self.applyEffect()
+                Game_t.rotate()
+                Game_t.setState("timer",10)
                 pygame.time.delay(1000)
                 return True
+
             """changes playerActive to next player hence this player's to false"""
+     # to apply last played card special effect 
+    def applyEffect(self): 
+        from utilities.classes.game.Game import Game as Game
+        if(self.getCardType() != "Normal"):
+                print("This is a special card")
+                Game.getState("lastPlayedCard").setPlayed()
+                if(Game.getState("lastPlayedCard").getCardType()=="Draw"):
+                    print("Next player draws 2")
+                    Game.deck.draw(2,(Game.getState("activePlayer")+1)%2)
+                    Game.rotate()
+                elif(Game.getState("lastPlayedCard").getCardType()=="Draw4"):
+                    print("Next player draws 4")
+                    Game.deck.draw(4,(Game.getState("activePlayer")+1)%2)
+                    Game.rotate()
+                elif(Game.getState("lastPlayedCard").getCardType()=="Reverse"):
+                    print("Reverse order")
+                    # reverseOrder()
+                elif(Game.getState("lastPlayedCard").getCardType()=="Skip"):
+                    print("Skip to next player")
+                    Game.rotate()
+                elif(Game.getState("lastPlayedCard").getCardType()=="Wild"):
+                    print("I'm wild baby!")
+        
+
+
+
     def getColor(self):
         return self.color
     

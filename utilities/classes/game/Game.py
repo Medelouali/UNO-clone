@@ -10,13 +10,14 @@ from utilities.classes.object.player.Player import Player
 from utilities.classes.object.deck.Deck import Deck
 from utilities.functions.path import writeText
 # from utilities.functions.Reverse import reverseOrder
+# from utilities.classes.Ai.ai_functions import TypeHand
+
 
 pygame.init()
 pygame.display.set_caption('UNO')
 pygame.display.set_icon(pygame.image.load(getPath("images", "cards", "Wild.png")))
 
 class Game:
-
     # Class attrs
     state={
             "rotation": 1, # it could be 1, -1, or eventially 2
@@ -60,24 +61,23 @@ class Game:
 
     def __init__(self):
     # Will add gameMode as attr later 
-        pass
+       pass
     # initialize a deck of cards at the start of the game
     
     def run(self):
-        print(Game.getState("numOfPlayers"))
         # generate a list of players
         self.generatePlayers() 
         self.setUp()
         # stock players list in a list 
         players = Game.getState("playersList")
-        
         # affect 7 cards to each player 
         Game.deck.distributeCard()
         
         # a loop that keeps running as long as we're playing the game
         while(True):
-
-            self.applyEffect()
+            # Game.state["playersList"][1].hand=[] #for testing
+            # if(Game.getState("lastPlayedCard")): self.applyEffect()
+            # print("Last played card: ",Game.getState("lastPlayedCard"))
             self.renderPlayedCard()
             # print("My hand :")
             # for card in players[Game.getState("activePlayer")].hand:
@@ -95,9 +95,9 @@ class Game:
                     elif(Game.getState("gameEnded")):
                         # call displayResults()
                         pass
-            self.displayWinner()
             # Check if current player is a bot 
-            if(isinstance(players[Game.getState("activePlayer")], Ai)):
+            self.displayWinner()
+            if(isinstance(players[Game.getState("activePlayer")], advanced_ai) or isinstance(players[Game.getState("activePlayer")],Ai)):
                 print("Ai is playing")
                 players[Game.getState("activePlayer")].performMove()
             # rendering the game
@@ -145,7 +145,6 @@ class Game:
         self.regenerateDeck()
         #show how many cards are left in the AI's hand 
         botCardsNumber=len(Game.getState("playersList")[0].getHand())
-
         self.renderTimer()
         writeText(f"{botCardsNumber} Cards Left", 100, 120, 30, Game.screen)
         writeText("Me", Game.screenWidth-100, Game.screenHeight-120, 30, Game.screen)
@@ -170,7 +169,7 @@ class Game:
             else:
                 Game.setState("playersList", Game.getState("playersList") + [Player(0)])    
                 Game.setState("playersList", Game.getState("playersList") + [
-                    Ai(i) for i in range(1, numOfPlayers)
+                    advanced_ai(i) for i in range(1, numOfPlayers)
                 ])
         # all players are real 
         else:
@@ -245,27 +244,6 @@ class Game:
                 print(card)
             # Game.rotate()
             
-    # to apply last played card special effect 
-    def applyEffect(self): 
-        if(Game.getState("lastPlayedCard").getCardType() != "Normal" and not Game.getState("lastPlayedCard").isPlayed()):
-                print("This is a special card")
-                Game.getState("lastPlayedCard").setPlayed()
-                if(Game.getState("lastPlayedCard").getCardType()=="Draw"):
-                    print("Next player draws 2")
-                    Game.deck.draw(2)
-                    Game.rotate()
-                elif(Game.getState("lastPlayedCard").getCardType()=="Draw4"):
-                    print("Next player draws 4")
-                    Game.deck.draw(4)
-                    Game.rotate()
-                elif(Game.getState("lastPlayedCard").getCardType()=="Reverse"):
-                    print("Reverse order")
-                    # reverseOrder()
-                elif(Game.getState("lastPlayedCard").getCardType()=="Skip"):
-                    print("Skip to next player")
-                    Game.rotate()
-                elif(Game.getState("lastPlayedCard").getCardType()=="Wild"):
-                    print("I'm wild baby!")
 
     def showDeck(self):
         for card in self.deck:
@@ -330,18 +308,18 @@ class Game:
         if(Game.getState("timer")==0):
             Game.deck.draw()
             Game.rotate()
-            return self.restTimer()
+            return self.resetTimer()
         current = time.time()
-        print(current-Game.getState("lastCheckedTime"))
+        # print(current-Game.getState("lastCheckedTime"))
         if(current-Game.getState("lastCheckedTime")>=1):
             Game.setState("timer", Game.getState("timer")-1)
             Game.setState("lastCheckedTime", current)
-            print("got herekkk")
+            # print("got herekkk")
         passed_time=Game.getState("timer")
         writeText(f"Time Left", Game.screenWidth-200, 100, 40, Game.screen)
         writeText(f"{passed_time} secondes", Game.screenWidth-200, 150, 30, Game.screen)
     
-    def restTimer(self):
+    def resetTimer(self):
         Game.setState("timer", Game.maxWaitingTime)
         Game.setState("lastCheckedTime", 0)
 

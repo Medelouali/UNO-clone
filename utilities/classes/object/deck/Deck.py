@@ -28,6 +28,7 @@ class Deck(Object):
         from utilities.classes.game.Game import Game
         self.draw()
         Game.rotate()
+        Game.setState("timer",10)
         
     # getters for deck and size
     def getDeck(self):
@@ -53,9 +54,12 @@ class Deck(Object):
         #self.shuffleDeck()
 
     # Draw a card from the deck if it's not empty
-    def draw(self, numberOfCards=1):
+    def draw(self, numberOfCards=1,activePlayer=None):
         from utilities.classes.game.Game import Game
-        topCard, activeId = None, Game.getState("activePlayer")
+        # if active player is not passed as an argument get the active player from Game's state
+        if(activePlayer==None):
+            activePlayer=Game.getState("activePlayer")
+        topCard, activeId = None, activePlayer
         #activeId :current active player
         # _ is used to replace i since we won't be using it again 
         for _ in range(numberOfCards):
