@@ -1,6 +1,7 @@
 from random import random
 import time
 import pygame, sys
+import threading
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 from utilities.functions.resize import getSize
@@ -9,8 +10,8 @@ from utilities.classes.Ai.advanced_ai import advanced_ai
 from utilities.classes.object.player.Player import Player
 from utilities.classes.object.deck.Deck import Deck
 from utilities.functions.path import writeText
-# from utilities.functions.Reverse import reverseOrder
-# from utilities.classes.Ai.ai_functions import TypeHand
+from utilities.sockets.Server import Server
+from utilities.sockets.Client import Client
 
 
 pygame.init()
@@ -31,7 +32,9 @@ class Game:
             "playersList": [],
             "lastPlayedCard": None,
             "timer": 10,
-            "lastCheckedTime": 0
+            "lastCheckedTime": 0,
+            "server": None,
+            "client": None,
         } # this dictionary will keep track of the game state
     
     #interface settings
@@ -59,9 +62,11 @@ class Game:
     backgroundImage = pygame.transform.scale(
     backgroundImage, getSize(getPath('images', 'backgroundCards.jpg'), screenWidth))
 
-    def __init__(self):
+    def __init__(self, is_client=True):
     # Will add gameMode as attr later 
-       pass
+        self.is_client = is_client
+        thread = threading.Thread(target=self.startSockets)
+        thread.start()  
     # initialize a deck of cards at the start of the game
     
     def run(self):
@@ -72,7 +77,9 @@ class Game:
         players = Game.getState("playersList")
         # affect 7 cards to each player 
         Game.deck.distributeCard()
-        
+        # for testing
+        if(Game.getState("client")):
+            Game.getState("client").send("The Game started helloo")
         # a loop that keeps running as long as we're playing the game
         while(True):
             # Game.state["playersList"][1].hand=[] #for testing
@@ -326,3 +333,15 @@ class Game:
     def notify(self, message):
         writeText(message, Game.screenWidth/2, 100, 40, Game.screen)
         
+        
+    def startSockets(self):
+        if(self.is_client):
+            Game.setState("client", Client()).start()
+        else:
+            Game.setState("server", Server()).start()
+            
+    # the message should be in the form "action/method type args"
+    def emit(self, message):
+        if(self.is_client):
+            return Game.getState("client").send(message)
+        Game.getState("server").send(message)
