@@ -10,7 +10,7 @@ def funct(callback, *args):
 
 funct(callback, "My name is Slim Shady")
 
-print([1, 2]+[23,23])
+# print([1, 2]+[23,23])
 # import pygame
 # import random
 # from utilities.functions.path import getPath
@@ -90,6 +90,14 @@ print([1, 2]+[23,23])
 #     list_t.append(item)
     
 # print(list_t)
+
+import getopt, sys
+ 
+ 
+# Remove 1st argument from the
+# list of command line arguments
+argumentList = sys.argv
+print(argumentList)
 
 # list_p=[x for x in range(10)]
 # print(list_p)
