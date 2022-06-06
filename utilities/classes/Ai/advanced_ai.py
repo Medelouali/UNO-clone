@@ -1,6 +1,9 @@
+from gettext import find
 from inspect import getcomments
 from turtle import color
+import random
 from utilities.classes.object.player.Player import Player
+from collections import Counter
 
 class advanced_ai(Player):  
     def __init__(self, id):
@@ -50,47 +53,98 @@ class advanced_ai(Player):
 
     # return card to be played
     def findCardToPlay(self,playableCards,typeOfCards,opponent):
-        
-        if(typeOfCards=="Normal"):
-            # call the functions you need or write the logic for this case
-            print("Normal")
-        # get rid of the color you have the most 
+        # Check if we have only one card to play , and play it automatically
+        if(len(playableCards) == 1):
+            print("One card to play")
+            return list(playableCards.values())[0]
+        # if we have multuple playable cards
+        else :
+            # check the type of playable cards list
+            if(typeOfCards=="Normal"):
+                # get the most common color in player's hand
+                commonColor = self.getCommonColor(playableCards)
+                # get the most common number in player's hand
+                commonNumber = self.getCommonNumber(playableCards)
+                print("Common color in playable cards : ",commonColor)
+                # get list of index of all cards with most common color
+                color_index = [idx for idx, element in enumerate(playableCards.values()) if self.getHand()[element].getColor()==commonColor]
+                # get list of index of all cards with most common number
+                number_index =[idx for idx, element in enumerate(playableCards.values()) if self.getHand()[element].getNumber()==commonNumber]
+                # decide if you should play matching number or matching color
+                # if number of cards with common color is less than number of cards with common number play a matching number card
+                if(len(color_index)<len(number_index)):
+                    return random.choice(color_index)
+                else :
+                    return random.choice(number_index)
+            
+            elif(typeOfCards=="Mixed"):
+                # call the functions you need or write the logic for this case
+                # return random.choice(list(playableCards.values()))
+                # get the most common color in player's hand
+                commonColor = self.getCommonColor(playableCards)
+                # get the most common number in player's hand
+                commonNumber = self.getCommonNumber(playableCards)
+                if("Skip" in playableCards):
+                    if(len(opponent.getHand())<len(self.getHand()) or len(playableCards)==1):
+                        #skipping when you can actually make the next player draw next round
+                        if("Draw4" in playableCards or "Draw" in playableCards):
+                            return playableCards["Skip"]
+                elif("Reverse" in playableCards):
+                    if(len(opponent.getHand())<len(self.getHand()) or len(playableCards)==1):
+                        return playableCards["Reverse"]
+                elif("Draw4" in playableCards):
+                    if(len(opponent.getHand())<len(self.getHand()) or len(playableCards)==1):
+                        return playableCards["Draw4"]
+                elif("Draw" in playableCards):
+                    if(len(opponent.getHand())<len(self.getHand()) or len(playableCards)==1):
+                        return playableCards["Draw"]
+                #need the common color here
+                elif("Wild" in playableCards):
+                    if(len(playableCards)==1):
+                        return playableCards["Wild"]
 
-
-
-
-
-        elif(typeOfCards=="Mixed"):
-            # call the functions you need or write the logic for this case
-            print("Mixed")
-        elif(typeOfCards=="Special"):
-            # call the functions you need or write the logic for this case
-            print("Special")
-            # play skip or reverse cards when opponent has less cards than ai 
-            if(playableCards.has_key("Skip")):
-                if(len(opponent.getHand())<len(self.getHand()) or len(playableCards)==1):
-                    return playableCards["Skip"]
-            elif(playableCards.has_key("Reverse")):
-                if(len(opponent.getHand())<len(self.getHand()) or len(playableCards)==1):
-                    return playableCards["Reverse"]
-            elif(playableCards.has_key("Draw4")):
-                return playableCards["Draw4"]
-            elif(playableCards.has_key("Draw")):
-                return playableCards["Draw"]
-            elif(playableCards.has_key("Wild")):
-                return playableCards["Wild"]
+                #sorry for stealing you code guys 
+                else:
+                    print("Common color in playable cards : ",commonColor)
+                    # get list of index of all cards with most common color
+                    color_index = [idx for idx, element in enumerate(playableCards.values()) if self.getHand()[element].getColor()==commonColor]
+                    # get list of index of all cards with most common number
+                    number_index =[idx for idx, element in enumerate(playableCards.values()) if self.getHand()[element].getNumber()==commonNumber]
+                    # decide if you should play matching number or matching color
+                    # if number of cards with common color is less than number of cards with common number play a matching number card
+                    if(len(color_index)<len(number_index)):
+                        return random.choice(color_index)
+                    else :
+                        return random.choice(number_index)
+            
+            elif(typeOfCards=="Special"):
+                # play skip or reverse cards when opponent has less cards than ai 
+                if("Skip" in playableCards):
+                    if(len(opponent.getHand())<len(self.getHand()) or len(playableCards)==1):
+                        return playableCards["Skip"]
+                elif("Reverse" in playableCards):
+                    if(len(opponent.getHand())<len(self.getHand()) or len(playableCards)==1):
+                        return playableCards["Reverse"]
+                elif("Draw4" in playableCards):
+                    return playableCards["Draw4"]
+                elif("Draw" in playableCards):
+                    return playableCards["Draw"]
+                elif("Wild" in playableCards):
+                    return playableCards["Wild"]
             
 
     def performMove(self):
             from utilities.classes.game.Game import Game as Game_t
-            #     # reads the type of playable cards to be used to decide which case we're at 
-            # cardsType = self.TypeHand(self.updatePlayableCards().values())
-            # for key,value in self.updatePlayableCards().items():
-            #     print(key, ' : ', self.getHand()[value].getColor())
-            for i in range(len(self.getHand())):
-                if self.getHand()[i].compareSingleCard():
-                    # pop a card to play from the Ai's hand
-                    cardToPlay = self.getHand().pop(i)
+            self.printHand()
+            print("------------------")
+            playableCards = self.updatePlayableCards()
+            # pop a card to play from the Ai's hand
+            if(playableCards):
+                    cardsType = self.TypeHand(playableCards.values())
+                    opponent = Game_t.getState("playersList")[Game_t.getState("activePlayer")]
+                    index=self.findCardToPlay(playableCards,cardsType,opponent)
+                    print(index)
+                    cardToPlay = self.getHand().pop(index)
                     # set the last played card to be this card
                     Game_t.setState("lastPlayedCard",cardToPlay)
                     Game_t.getState("lastPlayedCard").applyEffect()

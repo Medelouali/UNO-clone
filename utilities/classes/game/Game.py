@@ -169,7 +169,7 @@ class Game:
             if(numOfPlayers==2):
                 # set list of players ( Ai and real player in this case )
                 Game.setState("playersList", [
-                    Ai(0),
+                    advanced_ai(0),
                     #the human player starts first 
                     Player(1)]
                     )
