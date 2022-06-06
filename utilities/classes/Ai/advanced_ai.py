@@ -79,7 +79,44 @@ class advanced_ai(Player):
             
             elif(typeOfCards=="Mixed"):
                 # call the functions you need or write the logic for this case
-                return random.choice(list(playableCards.values()))
+                # return random.choice(list(playableCards.values()))
+                # get the most common color in player's hand
+                commonColor = self.getCommonColor(playableCards)
+                # get the most common number in player's hand
+                commonNumber = self.getCommonNumber(playableCards)
+                if("Skip" in playableCards):
+                    if(len(opponent.getHand())<len(self.getHand()) or len(playableCards)==1):
+                        #skipping when you can actually make the next player draw next round
+                        if("Draw4" in playableCards or "Draw" in playableCards):
+                            return playableCards["Skip"]
+                elif("Reverse" in playableCards):
+                    if(len(opponent.getHand())<len(self.getHand()) or len(playableCards)==1):
+                        return playableCards["Reverse"]
+                elif("Draw4" in playableCards):
+                    if(len(opponent.getHand())<len(self.getHand()) or len(playableCards)==1):
+                        return playableCards["Draw4"]
+                elif("Draw" in playableCards):
+                    if(len(opponent.getHand())<len(self.getHand()) or len(playableCards)==1):
+                        return playableCards["Draw"]
+                #need the common color here
+                elif("Wild" in playableCards):
+                    if(len(playableCards)==1):
+                        return playableCards["Wild"]
+
+                #sorry for stealing you code guys 
+                else:
+                    print("Common color in playable cards : ",commonColor)
+                    # get list of index of all cards with most common color
+                    color_index = [idx for idx, element in enumerate(playableCards.values()) if self.getHand()[element].getColor()==commonColor]
+                    # get list of index of all cards with most common number
+                    number_index =[idx for idx, element in enumerate(playableCards.values()) if self.getHand()[element].getNumber()==commonNumber]
+                    # decide if you should play matching number or matching color
+                    # if number of cards with common color is less than number of cards with common number play a matching number card
+                    if(len(color_index)<len(number_index)):
+                        return random.choice(color_index)
+                    else :
+                        return random.choice(number_index)
+            
             elif(typeOfCards=="Special"):
                 # play skip or reverse cards when opponent has less cards than ai 
                 if("Skip" in playableCards):
