@@ -73,9 +73,9 @@ class advanced_ai(Player):
                 # decide if you should play matching number or matching color
                 # if number of cards with common color is less than number of cards with common number play a matching number card
                 if(len(color_index)<len(number_index)):
-                    return random.choice(color_index)
-                else :
                     return random.choice(number_index)
+                else :
+                    return random.choice(color_index)
             
             elif(typeOfCards=="Mixed"):
                 # call the functions you need or write the logic for this case
@@ -103,7 +103,7 @@ class advanced_ai(Player):
                     if(len(playableCards)==1):
                         return playableCards["Wild"]
 
-                #sorry for stealing you code guys 
+                #sorry for stealing your code guys 
                 else:
                     print("Common color in playable cards : ",commonColor)
                     # get list of index of all cards with most common color
@@ -113,9 +113,9 @@ class advanced_ai(Player):
                     # decide if you should play matching number or matching color
                     # if number of cards with common color is less than number of cards with common number play a matching number card
                     if(len(color_index)<len(number_index)):
-                        return random.choice(color_index)
-                    else :
                         return random.choice(number_index)
+                    else :
+                        return random.choice(color_index)
             
             elif(typeOfCards=="Special"):
                 # play skip or reverse cards when opponent has less cards than ai 
