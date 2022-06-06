@@ -34,9 +34,11 @@ class Card(Object):
     # get card's type 
     def getCardType(self):
         return self.type
+    
     # set card's color
-    def setCardColor(self,color):
+    def setColor(self,color):
         self.color = color
+        
     # if a card is played this method returns True
     def isPlayed(self):
         return self.played

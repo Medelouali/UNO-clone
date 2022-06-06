@@ -74,6 +74,7 @@ class Object():
     #setter   
     def setCallback(self, callback):
         self.callback=callback
+        return self
         
     #getter of the object if    
     def getId(self):

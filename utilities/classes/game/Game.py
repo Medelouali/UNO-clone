@@ -62,6 +62,7 @@ class Game:
     backgroundImage = pygame.transform.scale(
     backgroundImage, getSize(getPath('images', 'backgroundCards.jpg'), screenWidth))
 
+    check=False
     def __init__(self, is_client=True):
     # Will add gameMode as attr later 
         self.is_client = is_client
