@@ -1,10 +1,9 @@
-from utilities.classes.game.Game import Game
-import sys
-
-# run this file with a flag as command line argument if you want it to be a server
-# otherwise just ignore this comment
+from menus.main import main
 
 if(__name__ == '__main__'):
-    argumentList = sys.argv[1:]
-    game = Game(False if len(argumentList) > 0 else True)
-    game.run()
+    menu_label = "" #to mark the menu 
+    rectangles ={} # to mark the existing Rect's
+    main(menu_label, rectangles)
+    # argumentList = sys.argv[1:]
+    # game = Game(False if len(argumentList) > 0 else True)
+    # game.run()

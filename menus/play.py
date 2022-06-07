@@ -1,9 +1,9 @@
 import pygame,sys
-from Functions import draw_text
-from Functions import font
-from Functions import screen
+from menus.functions import draw_text
+from menus.functions import font
+from menus.functions import screen
 from utilities.classes.game.Game import Game
-from SettingsMenu import SettingsMenu
+from menus.settings import SettingsMenu
 
 pygame.init()
 
@@ -42,9 +42,9 @@ def PlayMenu(ActMenu,RectDic):
 
         #Screen blit and updating                
         screen.fill((160,160,160))
-        draw_text("play a bit",font,(255 ,255 ,255),screen,PlayGButton,RectDic)
-        draw_text("Settings" , font , (255 ,255 ,255) ,screen ,Settings,RectDic)
-        draw_text("Back" , font , (255 ,255 ,255) ,screen ,Backbutton,RectDic)
+        draw_text("play a bit",font,(255 ,255 ,255), screen, PlayGButton,RectDic)
+        draw_text("Settings" , font , (255 ,255 ,255) ,screen , Settings,RectDic)
+        draw_text("Back" , font , (255 ,255 ,255) , screen , Backbutton,RectDic)
         pygame.display.update()
 
 
