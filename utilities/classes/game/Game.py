@@ -10,9 +10,6 @@ from utilities.classes.Ai.advanced_ai import advanced_ai
 from utilities.classes.object.player.Player import Player
 from utilities.classes.object.deck.Deck import Deck
 from utilities.functions.path import writeText
-from utilities.sockets.Server import Server
-from utilities.sockets.Client import Client
-
 
 pygame.init()
 pygame.display.set_caption('UNO')
@@ -33,8 +30,7 @@ class Game:
             "lastPlayedCard": None,
             "timer": 10,
             "lastCheckedTime": 0,
-            "server": None,
-            "client": None,
+            "network": None,
         } # this dictionary will keep track of the game state
     
     #interface settings
@@ -63,12 +59,11 @@ class Game:
     backgroundImage, getSize(getPath('images', 'backgroundCards.jpg'), screenWidth))
 
     check=False
-    def __init__(self, is_client=True):
+    def __init__(self, network=None):
     # Will add gameMode as attr later 
-        self.is_client = is_client
-        thread = threading.Thread(target=self.startSockets)
-        thread.start()  
-    # initialize a deck of cards at the start of the game
+        Game.setState("network", network)
+        # thread = threading.Thread(target=self.startSockets)
+        # thread.start()  
     
     def run(self):
         # generate a list of players
@@ -83,14 +78,7 @@ class Game:
             Game.getState("client").send("The Game started helloo")
         # a loop that keeps running as long as we're playing the game
         while(True):
-            # Game.state["playersList"][1].hand=[] #for testing
-            # if(Game.getState("lastPlayedCard")): self.applyEffect()
-            # print("Last played card: ",Game.getState("lastPlayedCard"))
             self.renderPlayedCard()
-            # print("My hand :")
-            # for card in players[Game.getState("activePlayer")].hand:
-            #     print(card)  
-            # Check if the player has quit the game or if the game is over
             for event in pygame.event.get():
                     # set the occured event 
                     Game.setState("event", event)
@@ -334,15 +322,3 @@ class Game:
     def notify(self, message):
         writeText(message, Game.screenWidth/2, 100, 40, Game.screen)
         
-        
-    def startSockets(self):
-        if(self.is_client):
-            Game.setState("client", Client()).start()
-        else:
-            Game.setState("server", Server()).start()
-            
-    # the message should be in the form "action/method type args"
-    def emit(self, message):
-        if(self.is_client):
-            return Game.getState("client").send(message)
-        Game.getState("server").send(message)
