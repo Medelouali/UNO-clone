@@ -1,7 +1,7 @@
 import pygame,sys
-from Functions import draw_text
-from Functions import font
-from Functions import screen   #screenWidth=1280    screenHeight=640
+from menus.functions import draw_text
+from menus.functions import font
+from menus.functions import screen   #screenWidth=1280    screenHeight=640
 from utilities.classes.game.Game import Game
 
 pygame.init()
