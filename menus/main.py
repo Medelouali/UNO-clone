@@ -1,8 +1,9 @@
 import pygame,sys
-from PlayMenu import PlayMenu
-from Functions import draw_text
-from Functions import font
-from Functions import screen
+# from PlayMenu import PlayMenu
+from menus.functions import draw_text
+from menus.functions import font
+from menus.functions import screen
+from menus.play import PlayMenu
 pygame.init()
 
 #   Buttons Positions 
@@ -12,7 +13,7 @@ RulesButton = (600 ,300)
 
 
 #  Game Loop
-def MainMenu(ActMenu,RectDic):
+def main(ActMenu, RectDic):
 
     while(True):
         ActMenu="MainMenu"
@@ -40,7 +41,7 @@ def MainMenu(ActMenu,RectDic):
 
 
 
-        screen.fill((50,50,50))
+        screen.fill((160,160,160))
         
         #    drawing the buttons
         draw_text("Play" , font , (255 ,255 ,255) ,screen ,PlayButton,RectDic)
