@@ -5,6 +5,5 @@ import sys
 # otherwise just ignore this comment
 
 if(__name__ == '__main__'):
-    argumentList = sys.argv[1:]
-    game = Game(False if len(argumentList) > 0 else True)
+    game = Game()
     game.run()

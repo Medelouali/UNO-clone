@@ -1,5 +1,6 @@
 from gettext import find
 from inspect import getcomments
+import re
 from turtle import color
 import random
 from utilities.classes.object.player.Player import Player
@@ -143,7 +144,8 @@ class advanced_ai(Player):
                     cardsType = self.TypeHand(playableCards.values())
                     opponent = Game_t.getState("playersList")[Game_t.getState("activePlayer")]
                     index=self.findCardToPlay(playableCards,cardsType,opponent)
-                    print(index)
+                    if(index==None):
+                        index =random.choice(list(playableCards.values()))
                     cardToPlay = self.getHand().pop(index)
                     # set the last played card to be this card
                     Game_t.setState("lastPlayedCard",cardToPlay)
