@@ -5,8 +5,6 @@ import threading
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 from utilities.functions.resize import getSize
-from utilities.classes.Ai.Ai import Ai
-from utilities.classes.Ai.advanced_ai import advanced_ai
 from utilities.classes.object.player.Player import Player
 from utilities.classes.object.deck.Deck import Deck
 from utilities.functions.path import writeText
@@ -72,10 +70,11 @@ class Game:
         # stock players list in a list 
         players = Game.getState("playersList")
         # affect 7 cards to each player 
+        # This should be moved to the server class
         Game.deck.distributeCard()
         # for testing
         if(Game.getState("client")):
-            Game.getState("client").send("The Game started helloo")
+            Game.getState("client").send("The Game started hello")
         # a loop that keeps running as long as we're playing the game
         while(True):
             self.renderPlayedCard()
@@ -91,11 +90,7 @@ class Game:
                     elif(Game.getState("gameEnded")):
                         # call displayResults()
                         pass
-            # Check if current player is a bot 
             self.displayWinner()
-            if(isinstance(players[Game.getState("activePlayer")], advanced_ai) or isinstance(players[Game.getState("activePlayer")],Ai)):
-                # print("Ai is playing")
-                players[Game.getState("activePlayer")].performMove()
             # rendering the game
             pygame.display.update()
             Game.screen.blit(Game.backgroundImage, (0, 0))
@@ -151,25 +146,8 @@ class Game:
         for value in Game.objectsGroup.values():
             value.update()
         
-    def generatePlayers(self, numOfPlayers=2, botExists=True):
-        # bot here representes Ai 
-        if(botExists):    
-            if(numOfPlayers==2):
-                # set list of players ( Ai and real player in this case )
-                Game.setState("playersList", [
-                    advanced_ai(0),
-                    #the human player starts first 
-                    Player(1)]
-                    )
-            # more than two players
-            else:
-                Game.setState("playersList", Game.getState("playersList") + [Player(0)])    
-                Game.setState("playersList", Game.getState("playersList") + [
-                    advanced_ai(i) for i in range(1, numOfPlayers)
-                ])
-        # all players are real 
-        else:
-            
+    def generatePlayers(self, numOfPlayers=2):
+            # We'll get players from server and add them to the game state  
             Game.setState("playersList", Game.getState("playersList") + [
                 Player(i) for i in range(numOfPlayers)
             ])
@@ -239,11 +217,6 @@ class Game:
             for card in Game.playedCards.values():
                 print(card)
             # Game.rotate()
-            
-
-    def showDeck(self):
-        for card in self.deck:
-            print(f"{card.number}_{card.color}")
             
     def displayWinner(self):
         if(Game.getState("playersList")[0].getHand() and Game.getState("playersList")[1].getHand()):
