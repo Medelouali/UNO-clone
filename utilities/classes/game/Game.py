@@ -10,6 +10,8 @@ from utilities.classes.Ai.advanced_ai import advanced_ai
 from utilities.classes.object.player.Player import Player
 from utilities.classes.object.deck.Deck import Deck
 from utilities.functions.path import writeText
+from utilities.classes.object.color_picker import ColorPicker
+
 
 
 
@@ -32,6 +34,8 @@ class Game:
             "lastPlayedCard": None,
             "timer": 10,
             "lastCheckedTime": 0,
+            "chosen_color": None,
+            "color_picker_id":None,
         } # this dictionary will keep track of the game state
     
     #interface settings
@@ -52,6 +56,7 @@ class Game:
     ##dict for object ID 
     playedCards={} 
     deck = Deck()
+    colorPicker =ColorPicker()
     #running used to go from oe interface to another 
     running = True 
     # set background for game interface
@@ -154,7 +159,7 @@ class Game:
         #loop to update the objects in the game 
         self.renderPlayerHand() 
         # copyList=Game.objectsGroup.values()
-        for value in Game.objectsGroup.values():
+        for value in list(Game.objectsGroup.values()):
             value.update()
         
     def generatePlayers(self, numOfPlayers=2, botExists=True):
@@ -301,6 +306,7 @@ class Game:
         Game.deck = Deck()
         #running used to go from oe interface to another 
         Game.running = True 
+        
     
     @classmethod
     def quit(cls):
@@ -345,5 +351,3 @@ class Game:
             # in case the previous player screamed UNO , we reset screamUno to False again for the next turn
             else:Game.getState("playersList")[abs(Game.getState("activePlayer")-1)].screamedUno=False
     
-        
-   
