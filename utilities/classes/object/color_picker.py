@@ -26,7 +26,7 @@ class ColorPicker():
     def wipeColors(self):
         from utilities.classes.game.Game import Game as Game
         for value in self.colors_objects.values():
-            value.setDimentions((0, 0)).destroyObject()
+            value.setDimensions((0, 0)).destroyObject()
             
     def setPickedColor(self, color):
         from utilities.classes.game.Game import Game as Game

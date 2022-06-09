@@ -84,7 +84,7 @@ class Object():
     def getId(self):
         return self.objectId
     
-    def setDimentions(self, dim):
+    def setDimensions(self, dim):
         self.dimensions=dim
         self.image = pygame.transform.scale(pygame.image.load(self.icon), getSize(self.icon, dim[0]))
         return self

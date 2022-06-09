@@ -201,7 +201,7 @@ class Game:
             cardWith=100
             moveBy+=(Game.screenWidth-2*handMargin-(cardWith+cardMargin)*len_t)/2
         for i in range(len_t):
-            hand[i].setPosition([moveBy, Game.screenHeight-100]).setDimentions((cardWith, 100)).add()
+            hand[i].setPosition([moveBy, Game.screenHeight-100]).setDimensions((cardWith, 100)).add()
             moveBy+=cardMargin+cardWith
             
     # adds object to the screen 
@@ -224,7 +224,7 @@ class Game:
     def renderPlayedCard(self):
         # No need to render all the cards, just the one on the top
           if(Game.getState("lastPlayedCard")):
-            Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).setDimentions([100, 200]).muteObject().add()
+            Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).setDimensions([100, 200]).muteObject().add()
             Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).update()
             # print(Game.getState("lastPlayedCard"))
             
