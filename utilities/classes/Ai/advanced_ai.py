@@ -153,6 +153,7 @@ class advanced_ai(Player):
                     # add cardToPlay to deck of played cards
                     Game_t.playedCards[cardToPlay.getId()]=cardToPlay
                     Game_t.rotate()
+                    Game_t.colorPicker.resetPickedColor()
                     return 
             if(Game_t.deck.getSize()>=1):
                 # print("I'm drawing")

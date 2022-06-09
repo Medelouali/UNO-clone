@@ -1,6 +1,10 @@
 import numbers
+from turtle import color
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
+from utilities.classes.Ai.Ai import Ai
+from utilities.classes.Ai.advanced_ai import advanced_ai
+from utilities.classes.object.color_picker import ColorPicker
 import pygame
 
 class Card(Object):
@@ -52,15 +56,15 @@ class Card(Object):
         #if this the first card on the game nothing happens 
         if(not lastPlayedCard):
             return self
-        
+        #for wild card
+        if self.type=="Wild":
+                return self
+        if(lastPlayedCard.type=="Wild"):
+                if(Game_t.state["chosen_color"]==self.getColor()):
+                    return self
         if self.type=="Normal":
             if(lastPlayedCard.getColor()==self.getColor() or lastPlayedCard.getNumber()==self.getNumber()):
                 return self
-            return None
-        #for wild card
-        elif self.type=="Wild":
-            # we will add some code here 
-            return self
         #if it's a special card
         elif self.type in ["Skip", "Reverse", "Draw", "Draw4"]:
             if(lastPlayedCard.getColor()==self.getColor()):
@@ -88,11 +92,11 @@ class Card(Object):
                 Game_t.state["lastPlayedCard"]=self
                 self.applyEffect()
                 Game_t.rotate()
+                Game_t.colorPicker.resetPickedColor()
                 Game_t.setState("timer",10)
                 pygame.time.delay(1000)
                 return True
-
-     # to apply last played card special effect 
+    # to apply last played card special effect 
     def applyEffect(self): 
         from utilities.classes.game.Game import Game as Game
         if(self.getCardType() != "Normal"):
@@ -113,7 +117,11 @@ class Card(Object):
                     print("Skip to next player")
                     Game.rotate()
                 elif(Game.getState("lastPlayedCard").getCardType()=="Wild"):
-                    print("I'm wild baby!")
+                    if(isinstance(Game.getState("playersList")[Game.getState("activePlayer")],advanced_ai)):
+                        print("I'm a bot , i'm useless")
+                    else:
+                        Game.colorPicker.fillColors()
+                        Game.colorPicker.drawColors()
         
 
 
