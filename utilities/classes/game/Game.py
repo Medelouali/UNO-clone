@@ -35,6 +35,8 @@ class Game:
             "lastCheckedTime": 0,
             "server": None,
             "client": None,
+            "difficulty" : "Normal",
+            "numOfPlayers" : 2 ,
         } # this dictionary will keep track of the game state
     
     #interface settings

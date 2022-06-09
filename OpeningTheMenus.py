@@ -1,6 +1,6 @@
 import pygame,sys
 pygame.init()
-from tests.GameStartMenu.MainMenu import MainMenu
+from MainMenu import MainMenu
 pygame.display.set_caption('UNO')
 # setting the variables 
 ActMenu=""#to mark the menu

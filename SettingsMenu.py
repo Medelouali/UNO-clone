@@ -65,7 +65,7 @@ def SettingsMenu(ActMenu,RectDic):
         draw_text("Number of players",font,(255 ,255 ,255),screen,NumPlayers,RectDic)
         draw_text("Back",font,(255 ,255 ,255),screen,Backbutton,RectDic)
         draw_text(str(Num),font,(255 ,255 ,255),screen,NumScreen,RectDic)
-        draw_text(Diff,font,(255 ,255 ,255),screen,DiffScreen,RectDic)
+        draw_text(str(Diff),font,(255 ,255 ,255),screen,DiffScreen,RectDic)
         screen.blit(PosButton ,PosRect)
         screen.blit(MinButton ,MinRect)
         pygame.display.update()
