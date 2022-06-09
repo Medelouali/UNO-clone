@@ -3,5 +3,5 @@ from utilities.sockets.network import Network
 
 # run this for development
 if(__name__ == '__main__'):
-    game = Game(Network())
+    game = Game()
     game.run()

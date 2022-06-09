@@ -1,4 +1,3 @@
-from contextlib import _GeneratorContextManager
 from random import random
 import time
 import pygame, sys
@@ -6,11 +5,10 @@ import threading
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 from utilities.functions.resize import getSize
-from utilities.classes.ai.Ai import Ai
-from utilities.classes.ai.advanced_ai import advanced_ai
 from utilities.classes.object.player.Player import Player
 from utilities.classes.object.deck.Deck import Deck
 from utilities.functions.path import writeText
+from utilities.sockets.network import Network
 
 pygame.init()
 pygame.display.set_caption('UNO')
@@ -32,7 +30,9 @@ class Game:
             "timer": 10,
             "lastCheckedTime": 0,
             "message": "",
-            "network": None,
+            "network": Network(),
+            "game": None,
+            "myPlayerId": None,
         } # this dictionary will keep track of the game state
     
     #interface settings
@@ -61,56 +61,33 @@ class Game:
     backgroundImage, getSize(getPath('images', 'backgroundCards.jpg'), screenWidth))
 
     check=False
-    def __init__(self, network=None):
-    # Will add gameMode as attr later 
-        Game.setState("network", network)
-        # thread = threading.Thread(target=self.startSockets)
-        # thread.start() 
-        self.p1Went = False
-        self.p2Went = False
-        self.ready = False
-        self.id = id
-        self.moves = [None, None]
-        self.wins = [0,0]
-        self.ties = 0 
+    def __init__(self):
+        # Will add gameMode as attr later 
+        pass
     
     def run(self):
         # generate a list of players
         self.generatePlayers() 
         self.setUp()
         # stock players list in a list 
-        players = Game.getState("playersList")
+        # players = Game.getState("playersList")
         # affect 7 cards to each player 
+        # This should be moved to the server class
         Game.deck.distributeCard()
-        # a loop that keeps running as long as we're playing the game
-        while(True):
-            self.notify()
-            self.renderPlayedCard()
-            for event in pygame.event.get():
-                    # set the occured event 
-                    Game.setState("event", event)
-                    # check if player quits the game
-                    if(event.type == pygame.QUIT):
-                    # Will add more conditions in next version
-                        pygame.quit()
-                        sys.exit()
-                    # check if game has ended
-                    elif(Game.getState("gameEnded")):
-                        # call displayResults()
-                        pass
-            # Check if there is a winnig case or not
-            self.displayWinner()
-            if(isinstance(players[Game.getState("activePlayer")], advanced_ai) or 
-                isinstance(players[Game.getState("activePlayer")], Ai)):
-                # print("Ai is playing")
-                players[Game.getState("activePlayer")].performMove()
-            # rendering the game
+        run=True
+        while run:
+            Game.clock.tick(60)
+            Game.screen.fill((128, 128, 128))
+            writeText("UNOOO, click to play...", Game.screenWidth/2, Game.screenHeight/3, 60, Game.screen)
             pygame.display.update()
-            Game.screen.blit(Game.backgroundImage, (0, 0))
-            
-            # self.renderPlayerHand(players[0])
-            self.render()
-            Game.clock.tick(Game.framesPerSecond)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    run = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    run = False
+        self.main()
          
     @classmethod # modify a value in the state by passing its key ( if it exists )
     def setState(cls, key, value):
@@ -159,25 +136,8 @@ class Game:
         for value in Game.objectsGroup.values():
             value.update()
         
-    def generatePlayers(self, numOfPlayers=2, botExists=True):
-        # bot here representes Ai 
-        if(botExists):    
-            if(numOfPlayers==2):
-                # set list of players ( Ai and real player in this case )
-                Game.setState("playersList", [
-                    Ai(0),
-                    #the human player starts first 
-                    Player(1)]
-                    )
-            # more than two players
-            else:
-                Game.setState("playersList", Game.getState("playersList") + [Player(0)])    
-                Game.setState("playersList", Game.getState("playersList") + [
-                    Ai(i) for i in range(1, numOfPlayers)
-                ])
-        # all players are real 
-        else:
-            
+    def generatePlayers(self, numOfPlayers=2):
+            # We'll get players from server and add them to the game state  
             Game.setState("playersList", Game.getState("playersList") + [
                 Player(i) for i in range(numOfPlayers)
             ])
@@ -201,7 +161,7 @@ class Game:
             
     # adds object to the screen 
     def setUp(self):
-        Object([100, 50], [100, 20],icon=getPath("images", "icons", "avatar10.png")).add()
+        Object([100, 50], [100, 20],icon=getPath("images", "icons", "avatar8.png")).add()
         Object(Game.positions["deck"], [80, 20],icon=getPath("images", "cards", "Deck.png"), 
                callback=lambda: Game.deck.drawingCallback()).add()
         Object([Game.screenWidth-100, Game.screenHeight-50], [100, 20],
@@ -247,11 +207,6 @@ class Game:
             for card in Game.playedCards.values():
                 print(card)
             # Game.rotate()
-            
-
-    def showDeck(self):
-        for card in self.deck:
-            print(f"{card.number}_{card.color}")
             
     def displayWinner(self):
         if(Game.getState("playersList")[0].getHand() and Game.getState("playersList")[1].getHand()):
@@ -331,48 +286,85 @@ class Game:
     def notify(self):
         writeText(Game.getState("message"), Game.screenWidth/2, 100, 40, Game.screen)
         
-        
-    def get_player_move(self, p):
-        """
-        :param p: [0,1]
-        :return: Move
-        """
-        return self.moves[p]
+    def main(self):
+        run = True
+        n=Game.state["network"]
+        print("n value:\t", n)
+        print("n value:\t", n.getP())
+        player=Game.setState("myPlayerId", int(n.getP())) 
+        print("You are player", player)
 
-    def play(self, player, move):
-        self.moves[player] = move
-        if player == 0:
-            self.p1Went = True
+        while run:
+            Game.clock.tick(60)
+            try:
+                game = n.send("get")
+                Game.setState("game", game)
+            except Exception as e:
+                run = False
+                print(e)
+                print("Couldn't get game")
+                break
+
+            if game.bothWent():
+                self.redrawWindow(Game.screen, game, player)
+                pygame.time.delay(500)
+                try:
+                    game = n.send("reset")
+                    Game.setState("game", game)
+                except:
+                    run = False
+                    print("Couldn't get game")
+                    break
+
+                font = pygame.font.SysFont("comicsans", 90)
+                if (game.winner() == 1 and player == 1) or (game.winner() == 0 and player == 0):
+                    writeText("You Won!", Game.screenWidth/2, Game.screenHeight/3, 40, Game.screen)
+                elif game.winner() == -1:
+                    writeText("Tie Game!", Game.screenWidth/2, Game.screenHeight/3, 40, Game.screen)
+                else:
+                    writeText("You Lost!", Game.screenWidth/2, Game.screenHeight/3, 40, Game.screen)
+                pygame.display.update()
+                pygame.time.delay(2000)
+
+            
+            self.redrawWindow(Game.screen, game, player)
+            
+    def redrawWindow(self, win, game, p):
+        win.fill((128,128,128))
+        if not(game.connected()):
+            font = pygame.font.SysFont("comicsans", 80)
+            text = font.render("Waiting for player to join...", 1, (255,0,0), True)
+            win.blit(text, (Game.screenWidth/2 - text.get_width()/2, Game.screenHeight/2 - text.get_height()/2))
         else:
-            self.p2Went = True
+            move1 = game.get_player_move(0)
+            move2 = game.get_player_move(1)
+            if game.bothWent():
+                text1 = font.render(move1, 1, (0,0,0))
+                text2 = font.render(move2, 1, (0, 0, 0))
+            else:
+                if game.p1Went and p == 0:
+                    text1 = font.render(move1, 1, (0,0,0))
+                elif game.p1Went:
+                    text1 = font.render("Locked In", 1, (0, 0, 0))
+                else:
+                    text1 = font.render("Waiting...", 1, (0, 0, 0))
 
-    def connected(self):
-        return self.ready
+                if game.p2Went and p == 1:
+                    text2 = font.render(move2, 1, (0,0,0))
+                elif game.p2Went:
+                    text2 = font.render("Locked In", 1, (0, 0, 0))
+                else:
+                    text2 = font.render("Waiting...", 1, (0, 0, 0))
 
-    def bothWent(self):
-        return self.p1Went and self.p2Went
+            if p == 1:
+                win.blit(text2, (100, 350))
+                win.blit(text1, (400, 350))
+            else:
+                win.blit(text1, (100, 350))
+                win.blit(text2, (400, 350))
 
-    def winner(self):
+            # 
+            self.render()
 
-        p1 = self.moves[0].upper()[0]
-        p2 = self.moves[1].upper()[0]
+        pygame.display.update()
 
-        winner = -1
-        if p1 == "R" and p2 == "S":
-            winner = 0
-        elif p1 == "S" and p2 == "R":
-            winner = 1
-        elif p1 == "P" and p2 == "R":
-            winner = 0
-        elif p1 == "R" and p2 == "P":
-            winner = 1
-        elif p1 == "S" and p2 == "P":
-            winner = 0
-        elif p1 == "P" and p2 == "S":
-            winner = 1
-
-        return winner
-
-    def resetWent(self):
-        self.p1Went = False
-        self.p2Went = False

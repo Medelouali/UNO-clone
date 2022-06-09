@@ -31,8 +31,7 @@ class Object():
         #if hes not nothing happens
         if(Game_t.Game.getState('activePlayer')!=1):
             return
-        
-        # Game_t.Game.ifAiPlay()
+    
         if self.rect.collidepoint(pos):  # testing if mouse hovering over Card
              # testing if Card clicked
             if pygame.mouse.get_pressed()[0] == 1 and not self.clicked: 
@@ -40,6 +39,15 @@ class Object():
             #depends on the effect of the object (ex :reverse card)
                 if(self.callback and self.isReactive):
                     self.callback()
+                    game=Game_t.Game.getState('game')
+                    n=Game_t.Game.getState("network")
+                    if Game_t.Game.getState('game').connected():
+                            if Game_t.Game.getState("myPlayerId") == 0:
+                                if not game.p1Went:
+                                    n.send(f"{self.getId()} was clicked")
+                            else:
+                                if not game.p2Went:
+                                    n.send(f"{self.getId()} was clicked")
         if(pygame.mouse.get_pressed()[0] == 0):
             self.clicked=False
             

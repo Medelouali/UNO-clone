@@ -13,7 +13,7 @@ try:
 except socket.error as e:
     str(e)
 
-s.listen(3)
+s.listen(2)
 print("Waiting for a connection, Server Started")
 
 connected = set()

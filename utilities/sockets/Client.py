@@ -32,14 +32,22 @@ class Button:
         else:
             return False
 
-###############
+
 def redrawWindow(win, game, p):
     win.fill((128,128,128))
+
     if not(game.connected()):
         font = pygame.font.SysFont("comicsans", 80)
-        text = font.render("Waiting for player to join...", 1, (255,0,0), True)
+        text = font.render("Waiting for Player...", 1, (255,0,0), True)
         win.blit(text, (width/2 - text.get_width()/2, height/2 - text.get_height()/2))
     else:
+        font = pygame.font.SysFont("comicsans", 60)
+        text = font.render("Your Move", 1, (0, 255,255))
+        win.blit(text, (80, 200))
+
+        text = font.render("Opponents", 1, (0, 255, 255))
+        win.blit(text, (380, 200))
+
         move1 = game.get_player_move(0)
         move2 = game.get_player_move(1)
         if game.bothWent():
@@ -73,12 +81,7 @@ def redrawWindow(win, game, p):
     pygame.display.update()
 
 
-btns = [
-    Button("Rock", 50, 500, (0,0,0)), 
-    Button("Scissors", 250, 500, (255,0,0)), 
-    Button("Paper", 450, 500, (0,255,0))
-]
-
+btns = [Button("Rock", 50, 500, (0,0,0)), Button("Scissors", 250, 500, (255,0,0)), Button("Paper", 450, 500, (0,255,0))]
 def main():
     run = True
     clock = pygame.time.Clock()

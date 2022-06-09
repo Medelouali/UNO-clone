@@ -27,4 +27,3 @@ class Network:
         except socket.error as e:
             print(e)
 
-n=Network()
