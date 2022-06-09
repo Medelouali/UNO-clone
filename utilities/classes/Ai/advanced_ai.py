@@ -142,8 +142,8 @@ class advanced_ai(Player):
             if(playableCards):
                     cardsType = self.TypeHand(playableCards.values())
                     opponent = Game_t.getState("playersList")[Game_t.getState("activePlayer")]
-                    index=self.findCardToPlay(playableCards,cardsType,opponent)
-                    print(index)
+                    index=self.findCardToPlay(playableCards, cardsType, opponent)
+                    print("index:\t", index)
                     cardToPlay = self.getHand().pop(index)
                     # set the last played card to be this card
                     Game_t.setState("lastPlayedCard",cardToPlay)

@@ -1,3 +1,4 @@
+from contextlib import _GeneratorContextManager
 from random import random
 import time
 import pygame, sys
@@ -5,8 +6,8 @@ import threading
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 from utilities.functions.resize import getSize
-from utilities.classes.Ai.Ai import Ai
-from utilities.classes.Ai.advanced_ai import advanced_ai
+from utilities.classes.ai.Ai import Ai
+from utilities.classes.ai.advanced_ai import advanced_ai
 from utilities.classes.object.player.Player import Player
 from utilities.classes.object.deck.Deck import Deck
 from utilities.functions.path import writeText
@@ -30,6 +31,7 @@ class Game:
             "lastPlayedCard": None,
             "timer": 10,
             "lastCheckedTime": 0,
+            "message": "",
             "network": None,
         } # this dictionary will keep track of the game state
     
@@ -63,7 +65,14 @@ class Game:
     # Will add gameMode as attr later 
         Game.setState("network", network)
         # thread = threading.Thread(target=self.startSockets)
-        # thread.start()  
+        # thread.start() 
+        self.p1Went = False
+        self.p2Went = False
+        self.ready = False
+        self.id = id
+        self.moves = [None, None]
+        self.wins = [0,0]
+        self.ties = 0 
     
     def run(self):
         # generate a list of players
@@ -73,11 +82,9 @@ class Game:
         players = Game.getState("playersList")
         # affect 7 cards to each player 
         Game.deck.distributeCard()
-        # for testing
-        if(Game.getState("client")):
-            Game.getState("client").send("The Game started helloo")
         # a loop that keeps running as long as we're playing the game
         while(True):
+            self.notify()
             self.renderPlayedCard()
             for event in pygame.event.get():
                     # set the occured event 
@@ -91,9 +98,10 @@ class Game:
                     elif(Game.getState("gameEnded")):
                         # call displayResults()
                         pass
-            # Check if current player is a bot 
+            # Check if there is a winnig case or not
             self.displayWinner()
-            if(isinstance(players[Game.getState("activePlayer")], advanced_ai) or isinstance(players[Game.getState("activePlayer")],Ai)):
+            if(isinstance(players[Game.getState("activePlayer")], advanced_ai) or 
+                isinstance(players[Game.getState("activePlayer")], Ai)):
                 # print("Ai is playing")
                 players[Game.getState("activePlayer")].performMove()
             # rendering the game
@@ -102,7 +110,7 @@ class Game:
             
             # self.renderPlayerHand(players[0])
             self.render()
-            self.clock.tick(Game.framesPerSecond)
+            Game.clock.tick(Game.framesPerSecond)
          
     @classmethod # modify a value in the state by passing its key ( if it exists )
     def setState(cls, key, value):
@@ -157,7 +165,7 @@ class Game:
             if(numOfPlayers==2):
                 # set list of players ( Ai and real player in this case )
                 Game.setState("playersList", [
-                    advanced_ai(0),
+                    Ai(0),
                     #the human player starts first 
                     Player(1)]
                     )
@@ -165,7 +173,7 @@ class Game:
             else:
                 Game.setState("playersList", Game.getState("playersList") + [Player(0)])    
                 Game.setState("playersList", Game.getState("playersList") + [
-                    advanced_ai(i) for i in range(1, numOfPlayers)
+                    Ai(i) for i in range(1, numOfPlayers)
                 ])
         # all players are real 
         else:
@@ -284,6 +292,7 @@ class Game:
                 "gameEnded": False,
                 # list of players 
                 "playersList": [],
+                "message": "",
                 "lastPlayedCard": None,
             } # this dictionary will keep track of the game state
         
@@ -319,6 +328,51 @@ class Game:
         Game.setState("timer", Game.maxWaitingTime)
         Game.setState("lastCheckedTime", 0)
 
-    def notify(self, message):
-        writeText(message, Game.screenWidth/2, 100, 40, Game.screen)
+    def notify(self):
+        writeText(Game.getState("message"), Game.screenWidth/2, 100, 40, Game.screen)
         
+        
+    def get_player_move(self, p):
+        """
+        :param p: [0,1]
+        :return: Move
+        """
+        return self.moves[p]
+
+    def play(self, player, move):
+        self.moves[player] = move
+        if player == 0:
+            self.p1Went = True
+        else:
+            self.p2Went = True
+
+    def connected(self):
+        return self.ready
+
+    def bothWent(self):
+        return self.p1Went and self.p2Went
+
+    def winner(self):
+
+        p1 = self.moves[0].upper()[0]
+        p2 = self.moves[1].upper()[0]
+
+        winner = -1
+        if p1 == "R" and p2 == "S":
+            winner = 0
+        elif p1 == "S" and p2 == "R":
+            winner = 1
+        elif p1 == "P" and p2 == "R":
+            winner = 0
+        elif p1 == "R" and p2 == "P":
+            winner = 1
+        elif p1 == "S" and p2 == "P":
+            winner = 0
+        elif p1 == "P" and p2 == "S":
+            winner = 1
+
+        return winner
+
+    def resetWent(self):
+        self.p1Went = False
+        self.p2Went = False

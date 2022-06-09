@@ -105,7 +105,6 @@ class Card(Object):
                 self.applyEffect()
                 Game_t.rotate()
                 Game_t.setState("timer",10)
-                pygame.time.delay(1000)
                 return True
 
             """changes playerActive to next player hence this player's to false"""
@@ -140,5 +139,6 @@ class Card(Object):
     
     def getNumber(self):
         return self.number
+    
     def __str__(self):
         return f"Number : {self.number} Color : {self.color}"

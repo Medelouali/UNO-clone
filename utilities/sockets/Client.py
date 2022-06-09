@@ -35,10 +35,9 @@ class Button:
 ###############
 def redrawWindow(win, game, p):
     win.fill((128,128,128))
-
     if not(game.connected()):
         font = pygame.font.SysFont("comicsans", 80)
-        text = font.render("Waiting for Player...", 1, (255,0,0), True)
+        text = font.render("Waiting for player to join...", 1, (255,0,0), True)
         win.blit(text, (width/2 - text.get_width()/2, height/2 - text.get_height()/2))
     else:
         move1 = game.get_player_move(0)
