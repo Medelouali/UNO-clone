@@ -64,7 +64,9 @@ class Deck(Object):
         # _ is used to replace i since we won't be using it again 
         for _ in range(numberOfCards):
            #if the deck is empty topCard =None 
-            if(self.isEmpty()): return topCard
+            if(len(self.deck) == 0): 
+                print("deck is empty")
+                return topCard
             topCard=self.deck.pop()
              # add deck top card into player's hand
             Game.state["playersList"][activeId].hand+= [topCard]
@@ -119,9 +121,9 @@ class Deck(Object):
     
     def createSpecialCards(self):
         subDeck=self.createCards(Deck.cardsColors, [None], Deck.coloredTypes)
-        subDeckWild=self.createWildCards()
+        # subDeckWild=self.createWildCards()
         # subDeckSpecial=self.cloneCards(subDeck,2)
-        return subDeck + subDeckWild
+        return subDeck
     
     # Game_t.Game.getState("playersList") cercular import bug should be fixed
     def distributeCard(self, number=7):

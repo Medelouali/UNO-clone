@@ -17,20 +17,6 @@ class Card(Object):
         self.played=False
         
     # coloredType=["Skip", "Reverse", "Draw 2", "Draw 4", "Wild"]
-    
-    
-    # to be reviewed
-    def switchCard(self):
-        if(self.type=="Skip"):
-            print("You choose a skip card")
-        elif(self.type=="Reverse"):
-            print("You choose a reverse card")
-        elif(self.type=="Draw2"):
-            print("You choose draw 2 card")
-        elif(self.type=="Draw4"):
-            print("You choose a draw 4 card")
-        else:
-            print("Norml card was chosen")
     # get card's type 
     def getCardType(self):
         return self.type
@@ -106,7 +92,6 @@ class Card(Object):
                 pygame.time.delay(1000)
                 return True
 
-            """changes playerActive to next player hence this player's to false"""
      # to apply last played card special effect 
     def applyEffect(self): 
         from utilities.classes.game.Game import Game as Game
@@ -123,7 +108,7 @@ class Card(Object):
                     Game.rotate()
                 elif(Game.getState("lastPlayedCard").getCardType()=="Reverse"):
                     print("Reverse order")
-                    # reverseOrder()
+                    Game.rotate()
                 elif(Game.getState("lastPlayedCard").getCardType()=="Skip"):
                     print("Skip to next player")
                     Game.rotate()

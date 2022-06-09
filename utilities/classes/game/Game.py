@@ -1,4 +1,4 @@
-from random import random
+import random
 import time
 import pygame, sys
 import threading
@@ -10,8 +10,7 @@ from utilities.classes.Ai.advanced_ai import advanced_ai
 from utilities.classes.object.player.Player import Player
 from utilities.classes.object.deck.Deck import Deck
 from utilities.functions.path import writeText
-from utilities.sockets.Server import Server
-from utilities.sockets.Client import Client
+
 
 
 pygame.init()
@@ -33,10 +32,13 @@ class Game:
             "lastPlayedCard": None,
             "timer": 10,
             "lastCheckedTime": 0,
+<<<<<<< HEAD
             "server": None,
             "client": None,
             "difficulty" : "Normal",
             "numOfPlayers" : 2 ,
+=======
+>>>>>>> c69ec6c76cffc348722f124564457eb263b6d60d
         } # this dictionary will keep track of the game state
     
     #interface settings
@@ -64,12 +66,9 @@ class Game:
     backgroundImage = pygame.transform.scale(
     backgroundImage, getSize(getPath('images', 'backgroundCards.jpg'), screenWidth))
 
-    def __init__(self, is_client=True):
-    # Will add gameMode as attr later 
-        self.is_client = is_client
-        thread = threading.Thread(target=self.startSockets)
-        thread.start()  
+    def __init__(self):
     # initialize a deck of cards at the start of the game
+        pass
     
     def run(self):
         # generate a list of players
@@ -79,18 +78,12 @@ class Game:
         players = Game.getState("playersList")
         # affect 7 cards to each player 
         Game.deck.distributeCard()
-        # for testing
-        if(Game.getState("client")):
-            Game.getState("client").send("The Game started helloo")
         # a loop that keeps running as long as we're playing the game
         while(True):
             # Game.state["playersList"][1].hand=[] #for testing
             # if(Game.getState("lastPlayedCard")): self.applyEffect()
             # print("Last played card: ",Game.getState("lastPlayedCard"))
             self.renderPlayedCard()
-            # print("My hand :")
-            # for card in players[Game.getState("activePlayer")].hand:
-            #     print(card)  
             # Check if the player has quit the game or if the game is over
             for event in pygame.event.get():
                     # set the occured event 
@@ -108,6 +101,13 @@ class Game:
             self.displayWinner()
             if(isinstance(players[Game.getState("activePlayer")], advanced_ai) or isinstance(players[Game.getState("activePlayer")],Ai)):
                 # print("Ai is playing")
+                # before playing a card, check if previous player has screamed UNO
+                # to base screaming UNO purely on chance for the ai 
+                head_or_tails = random.randint(0,1)
+                if(head_or_tails):
+                    print("Checking scream ")
+                    self.unoScream()
+                # play ai's turn
                 players[Game.getState("activePlayer")].performMove()
             # rendering the game
             pygame.display.update()
@@ -212,7 +212,7 @@ class Game:
         Object([Game.screenWidth-100, Game.screenHeight-50], [100, 20],
                icon=getPath("images", "icons", "avatar6.png")).add()        
         Object([Game.screenWidth-100, Game.screenHeight-200], [100, 20],
-               icon=getPath("images", "icons", "unoButton.png")).add()  
+               icon=getPath("images", "icons", "unoButton.png"),callback=lambda: self.unoScream()).add()  
         if(not Game.deck.isEmpty()):
             Game.setState("lastPlayedCard", Game.deck.deck.pop())
     
@@ -298,6 +298,7 @@ class Game:
                 # list of players 
                 "playersList": [],
                 "lastPlayedCard": None,
+                "unoScream":False,
             } # this dictionary will keep track of the game state
         
         #dict foe object ID 
@@ -312,7 +313,7 @@ class Game:
     def quit(cls):
         pygame.quit()
         sys.exit()
-        
+    # to render the timer
     def renderTimer(self):
         if(Game.getState("timer")==0):
             Game.deck.draw()
@@ -327,23 +328,29 @@ class Game:
         passed_time=Game.getState("timer")
         writeText(f"Time Left", Game.screenWidth-200, 100, 40, Game.screen)
         writeText(f"{passed_time} secondes", Game.screenWidth-200, 150, 30, Game.screen)
-    
+    # to reset the round timer
     def resetTimer(self):
         Game.setState("timer", Game.maxWaitingTime)
         Game.setState("lastCheckedTime", 0)
-
+    # to display a message to the player notifying them of any changes made to the game state
     def notify(self, message):
         writeText(message, Game.screenWidth/2, 100, 40, Game.screen)
+    # control uno scream's logic
+    def unoScream(self):
+        current_player =Game.getState("playersList")[Game.getState("activePlayer")]
+    # in case the current player needs to scream UNO
+        if(len(current_player.getHand())==1):
+            Game.getState("playersList")[Game.getState("activePlayer")].screamedUno=True
+            print("UNO !!!")
+            # to check if the previous player screamed uno 
+            previous_player=Game.getState("playersList")[abs(Game.getState("activePlayer")-1)]
+            if(len(previous_player.getHand())==1 and previous_player.screamedUno==False):
+                # if he had to scream it and haven't then he has to draw two cards
+                print("You are bamboozled")
+                # draw two cards
+                Game.deck.draw(2,abs(Game.getState("activePlayer")-1))
+            # in case the previous player screamed UNO , we reset screamUno to False again for the next turn
+            else:Game.getState("playersList")[abs(Game.getState("activePlayer")-1)].screamedUno=False
+    
         
-        
-    def startSockets(self):
-        if(self.is_client):
-            Game.setState("client", Client()).start()
-        else:
-            Game.setState("server", Server()).start()
-            
-    # the message should be in the form "action/method type args"
-    def emit(self, message):
-        if(self.is_client):
-            return Game.getState("client").send(message)
-        Game.getState("server").send(message)
+   
