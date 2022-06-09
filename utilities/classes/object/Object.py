@@ -75,6 +75,11 @@ class Object():
     def setCallback(self, callback):
         self.callback=callback
         
+    def generateCallback(self, *args):
+        def func():
+            self.triggerCallback(*args)
+        return func
+    
     #getter of the object if    
     def getId(self):
         return self.objectId

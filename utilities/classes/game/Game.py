@@ -36,6 +36,7 @@ class Game:
             "lastCheckedTime": 0,
             "chosen_color": None,
             "color_picker_id":None,
+            "message": ""
         } # this dictionary will keep track of the game state
     
     #interface settings
@@ -56,7 +57,7 @@ class Game:
     ##dict for object ID 
     playedCards={} 
     deck = Deck()
-    colorPicker =ColorPicker()
+    colorPicker = ColorPicker()
     #running used to go from oe interface to another 
     running = True 
     # set background for game interface
@@ -82,6 +83,7 @@ class Game:
             # if(Game.getState("lastPlayedCard")): self.applyEffect()
             # print("Last played card: ",Game.getState("lastPlayedCard"))
             self.renderPlayedCard()
+            self.notify()
             # Check if the player has quit the game or if the game is over
             for event in pygame.event.get():
                     # set the occured event 
@@ -222,7 +224,7 @@ class Game:
     def renderPlayedCard(self):
         # No need to render all the cards, just the one on the top
           if(Game.getState("lastPlayedCard")):
-            Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).muteObject().add()
+            Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).setDimentions([100, 200]).muteObject().add()
             Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).update()
             # print(Game.getState("lastPlayedCard"))
             
@@ -332,8 +334,8 @@ class Game:
         Game.setState("timer", Game.maxWaitingTime)
         Game.setState("lastCheckedTime", 0)
     # to display a message to the player notifying them of any changes made to the game state
-    def notify(self, message):
-        writeText(message, Game.screenWidth/2, 100, 40, Game.screen)
+    def notify(self):
+        writeText(Game.getState("message"), Game.screenWidth/2, 50, 30, Game.screen)
         
     # control uno scream's logic
     def unoScream(self):
