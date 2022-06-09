@@ -5,8 +5,8 @@ import threading
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 from utilities.functions.resize import getSize
-from utilities.classes.Ai.Ai import Ai
-from utilities.classes.Ai.advanced_ai import advanced_ai
+from utilities.classes.ai.Ai import Ai
+from utilities.classes.ai.advanced_ai import advanced_ai
 from utilities.classes.object.player.Player import Player
 from utilities.classes.object.deck.Deck import Deck
 from utilities.functions.path import writeText
@@ -328,6 +328,7 @@ class Game:
     # to display a message to the player notifying them of any changes made to the game state
     def notify(self, message):
         writeText(message, Game.screenWidth/2, 100, 40, Game.screen)
+        
     # control uno scream's logic
     def unoScream(self):
         current_player =Game.getState("playersList")[Game.getState("activePlayer")]
