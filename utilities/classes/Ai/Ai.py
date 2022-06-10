@@ -10,7 +10,7 @@ class Ai(Player):
         Player.__init__(self, id)
         # intializing the list of playabale cards to an empty list
         # self.playableCards = []
-   
+    
     # # To update the list of playable cards by comparing every card against the last played card
     # def updatePlayableCards(self, lastPlayedCard):
     #     # to check every card in the Ai's hand
@@ -18,11 +18,28 @@ class Ai(Player):
     #         # checking if the return card is not null , if it's the case then add it to the list of playable cards
     #         if self.compareSingleCard(lastPlayedCard, card):
     #             self.playableCards.append(card)
+    def getCommonColor(self,playableCards):
+        colors={}
+        for i in playableCards.values():
+            try:
+                colors[self.getHand()[i].getColor()] = colors[self.getHand()[i].getColor()] + 1
+            except KeyError:
+                colors[self.getHand()[i].getColor()] = 1
+            if(colors):
+                return max(colors,key=colors.get)
+
+    def getCommonNumber(self,playableCards):
+        numbers={}
+        for i in playableCards.values():
+            try:
+                numbers[self.getHand()[i].getNumber()] = numbers[self.getHand()[i].getNumber()] + 1
+            except KeyError:
+                numbers[self.getHand()[i].getNumber()] = 1
+            if(numbers):
+                return max(numbers,key=numbers.get)
     # for the Ai to play when      
     def performMove(self):
         from utilities.classes.game.Game import Game as Game_t
-    
-
         for i in range(len(self.getHand())):
             if self.getHand()[i].compareSingleCard():
                 # pop a card to play from the Ai's hand
@@ -33,6 +50,7 @@ class Ai(Player):
                 # add cardToPlay to deck of played cards
                 Game_t.playedCards[cardToPlay.getId()]=cardToPlay
                 Game_t.rotate()
+                Game_t.colorPicker.resetPickedColor()
                 return 
         if(Game_t.deck.getSize()>=1):
             # print("I'm drawing")
@@ -41,17 +59,7 @@ class Ai(Player):
         else :
             print("Can't draw no more")
             print(Game_t.deck.getSize()) 
-    # overriding the screamUno method for Ai since it'll be called randomly when it's the Ai's turn 
-    def screamUno(self,deck,Game):
-            prevPlayer = Game.players[Game.state["activePlayer"]-Game.rotation]
-            if (prevPlayer.hasUno) and (not prevPlayer.screamedUno):
-                handOfPlayer = prevPlayer.getHand()
-                deck.draw(handOfPlayer,2)
-                self.screamUno = True
-                print("player ", self.ID, "screamed UNO\n")
-            elif self.hasUno == True:
-                self.screamUno = True
-                print("player ", self.ID, "screamed UNO\n")
+  
             
                
 

@@ -5,11 +5,13 @@ import threading
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 from utilities.functions.resize import getSize
-from utilities.classes.Ai.Ai import Ai
-from utilities.classes.Ai.advanced_ai import advanced_ai
+from utilities.classes.ai.Ai import Ai
+from utilities.classes.ai.advanced_ai import advanced_ai
 from utilities.classes.object.player.Player import Player
 from utilities.classes.object.deck.Deck import Deck
 from utilities.functions.path import writeText
+from utilities.classes.object.color_picker import ColorPicker
+
 
 
 
@@ -32,9 +34,15 @@ class Game:
             "lastPlayedCard": None,
             "timer": 10,
             "lastCheckedTime": 0,
+<<<<<<< HEAD
             #difficulty and umber of players
             "Difficulty" : "Normal",
             "numOfPlayers" : 2 
+=======
+            "chosen_color": None,
+            "color_picker_id":None,
+            "message": ""
+>>>>>>> 4bbade8965fb4ca8127b3ed1f24725c889322a9c
         } # this dictionary will keep track of the game state
     
     #interface settings
@@ -55,6 +63,7 @@ class Game:
     ##dict for object ID 
     playedCards={} 
     deck = Deck()
+    colorPicker = ColorPicker()
     #running used to go from oe interface to another 
     running = True 
     # set background for game interface
@@ -81,6 +90,7 @@ class Game:
             # if(Game.getState("lastPlayedCard")): self.applyEffect()
             # print("Last played card: ",Game.getState("lastPlayedCard"))
             self.renderPlayedCard()
+            self.notify()
             # Check if the player has quit the game or if the game is over
             for event in pygame.event.get():
                     # set the occured event 
@@ -172,7 +182,7 @@ class Game:
         #loop to update the objects in the game 
         self.renderPlayerHand() 
         # copyList=Game.objectsGroup.values()
-        for value in Game.objectsGroup.values():
+        for value in list(Game.objectsGroup.values()):
             value.update()
         
     def generatePlayers(self, numOfPlayers=2, botExists=True):
@@ -212,7 +222,7 @@ class Game:
             cardWith=100
             moveBy+=(Game.screenWidth-2*handMargin-(cardWith+cardMargin)*len_t)/2
         for i in range(len_t):
-            hand[i].setPosition([moveBy, Game.screenHeight-100]).setDimentions((cardWith, 100)).add()
+            hand[i].setPosition([moveBy, Game.screenHeight-100]).setDimensions((cardWith, 100)).add()
             moveBy+=cardMargin+cardWith
             
     # adds object to the screen 
@@ -235,7 +245,7 @@ class Game:
     def renderPlayedCard(self):
         # No need to render all the cards, just the one on the top
           if(Game.getState("lastPlayedCard")):
-            Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).muteObject().add()
+            Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).setDimensions([100, 200]).muteObject().add()
             Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).update()
             # print(Game.getState("lastPlayedCard"))
             
@@ -324,6 +334,7 @@ class Game:
         Game.deck = Deck()
         #running used to go from oe interface to another 
         Game.running = True 
+        
     
     @classmethod
     def quit(cls):
@@ -349,8 +360,9 @@ class Game:
         Game.setState("timer", Game.maxWaitingTime)
         Game.setState("lastCheckedTime", 0)
     # to display a message to the player notifying them of any changes made to the game state
-    def notify(self, message):
-        writeText(message, Game.screenWidth/2, 100, 40, Game.screen)
+    def notify(self):
+        writeText(Game.getState("message"), Game.screenWidth/2, 50, 30, Game.screen)
+        
     # control uno scream's logic
     def unoScream(self):
         current_player =Game.getState("playersList")[Game.getState("activePlayer")]
@@ -368,5 +380,3 @@ class Game:
             # in case the previous player screamed UNO , we reset screamUno to False again for the next turn
             else:Game.getState("playersList")[abs(Game.getState("activePlayer")-1)].screamedUno=False
     
-        
-   

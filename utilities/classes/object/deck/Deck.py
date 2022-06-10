@@ -121,9 +121,9 @@ class Deck(Object):
     
     def createSpecialCards(self):
         subDeck=self.createCards(Deck.cardsColors, [None], Deck.coloredTypes)
-        # subDeckWild=self.createWildCards()
+        subDeckWild=self.createWildCards()
         # subDeckSpecial=self.cloneCards(subDeck,2)
-        return subDeck
+        return subDeck+subDeckWild
     
     #Game_t.Game.getState("playersList") cercular import bug should be fixed
     def distributeCard(self, number=7):
