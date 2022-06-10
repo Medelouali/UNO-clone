@@ -34,15 +34,9 @@ class Game:
             "lastPlayedCard": None,
             "timer": 10,
             "lastCheckedTime": 0,
-<<<<<<< HEAD
-            #difficulty and umber of players
-            "Difficulty" : "Normal",
-            "numOfPlayers" : 2 
-=======
             "chosen_color": None,
             "color_picker_id":None,
             "message": ""
->>>>>>> 4bbade8965fb4ca8127b3ed1f24725c889322a9c
         } # this dictionary will keep track of the game state
     
     #interface settings
