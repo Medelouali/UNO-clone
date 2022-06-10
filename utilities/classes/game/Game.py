@@ -5,8 +5,8 @@ import threading
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 from utilities.functions.resize import getSize
-from utilities.classes.Ai.Ai import Ai
-from utilities.classes.Ai.advanced_ai import advanced_ai
+from utilities.classes.ai.Ai import Ai
+from utilities.classes.ai.advanced_ai import advanced_ai
 from utilities.classes.object.player.Player import Player
 from utilities.classes.object.deck.Deck import Deck
 from utilities.functions.path import writeText
@@ -34,8 +34,15 @@ class Game:
             "lastPlayedCard": None,
             "timer": 10,
             "lastCheckedTime": 0,
+<<<<<<< HEAD
+            #difficulty and umber of players
+            "Difficulty" : "Normal",
+            "numOfPlayers" : 2 
+=======
             "chosen_color": None,
             "color_picker_id":None,
+            "message": ""
+>>>>>>> 4bbade8965fb4ca8127b3ed1f24725c889322a9c
         } # this dictionary will keep track of the game state
     
     #interface settings
@@ -56,7 +63,7 @@ class Game:
     ##dict for object ID 
     playedCards={} 
     deck = Deck()
-    colorPicker =ColorPicker()
+    colorPicker = ColorPicker()
     #running used to go from oe interface to another 
     running = True 
     # set background for game interface
@@ -72,16 +79,18 @@ class Game:
         # generate a list of players
         self.generatePlayers() 
         self.setUp()
+        T=True
         # stock players list in a list 
         players = Game.getState("playersList")
         # affect 7 cards to each player 
         Game.deck.distributeCard()
         # a loop that keeps running as long as we're playing the game
-        while(True):
+        while(T):
             # Game.state["playersList"][1].hand=[] #for testing
             # if(Game.getState("lastPlayedCard")): self.applyEffect()
             # print("Last played card: ",Game.getState("lastPlayedCard"))
             self.renderPlayedCard()
+            self.notify()
             # Check if the player has quit the game or if the game is over
             for event in pygame.event.get():
                     # set the occured event 
@@ -91,12 +100,24 @@ class Game:
                     # Will add more conditions in next version
                         pygame.quit()
                         sys.exit()
+                    #force the end of game
+                    if(event.type == pygame.KEYDOWN or event.type == pygame.KEYUP ):
+                        # if (event.type == pygame.K_p):
+                            print("ohh you're aproaching me ?")
+                            Game.getState("playersList")[1].setHand([])
                     # check if game has ended
-                    elif(Game.getState("gameEnded")):
+
+                    if(Game.getState("gameEnded")):
                         # call displayResults()
-                        pass
+                        Game.setState("gameEnded",False)
+                        T=False
+            #Verifying if a hand is empty
+            if( Game.getState("playersList")[0].getHand()==[] or Game.getState("playersList")[1].getHand() ==[] ):
+                Game.setState("gameEnded",True)
+                # Game.setState("lastPlayedCard", None)
+                # T=False
             # Check if current player is a bot 
-            self.displayWinner()
+            # self.displayWinner()
             if(isinstance(players[Game.getState("activePlayer")], advanced_ai) or isinstance(players[Game.getState("activePlayer")],Ai)):
                 # print("Ai is playing")
                 # before playing a card, check if previous player has screamed UNO
@@ -107,6 +128,8 @@ class Game:
                     self.unoScream()
                 # play ai's turn
                 players[Game.getState("activePlayer")].performMove()
+            
+
             # rendering the game
             pygame.display.update()
             Game.screen.blit(Game.backgroundImage, (0, 0))
@@ -199,7 +222,7 @@ class Game:
             cardWith=100
             moveBy+=(Game.screenWidth-2*handMargin-(cardWith+cardMargin)*len_t)/2
         for i in range(len_t):
-            hand[i].setPosition([moveBy, Game.screenHeight-100]).setDimentions((cardWith, 100)).add()
+            hand[i].setPosition([moveBy, Game.screenHeight-100]).setDimensions((cardWith, 100)).add()
             moveBy+=cardMargin+cardWith
             
     # adds object to the screen 
@@ -222,7 +245,7 @@ class Game:
     def renderPlayedCard(self):
         # No need to render all the cards, just the one on the top
           if(Game.getState("lastPlayedCard")):
-            Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).muteObject().add()
+            Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).setDimensions([100, 200]).muteObject().add()
             Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).update()
             # print(Game.getState("lastPlayedCard"))
             
@@ -257,29 +280,34 @@ class Game:
             print(f"{card.number}_{card.color}")
             
     def displayWinner(self):
-        if(Game.getState("playersList")[0].getHand() and Game.getState("playersList")[1].getHand()):
-            return
-        Game.setState("lastPlayedCard", None)
-        if(not Game.getState("playersList")[0].getHand()):
-            writeText(f"The Bot Wins, You May Win Next Time;)", Game.screenWidth/2, Game.screenHeight/3, 50, Game.screen)
-            Object(Game.positions["playedCards"], (150, 0), 
-                    getPath("images", "icons", "avatar10.png"), None).add()
-            Object((Game.screenWidth/2, Game.screenHeight/2+150), (150, 0), 
-                    getPath("images", "continue2.jpg"), Game.reset).add()
-            Object((Game.screenWidth/2, Game.screenHeight/2+250), (150, 0), 
-                    getPath("images", "exit.jpg"), Game.quit).add()
-            return True
+        # if(Game.getState("playersList")[0].getHand() and Game.getState("playersList")[1].getHand()):
+        #     return
+        
+        if(not Game.getState("playersList")[0].getHand() or not Game.getState("playersList")[1].getHand() ):
+            Game.setState("lastPlayedCard", None)
+            T=False
+            # return True
+        
+        
+        # if(not Game.getState("playersList")[0].getHand()):
+        #     writeText(f"The Bot Wins, You May Win Next Time;)", Game.screenWidth/2, Game.screenHeight/3, 50, Game.screen)
+        #     Object(Game.positions["playedCards"], (150, 0), 
+        #             getPath("images", "icons", "avatar10.png"), None).add()
+        #     Object((Game.screenWidth/2, Game.screenHeight/2+150), (150, 0), 
+        #             getPath("images", "continue2.jpg"), Game.reset).add()
+        #     Object((Game.screenWidth/2, Game.screenHeight/2+250), (150, 0), 
+        #             getPath("images", "exit.jpg"), Game.quit).add()
+        #     return True
             
-        if(not Game.getState("playersList")[1].getHand()):
-            writeText(f"You Won, Good Boy;)", Game.screenWidth/2, Game.screenHeight/3, 50, Game.screen)
-            Object(Game.positions["playedCards"], (150, 0), 
-                    getPath("images", "icons", "avatar6.png"), None).add()
-            
-            Object((Game.screenWidth/2, Game.screenHeight/2+150), (150, 0), 
-                    getPath("images", "continue2.jpg"), Game.reset).add()
-            Object((Game.screenWidth/2, Game.screenHeight/2+250), (150, 0), 
-                    getPath("images", "exit.jpg"), Game.quit).add()
-            return True
+        # if(not Game.getState("playersList")[1].getHand()):
+        #     writeText(f"You Won, Good Boy;)", Game.screenWidth/2, Game.screenHeight/3, 50, Game.screen)
+        #     Object(Game.positions["playedCards"], (150, 0), 
+        #             getPath("images", "icons", "avatar6.png"), None).add()           
+        #     Object((Game.screenWidth/2, Game.screenHeight/2+150), (150, 0), 
+        #             getPath("images", "continue2.jpg"), Game.reset).add()
+        #     Object((Game.screenWidth/2, Game.screenHeight/2+250), (150, 0), 
+        #             getPath("images", "exit.jpg"), Game.quit).add()
+        #     return True
     
     @classmethod
     def reset(cls):
@@ -332,8 +360,9 @@ class Game:
         Game.setState("timer", Game.maxWaitingTime)
         Game.setState("lastCheckedTime", 0)
     # to display a message to the player notifying them of any changes made to the game state
-    def notify(self, message):
-        writeText(message, Game.screenWidth/2, 100, 40, Game.screen)
+    def notify(self):
+        writeText(Game.getState("message"), Game.screenWidth/2, 50, 30, Game.screen)
+        
     # control uno scream's logic
     def unoScream(self):
         current_player =Game.getState("playersList")[Game.getState("activePlayer")]

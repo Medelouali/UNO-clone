@@ -75,11 +75,16 @@ class Object():
     def setCallback(self, callback):
         self.callback=callback
         
+    def generateCallback(self, *args):
+        def func():
+            self.triggerCallback(*args)
+        return func
+    
     #getter of the object if    
     def getId(self):
         return self.objectId
     
-    def setDimentions(self, dim):
+    def setDimensions(self, dim):
         self.dimensions=dim
         self.image = pygame.transform.scale(pygame.image.load(self.icon), getSize(self.icon, dim[0]))
         return self

@@ -125,7 +125,7 @@ class Deck(Object):
         # subDeckSpecial=self.cloneCards(subDeck,2)
         return subDeck+subDeckWild
     
-    # Game_t.Game.getState("playersList") cercular import bug should be fixed
+    #Game_t.Game.getState("playersList") cercular import bug should be fixed
     def distributeCard(self, number=7):
         import utilities.classes.game.Game as Game_t
         #we loop on the players  to distribute the card

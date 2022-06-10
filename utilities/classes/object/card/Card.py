@@ -2,8 +2,8 @@ import numbers
 from turtle import color
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
-from utilities.classes.Ai.Ai import Ai
-from utilities.classes.Ai.advanced_ai import advanced_ai
+from utilities.classes.ai.Ai import Ai
+from utilities.classes.ai.advanced_ai import advanced_ai
 from utilities.classes.object.color_picker import ColorPicker
 import pygame
 
@@ -16,7 +16,7 @@ class Card(Object):
         self.color=color
         self.type=type
         self.icon = icon
-        #to know who throwed the card (still not used)
+        # to know who throwed the card (still not used just in case)
         self.ownerId=ownerId
         self.played=False
         
@@ -117,7 +117,7 @@ class Card(Object):
                     print("Skip to next player")
                     Game.rotate()
                 elif(Game.getState("lastPlayedCard").getCardType()=="Wild"):
-                    if(isinstance(Game.getState("playersList")[Game.getState("activePlayer")],advanced_ai)):
+                    if(isinstance(Game.getState("playersList")[Game.getState("activePlayer")], advanced_ai)):
                         print("I'm a bot , i'm useless")
                     else:
                         Game.colorPicker.fillColors()
