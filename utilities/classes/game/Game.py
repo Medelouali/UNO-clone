@@ -5,7 +5,8 @@ import threading
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 from utilities.functions.resize import getSize
-from utilities.classes.ai.Ai import Ai
+from utilities.classes.ai.bot_player import bot_player
+from utilities.classes.ai.random_ai import random_ai
 from utilities.classes.ai.advanced_ai import advanced_ai
 from utilities.classes.object.player.Player import Player
 from utilities.classes.object.deck.Deck import Deck
@@ -36,7 +37,7 @@ class Game:
             "lastCheckedTime": 0,
             "chosen_color": None,
             "color_picker_id":None,
-            "message": ""
+            "message": "",
         } # this dictionary will keep track of the game state
     
     #interface settings
@@ -112,8 +113,8 @@ class Game:
                 # T=False
             # Check if current player is a bot 
             # self.displayWinner()
-            if(isinstance(players[Game.getState("activePlayer")], advanced_ai) or isinstance(players[Game.getState("activePlayer")],Ai)):
-                # print("Ai is playing")
+            if(isinstance(players[Game.getState("activePlayer")], bot_player)):
+                # print("basic_ai is playing")
                 # before playing a card, check if previous player has screamed UNO
                 # to base screaming UNO purely on chance for the ai 
                 head_or_tails = random.randint(0,1)
@@ -147,6 +148,7 @@ class Game:
      #method to review !!!   
     @classmethod
     def rotate(cls):
+        print(Game.getState("chosen_color"))
         #rotateBy 
         numOfPlayers=len(Game.getState("playersList"))
         rotateBy=Game.getState("rotation")
@@ -180,10 +182,10 @@ class Game:
             value.update()
         
     def generatePlayers(self, numOfPlayers=2, botExists=True):
-        # bot here representes Ai 
+        # bot here representes basic_ai 
         if(botExists):    
             if(numOfPlayers==2):
-                # set list of players ( Ai and real player in this case )
+                # set list of players ( basic_ai and real player in this case )
                 Game.setState("playersList", [
                     advanced_ai(0),
                     #the human player starts first 

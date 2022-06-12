@@ -1,8 +1,9 @@
 import numbers
 from turtle import color
+from utilities.classes.ai.bot_player import bot_player
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
-from utilities.classes.ai.Ai import Ai
+from utilities.classes.ai.random_ai import random_ai
 from utilities.classes.ai.advanced_ai import advanced_ai
 from utilities.classes.object.color_picker import ColorPicker
 import pygame
@@ -61,6 +62,8 @@ class Card(Object):
                 return self
         if(lastPlayedCard.type=="Wild"):
                 if(Game_t.state["chosen_color"]==self.getColor()):
+                    # in case you played a card after a wild one , the color should be returned to None
+                    Game_t.colorPicker.resetPickedColor()
                     return self
         if self.type=="Normal":
             if(lastPlayedCard.getColor()==self.getColor() or lastPlayedCard.getNumber()==self.getNumber()):
@@ -91,8 +94,11 @@ class Card(Object):
                 Game_t.playedCards[self.getId()]=self
                 Game_t.state["lastPlayedCard"]=self
                 self.applyEffect()
-                Game_t.rotate()
-                Game_t.colorPicker.resetPickedColor()
+                # Only rotate if it's not wild card 
+                # In case it's a wild card , rotation whill happen only when player picks a color
+                if(Game_t.getState("lastPlayedCard").getCardType()!="Wild"):
+                    Game_t.rotate()
+                # Game_t.colorPicker.resetPickedColor()
                 Game_t.setState("timer",10)
                 pygame.time.delay(1000)
                 return True
@@ -117,11 +123,15 @@ class Card(Object):
                     print("Skip to next player")
                     Game.rotate()
                 elif(Game.getState("lastPlayedCard").getCardType()=="Wild"):
-                    if(isinstance(Game.getState("playersList")[Game.getState("activePlayer")], advanced_ai)):
-                        print("I'm a bot , i'm useless")
+                    if(isinstance(Game.getState("playersList")[Game.getState("activePlayer")], bot_player)):
+                        current_player = Game.getState("playersList")[Game.getState("activePlayer")]
+                        color = current_player.getCommonColor(range(len(current_player.getHand())))
+                        Game.setState("chosen_color",color.capitalize())
+                        Game.setState("message", f"I chose {color.capitalize()}")
                     else:
                         Game.colorPicker.fillColors()
                         Game.colorPicker.drawColors()
+        
         
 
 

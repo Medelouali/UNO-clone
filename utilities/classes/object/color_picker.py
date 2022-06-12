@@ -14,9 +14,10 @@ class ColorPicker():
         from utilities.classes.game.Game import Game as Game
         colors=["red", "green", "blue", "yellow"]
         for i in range(4):
+            print(colors[i])
             self.colors_objects[colors[i]]=Object([Game.screenWidth/3+100*i,Game.screenHeight/2-150],
                 [90, 90],icon=getPath("images", "icons", f"{colors[i]}.png"),
-                callback=lambda: self.setPickedColor(colors[i])
+                callback=lambda color=colors[i]: self.setPickedColor(color)
             )
             
     def drawColors(self):
@@ -32,6 +33,7 @@ class ColorPicker():
         from utilities.classes.game.Game import Game as Game
         Game.setState("chosen_color", color.capitalize())
         Game.setState("message", f"You chose {color.capitalize()}")
+        Game.setState("color_picked",True)
         self.wipeColors()
         Game.rotate()
         
