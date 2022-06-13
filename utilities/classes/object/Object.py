@@ -15,7 +15,6 @@ class Object():
         self.dimensions=dimensions
         self.icon=icon
         self.callback=callback
-        # it'll be False by default but here it's True just for testing purposes
         self.clicked=False
         #objectId :to differentiate between same object type 
         #the first created object will have an id = 0 and so on 
@@ -23,12 +22,10 @@ class Object():
         Object.createdObjects+=1
         self.isReactive=True
                
-    #  
     def update(self):
-        # event= Game_t.Game.getState('event')
         pos = pygame.mouse.get_pos()
         #check if the player who touches the mouse is the active one or not
-        #if hes not nothing happens
+        #if he's not nothing happens
         if(Game_t.Game.getState('activePlayer')!=1):
             return
 
@@ -46,9 +43,8 @@ class Object():
         self.updateCoord()
         # self.updateDimentions()
 
-    #to be reviewed   
+
     def destroyObject(self):
-        # this is more efficient than deleting an item of a list
         if(self.getId() in Game_t.Game.objectsGroup.keys()):
             Game_t.Game.objectsGroup.pop(self.getId())
 
@@ -59,9 +55,6 @@ class Object():
     #update coordinates of the obj   
     def updateCoord(self):
         Game_t.Game.objectsGroup[self.objectId]=self
-        
-    # def updateDimentions(self):
-    #     Game_t.Game.objectsGroup[self.objectId].dimensions=self.dimensions
     
     #we might need args for the callback function 
     def triggerCallback(self, *args):
@@ -88,7 +81,7 @@ class Object():
         self.image = pygame.transform.scale(pygame.image.load(self.icon), getSize(self.icon, dim[0]))
         return self
     
-    # This is for some animations
+    # Rect coordinate manipulation and other functions for animations
     def getCoordinates(self):
         return self.rect.center
     

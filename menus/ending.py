@@ -1,11 +1,12 @@
 import pygame,sys
 
 from utilities.functions.path import writeText
-
 from menus.functions import font
 from menus.functions import screen
+from menus.functions import button
+from utilities.classes.game.Game import Game  as Game
 # from MainMenu import button 
-bg = pygame.image.load('bg1.jpg')
+bg = pygame.image.load('assets\images\pl.jpg')
 bg= pygame.transform.scale(bg,(1280,640))
 # from utilities.classes.game.Game import Game
 
@@ -13,14 +14,13 @@ pygame.init()
 
 
 def ending(ActMenu,txt):
-    from menus.functions import button
-    from utilities.classes.game.Game import Game  as Game
+
 
     T=True# this loop while variable
     #Buttons positions
-    Replay=button("Replay",50,(250, 53, 29),250 ,100,200,100)
-    Exit= button("Exit",50,(250, 53, 29),250 ,300,200,100)
-    exitMenu = button("Back To Menus",50,(250, 53, 29),250 ,500,300,100)
+    Replay=button("Replay",50,(250, 53, 29),160 ,55,200,100)
+    Exit= button("Exit",50,(250, 53, 29),160 ,255,200,100)
+    exitMenu = button("Back To Menus",50,(250, 53, 29),110 ,455,300,100)
 
 
 
@@ -78,14 +78,12 @@ def ending(ActMenu,txt):
                     return True
 
 
-        Replay.draw_text(screen,(255,255,255))
-        exitMenu.draw_text(screen ,(255,255,255) )
-        Exit.draw_text(screen ,(255,255,255) )
+        Replay.draw_text(screen,(255,255,255),(250 ,100))
+        exitMenu.draw_text(screen ,(255,255,255),(250 ,500))
+        Exit.draw_text(screen ,(255,255,255),(250 ,300) )
         
-        writeText(txt, 3*Game.screenWidth/4, Game.screenHeight/3, 50, Game.screen)
+        writeText(txt, 5*Game.screenWidth/6, 2*Game.screenHeight/5, 50, Game.screen)
         
        
         pygame.display.update()
 
-
-# ending("end","Bot Wins !")

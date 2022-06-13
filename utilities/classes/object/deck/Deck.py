@@ -2,15 +2,11 @@ from random import randint, random
 from utilities.functions.path import getPath
 from utilities.classes.object.card.Card import Card
 import pygame
-# import utilities.classes.game.Game as Game_t
-# from utilities.classes.game.Game import Game
 from utilities.classes.object.Object import Object
-# font = pygame.font.SysFont("gillsanscondensed",70)
 
 class Deck(Object):
     cardsColors=[ "Green", "Blue", "Red", "Yellow"]
-    numbersRange=list(range(0,10)) #rang des number-cards (0-9 cards)
-    # Draw type is for drawing two , Draw4 is for drawing 4
+    numbersRange=list(range(0,10)) #rank of number-cards (0-9 cards)
     coloredTypes=["Skip", "Reverse", "Draw","Draw4"]
     
     def __init__(self):
@@ -42,7 +38,7 @@ class Deck(Object):
     # Shuffling the deck
     def shuffleDeck(self):
         for i in range(self.size-1, 0, -1):
-            j = randint(0, i+1) # x, y=y, x doesn't echange the value of x and y
+            j = randint(0, i+1)
             temp=self.deck[i]
             self.deck[i]=self.deck[j]
             self.deck[j]=temp
@@ -51,7 +47,6 @@ class Deck(Object):
     def setDeck(self, newDeckLst):
         self.deck=newDeckLst
         self.size=len(self.deck)
-        #self.shuffleDeck()
 
     # Draw a card from the deck if it's not empty
     def draw(self, numberOfCards=1, activePlayer=None):
@@ -72,11 +67,10 @@ class Deck(Object):
             Game.state["playersList"][activeId].hand+= [topCard]
             #decmente size of the deck
             self.size-=1
-        #we will need topCard for the AI to compare when he draws the card no need to go again and 
-        #compare all the cards in his hand 
+        #we will need topCard for the AI to compare when he draws the card 
         return topCard
 
-    #Tester si le deck est isEmpty et changer la valeur de l'attr. isEmpty de l'instance
+    #Testing if the deck isEmpty and changing the value of the attribute isEmpty of the instance
     def isEmpty(self):
         if self.size==0:
             self.isDeckEmpty=True
@@ -111,21 +105,18 @@ class Deck(Object):
         listOfWildCards=[]
         for i in range(4):
             listOfWildCards.append(Card(type="Wild", icon=getPath("images", "cards", "Wild.png")))
-            #une carte wild est crée dans la liste
+            #a  wild card is created in the list
         return listOfWildCards
     
     # create 76 normal cards , 4 for each color and number
     def createNrmlCards(self):
-        # subDeck=self.cloneCards(subDeck1[4:],2)
         return self.createCards(Deck.cardsColors, Deck.numbersRange)
     
     def createSpecialCards(self):
         subDeck=self.createCards(Deck.cardsColors, [None], Deck.coloredTypes)
         subDeckWild=self.createWildCards()
-        # subDeckSpecial=self.cloneCards(subDeck,2)
         return subDeck+subDeckWild
     
-    #Game_t.Game.getState("playersList") cercular import bug should be fixed
     def distributeCard(self, number=7):
         import utilities.classes.game.Game as Game_t
         #we loop on the players  to distribute the card

@@ -1,11 +1,11 @@
 import numbers
 import time
-from utilities.classes.ai.bot_player import bot_player
+from utilities.classes.Ai.bot_player import bot_player
 # from utilities.classes.game.Game import Game
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
-from utilities.classes.ai.random_ai import random_ai
-from utilities.classes.ai.advanced_ai import advanced_ai
+from utilities.classes.Ai.random_ai import random_ai
+from utilities.classes.Ai.advanced_ai import advanced_ai
 from utilities.classes.object.color_picker import ColorPicker
 import pygame
 
@@ -18,7 +18,7 @@ class Card(Object):
         self.color=color
         self.type=type
         self.icon = icon
-        # to know who throwed the card (still not used just in case)
+        # to know who throwed the card
         self.ownerId=ownerId
         self.played=False
         
@@ -47,7 +47,7 @@ class Card(Object):
     # to get icon from a card
     def getIcon(self):
         return self.icon
-    #getter for dim
+    #getter for dimensions
     def getDimensions(self):
         return self.dimensions
 
@@ -82,13 +82,11 @@ class Card(Object):
             #if compareSingleCard() returns a card
             if self.compareSingleCard():
                 newHand=[]
-                #we want to know which cards will be in the new hand  so we
-                #by detecting the clicked card 
+                #we want to know which cards will be in the new hand
                 for card in Game_t.getState("playersList")[playerId].getHand():
                     if(card.getId()!=self.getId()):
                         newHand.append(card)
-                #the nexPlayer is the same activePlayer 
-                #but we want to update his hand 
+                #the nexPlayer is the same activePlayer but we want to update his hand 
                 newPlayer=Game_t.getState("playersList")[playerId]
                 newPlayer.hand=newHand
                 Game_t.state["playersList"][playerId]=newPlayer
@@ -107,7 +105,6 @@ class Card(Object):
     def applyEffect(self): 
         from utilities.classes.game.Game import Game as Game
         if(self.getCardType() != "Normal"):
-                # print("This is a special card")
                 Game.getState("lastPlayedCard").setPlayed()
                 if(Game.getState("lastPlayedCard").getCardType()=="Draw"):
                     print("Next player draws 2")
