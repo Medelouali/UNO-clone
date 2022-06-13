@@ -21,7 +21,7 @@ class advanced_ai(bot_player):
     def findCardToPlay(self,playableCards,typeOfCards,opponent):
         # Check if we have only one card to play , and play it automatically
         if(len(playableCards) == 1):
-            print("One card to play")
+            # print("One card to play")
             return list(playableCards.values())[0]
         # if we have multuple playable cards
         else :

@@ -42,7 +42,7 @@ class Deck(Object):
     # Shuffling the deck
     def shuffleDeck(self):
         for i in range(self.size-1, 0, -1):
-            j = randint(0, i+1) # x, y=y, x doesn't echange the value of x and y
+            j = randint(0, i)
             temp=self.deck[i]
             self.deck[i]=self.deck[j]
             self.deck[j]=temp
@@ -65,7 +65,7 @@ class Deck(Object):
         for _ in range(numberOfCards):
            #if the deck is empty topCard =None 
             if(len(self.deck) == 0): 
-                print("deck is empty")
+                self.regenerateDeck()
                 return topCard
             topCard=self.deck.pop()
              # add deck top card into player's hand
@@ -137,4 +137,13 @@ class Deck(Object):
                 i+=1
             Game_t.Game.setState("lastPlayedCard",self.deck.pop(-i))
         
-
+    def regenerateDeck(self):
+        import utilities.classes.game.Game as Game_t
+        Game_t.Game.setState("message","Building deck ...")
+        pygame.time.wait(1000)
+        self.deck = list(Game_t.Game.playedCards.values())
+        self.size = len(self.deck)
+        print("Deck : ")
+        for card in Game_t.Game.deck.getDeck():
+            print(card)
+        

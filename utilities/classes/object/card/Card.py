@@ -131,10 +131,6 @@ class Card(Object):
                     else:
                         Game.colorPicker.fillColors()
                         Game.colorPicker.drawColors()
-        
-        
-
-
 
     def getColor(self):
         return self.color

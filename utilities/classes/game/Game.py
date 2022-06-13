@@ -148,13 +148,14 @@ class Game:
      #method to review !!!   
     @classmethod
     def rotate(cls):
-        print(Game.getState("chosen_color"))
+        # print(Game.getState("chosen_color"))
         #rotateBy 
         numOfPlayers=len(Game.getState("playersList"))
         rotateBy=Game.getState("rotation")
         activeId=Game.getState("activePlayer")
         
-        if(rotateBy>1 or rotateBy<-1): return
+        if(rotateBy>1 or rotateBy<-1): 
+            return
         #to be reviewed
         if(activeId + rotateBy>numOfPlayers-1):
             Game.setState("activePlayer", 0)
@@ -168,11 +169,12 @@ class Game:
         
     # render every object in objectGroup 
     def render(self):
-        self.regenerateDeck()
         #show how many cards are left in the AI's hand 
         botCardsNumber=len(Game.getState("playersList")[0].getHand())
+        # secondbotCardsNumber=len(Game.getState("playersList")[2].getHand())
         self.renderTimer()
         writeText(f"{botCardsNumber} Cards Left", 100, 120, 30, Game.screen)
+        # writeText(f"{secondbotCardsNumber} Cards Left", 500, 120, 30, Game.screen)
         writeText("Me", Game.screenWidth-100, Game.screenHeight-120, 30, Game.screen)
 
         #loop to update the objects in the game 
@@ -181,28 +183,35 @@ class Game:
         for value in list(Game.objectsGroup.values()):
             value.update()
         
-    def generatePlayers(self, numOfPlayers=2, botExists=True):
-        # bot here representes basic_ai 
-        if(botExists):    
-            if(numOfPlayers==2):
-                # set list of players ( basic_ai and real player in this case )
-                Game.setState("playersList", [
+    def generatePlayers(self, numOfPlayers=2):
+        if(numOfPlayers==2):
+            Game.setState("playersList", [
                     advanced_ai(0),
-                    #the human player starts first 
-                    Player(1)]
-                    )
-            # more than two players
-            else:
-                Game.setState("playersList", Game.getState("playersList") + [Player(0)])    
-                Game.setState("playersList", Game.getState("playersList") + [
-                    advanced_ai(i) for i in range(1, numOfPlayers)
-                ])
-        # all players are real 
-        else:
+                     #the human player starts first 
+                     Player(1)]
+                  )
+        else :
+            print("More players")
+
+            # if(numOfPlayers==2):
+            #     # set list of players ( basic_ai and real player in this case )
+            #     Game.setState("playersList", [
+            #         advanced_ai(1),
+            #         #the human player starts first 
+            #         Player(0)]
+            #         )
+            # # more than two players
+            # else:
+            #     Game.setState("playersList", Game.getState("playersList") + [Player(0)])    
+            #     Game.setState("playersList", Game.getState("playersList") + [
+            #         advanced_ai(i) for i in range(1, numOfPlayers-1)
+            #     ])
+        # # all players are real 
+        # else:
             
-            Game.setState("playersList", Game.getState("playersList") + [
-                Player(i) for i in range(numOfPlayers)
-            ])
+        #     Game.setState("playersList", Game.getState("playersList") + [
+        #         Player(i) for i in range(numOfPlayers)
+        #     ])
             
     # display player's hand, it's responsive now
     def renderPlayerHand(self):
@@ -224,6 +233,7 @@ class Game:
     # adds object to the screen 
     def setUp(self):
         Object([100, 50], [100, 20],icon=getPath("images", "icons", "avatar10.png")).add()
+        # Object([500, 50], [100, 20],icon=getPath("images", "icons", "avatar10.png")).add()
         Object(Game.positions["deck"], [80, 20],icon=getPath("images", "cards", "Deck.png"), 
                callback=lambda: Game.deck.drawingCallback()).add()
         Object([Game.screenWidth-100, Game.screenHeight-50], [100, 20],
@@ -243,33 +253,6 @@ class Game:
           if(Game.getState("lastPlayedCard")):
             Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).setDimensions([100, 200]).muteObject().add()
             Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).update()
-            # print(Game.getState("lastPlayedCard"))
-            
-    # generate a deck of cards when the deck runs out of cards
-    def regenerateDeck(self):
-        # Check if deck is empty
-        if(Game.deck.getSize()==0):
-            # set a new deck from a set of played cards
-            Game.deck.setDeck([card.unmuteObject() for card in list(Game.playedCards.values())])
-            # set new size for this deck
-            Game.deck.setSize(len(Game.playedCards.values()))
-            # shuffle the deck 
-            Game.deck.shuffleDeck()
-            # empty playedCards
-            Game.playedCards={}
-            # pick a card from new shuffeled deck to move it to terrain
-            Game.setState("lastPlayedCard",Game.deck.getDeck()[-1])
-            # add lastPlayedCard to deck
-            Game.playedCards[Game.deck.getDeck()[-1].getId()]= Game.deck.getDeck()[-1]
-            # test 
-            print("Deck : ")
-            for card in Game.deck.getDeck():
-                print(card)
-            print("Played cards : ")
-            for card in Game.playedCards.values():
-                print(card)
-            # Game.rotate()
-            
 
     def showDeck(self):
         for card in self.deck:
@@ -365,7 +348,7 @@ class Game:
     # in case the current player needs to scream UNO
         if(len(current_player.getHand())==1):
             Game.getState("playersList")[Game.getState("activePlayer")].screamedUno=True
-            print("UNO !!!")
+            Game.setState("message","UNO !!!")
             # to check if the previous player screamed uno 
             previous_player=Game.getState("playersList")[abs(Game.getState("activePlayer")-1)]
             if(len(previous_player.getHand())==1 and previous_player.screamedUno==False):
