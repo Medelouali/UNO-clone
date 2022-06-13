@@ -3,7 +3,7 @@ import random
 from utilities.classes.object.player.Player import Player
 import pygame
 from utilities.functions.path import writeText
-
+import time
 class Ai(Player):  
     def __init__(self, id):
         # calling the parent constructor to take care of initialization of attrs that are common to all players
@@ -42,6 +42,7 @@ class Ai(Player):
         from utilities.classes.game.Game import Game as Game_t
         for i in range(len(self.getHand())):
             if self.getHand()[i].compareSingleCard():
+                pygame.time.delay(2000)
                 # pop a card to play from the Ai's hand
                 cardToPlay = self.getHand().pop(i)
                 # set the last played card to be this card

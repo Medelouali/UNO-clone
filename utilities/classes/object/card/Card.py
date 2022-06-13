@@ -1,6 +1,7 @@
 import numbers
-from turtle import color
+import time
 from utilities.classes.ai.bot_player import bot_player
+# from utilities.classes.game.Game import Game
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 from utilities.classes.ai.random_ai import random_ai
@@ -98,9 +99,9 @@ class Card(Object):
                 # In case it's a wild card , rotation whill happen only when player picks a color
                 if(Game_t.getState("lastPlayedCard").getCardType()!="Wild"):
                     Game_t.rotate()
+                self.handleMessage()
                 # Game_t.colorPicker.resetPickedColor()
                 Game_t.setState("timer",10)
-                pygame.time.delay(1000)
                 return True
     # to apply last played card special effect 
     def applyEffect(self): 
@@ -132,10 +133,20 @@ class Card(Object):
                         Game.colorPicker.fillColors()
                         Game.colorPicker.drawColors()
         
-        
-
-
-
+    def handleMessage(self):
+        from utilities.classes.game.Game import Game as Game_t
+        if self.type in ["Skip", "Reverse", "Draw", "Draw4"]:
+            Game_t.setState("message", f"Woow! {self.getPlayerName()} played {self.type} card!")
+            return
+        if(Game_t.getState("lastPlayedCard").getCardType()=="Wild"):
+            Game_t.setState("message", f"Niice {self.getPlayerName()} played wild card!")
+            return
+        if(Game_t.getState("lastPlayedCard").getCardType()=="Normal"):
+            color=Game_t.getState("lastPlayedCard").getColor()
+            number=Game_t.getState("lastPlayedCard").getNumber()
+            Game_t.setState("message", f"{self.getPlayerName()} played {number} with {color} color!")
+            return
+        Game_t.setState("message", "")
     def getColor(self):
         return self.color
     
@@ -143,3 +154,11 @@ class Card(Object):
         return self.number
     def __str__(self):
         return f"Number : {self.number} Color : {self.color}"
+    
+    def getPlayerName(self):
+        from utilities.classes.game.Game import Game as Game_t
+        if(Game_t.getState("activePlayer")):
+            return "Bot"
+        return "You"
+    
+    

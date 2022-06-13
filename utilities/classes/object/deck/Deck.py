@@ -54,7 +54,7 @@ class Deck(Object):
         #self.shuffleDeck()
 
     # Draw a card from the deck if it's not empty
-    def draw(self, numberOfCards=1,activePlayer=None):
+    def draw(self, numberOfCards=1, activePlayer=None):
         from utilities.classes.game.Game import Game
         # if active player is not passed as an argument get the active player from Game's state
         if(activePlayer==None):
@@ -138,3 +138,4 @@ class Deck(Object):
             Game_t.Game.setState("lastPlayedCard",self.deck.pop(-i))
         
 
+ 
