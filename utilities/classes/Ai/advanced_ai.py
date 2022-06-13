@@ -1,4 +1,7 @@
 import random
+import time
+
+import pygame
 from utilities.classes.object.player.Player import Player
 from utilities.classes.ai.bot_player import bot_player
 
@@ -20,6 +23,7 @@ class advanced_ai(bot_player):
     # Find which card is best to play
     def findCardToPlay(self,playableCards,typeOfCards,opponent):
         # Check if we have only one card to play , and play it automatically
+        
         if(len(playableCards) == 1):
             # print("One card to play")
             return list(playableCards.values())[0]

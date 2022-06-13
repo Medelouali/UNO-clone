@@ -1,7 +1,6 @@
 import random
 import time
 import pygame, sys
-import threading
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 from utilities.functions.resize import getSize
@@ -25,7 +24,7 @@ class Game:
     state={
             "rotation": 1, # it could be 1, -1, or eventially 2
             "winner": None,
-            "activePlayer": 1,#contains the id of the active player
+            "activePlayer": 1, #contains the id of the active player
             # representes an event that player can trigger 
             "event": None, 
             # equals true when the game is finished
@@ -66,10 +65,6 @@ class Game:
     backgroundImage = pygame.transform.scale(
     backgroundImage, getSize(getPath('images', 'backgroundCards.jpg'), screenWidth))
 
-    def __init__(self):
-    # initialize a deck of cards at the start of the game
-        pass
-    
     def run(self):
         # generate a list of players
         self.generatePlayers() 
@@ -81,9 +76,6 @@ class Game:
         Game.deck.distributeCard()
         # a loop that keeps running as long as we're playing the game
         while(T):
-            # Game.state["playersList"][1].hand=[] #for testing
-            # if(Game.getState("lastPlayedCard")): self.applyEffect()
-            # print("Last played card: ",Game.getState("lastPlayedCard"))
             self.renderPlayedCard()
             self.notify()
             # Check if the player has quit the game or if the game is over
@@ -166,6 +158,7 @@ class Game:
             return
         
         Game.setState("activePlayer", activeId + rotateBy)
+        # time.sleep(2)
         
     # render every object in objectGroup 
     def render(self):
@@ -230,7 +223,7 @@ class Game:
             hand[i].setPosition([moveBy, Game.screenHeight-100]).setDimensions((cardWith, 100)).add()
             moveBy+=cardMargin+cardWith
             
-    # adds object to the screen 
+    # adds objects to the screen 
     def setUp(self):
         Object([100, 50], [100, 20],icon=getPath("images", "icons", "avatar10.png")).add()
         # Object([500, 50], [100, 20],icon=getPath("images", "icons", "avatar10.png")).add()
@@ -242,10 +235,6 @@ class Game:
                icon=getPath("images", "icons", "unoButton.png"),callback=lambda: self.unoScream()).add()  
         if(not Game.deck.isEmpty()):
             Game.setState("lastPlayedCard", Game.deck.deck.pop())
-    
-    # display the results of the game
-    def displayResults(self):
-        pass # Will add this method later on
     
     # display the cards that have already been played
     def renderPlayedCard(self):
@@ -313,12 +302,12 @@ class Game:
         Game.deck = Deck()
         #running used to go from oe interface to another 
         Game.running = True 
-        
-    
+            
     @classmethod
     def quit(cls):
         pygame.quit()
         sys.exit()
+        
     # to render the timer
     def renderTimer(self):
         if(Game.getState("timer")==0):
@@ -326,11 +315,9 @@ class Game:
             Game.rotate()
             return self.resetTimer()
         current = time.time()
-        # print(current-Game.getState("lastCheckedTime"))
         if(current-Game.getState("lastCheckedTime")>=1):
             Game.setState("timer", Game.getState("timer")-1)
             Game.setState("lastCheckedTime", current)
-            # print("got herekkk")
         passed_time=Game.getState("timer")
         writeText(f"Time Left", Game.screenWidth-200, 100, 40, Game.screen)
         writeText(f"{passed_time} secondes", Game.screenWidth-200, 150, 30, Game.screen)
@@ -338,6 +325,7 @@ class Game:
     def resetTimer(self):
         Game.setState("timer", Game.maxWaitingTime)
         Game.setState("lastCheckedTime", 0)
+    
     # to display a message to the player notifying them of any changes made to the game state
     def notify(self):
         writeText(Game.getState("message"), Game.screenWidth/2, 50, 30, Game.screen)
@@ -348,12 +336,12 @@ class Game:
     # in case the current player needs to scream UNO
         if(len(current_player.getHand())==1):
             Game.getState("playersList")[Game.getState("activePlayer")].screamedUno=True
-            Game.setState("message","UNO !!!")
+            Game.setState("message", "Unoooooooo!!")
             # to check if the previous player screamed uno 
             previous_player=Game.getState("playersList")[abs(Game.getState("activePlayer")-1)]
             if(len(previous_player.getHand())==1 and previous_player.screamedUno==False):
                 # if he had to scream it and haven't then he has to draw two cards
-                print("You are bamboozled")
+                Game.setState("message", "You are bamboozled")
                 # draw two cards
                 Game.deck.draw(2,abs(Game.getState("activePlayer")-1))
             # in case the previous player screamed UNO , we reset screamUno to False again for the next turn

@@ -31,8 +31,7 @@ class Object():
         #if hes not nothing happens
         if(Game_t.Game.getState('activePlayer')!=1):
             return
-        
-        # Game_t.Game.ifAiPlay()
+
         if self.rect.collidepoint(pos):  # testing if mouse hovering over Card
              # testing if Card clicked
             if pygame.mouse.get_pressed()[0] == 1 and not self.clicked: 
