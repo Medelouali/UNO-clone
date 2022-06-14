@@ -147,12 +147,17 @@ class Game:
      #method to review !!!   
     @classmethod
     def rotate(cls):
+<<<<<<< HEAD
+=======
+        # print(Game.getState("chosen_color"))
+>>>>>>> fa5ece67146c089c5bce3e7bff405e2732d4685d
         #rotateBy 
         numOfPlayers=len(Game.getState("playersList"))
         rotateBy=Game.getState("rotation")
         activeId=Game.getState("activePlayer")
         
-        if(rotateBy>1 or rotateBy<-1): return
+        if(rotateBy>1 or rotateBy<-1): 
+            return
         #to be reviewed
         if(activeId + rotateBy>numOfPlayers-1):
             Game.setState("activePlayer", 0)
@@ -166,11 +171,12 @@ class Game:
         
     # render every object in objectGroup 
     def render(self):
-        self.regenerateDeck()
         #show how many cards are left in the AI's hand 
         botCardsNumber=len(Game.getState("playersList")[0].getHand())
+        # secondbotCardsNumber=len(Game.getState("playersList")[2].getHand())
         self.renderTimer()
         writeText(f"{botCardsNumber} Cards Left", 100, 120, 30, Game.screen)
+        # writeText(f"{secondbotCardsNumber} Cards Left", 500, 120, 30, Game.screen)
         writeText("Me", Game.screenWidth-100, Game.screenHeight-120, 30, Game.screen)
 
         #loop to update the objects in the game 
@@ -179,28 +185,44 @@ class Game:
         for value in list(Game.objectsGroup.values()):
             value.update()
         
+<<<<<<< HEAD
     def generatePlayers(self, numOfPlayers=2, botExists=True):
         # bot here representes Ai 
         if(botExists):    
             if(numOfPlayers==2):
                 # set list of players ( Ai and real player in this case )
                 Game.setState("playersList", [
+=======
+    def generatePlayers(self, numOfPlayers=2):
+        if(numOfPlayers==2):
+            Game.setState("playersList", [
+>>>>>>> fa5ece67146c089c5bce3e7bff405e2732d4685d
                     advanced_ai(0),
-                    #the human player starts first 
-                    Player(1)]
-                    )
-            # more than two players
-            else:
-                Game.setState("playersList", Game.getState("playersList") + [Player(0)])    
-                Game.setState("playersList", Game.getState("playersList") + [
-                    advanced_ai(i) for i in range(1, numOfPlayers)
-                ])
-        # all players are real 
-        else:
+                     #the human player starts first 
+                     Player(1)]
+                  )
+        else :
+            print("More players")
+
+            # if(numOfPlayers==2):
+            #     # set list of players ( basic_ai and real player in this case )
+            #     Game.setState("playersList", [
+            #         advanced_ai(1),
+            #         #the human player starts first 
+            #         Player(0)]
+            #         )
+            # # more than two players
+            # else:
+            #     Game.setState("playersList", Game.getState("playersList") + [Player(0)])    
+            #     Game.setState("playersList", Game.getState("playersList") + [
+            #         advanced_ai(i) for i in range(1, numOfPlayers-1)
+            #     ])
+        # # all players are real 
+        # else:
             
-            Game.setState("playersList", Game.getState("playersList") + [
-                Player(i) for i in range(numOfPlayers)
-            ])
+        #     Game.setState("playersList", Game.getState("playersList") + [
+        #         Player(i) for i in range(numOfPlayers)
+        #     ])
             
     # display player's hand, it's responsive now
     def renderPlayerHand(self):
@@ -222,6 +244,7 @@ class Game:
     # adds object to the screen 
     def setUp(self):
         Object([100, 50], [100, 20],icon=getPath("images", "icons", "avatar10.png")).add()
+        # Object([500, 50], [100, 20],icon=getPath("images", "icons", "avatar10.png")).add()
         Object(Game.positions["deck"], [80, 20],icon=getPath("images", "cards", "Deck.png"), 
                callback=lambda: Game.deck.drawingCallback()).add()
         Object([Game.screenWidth-100, Game.screenHeight-50], [100, 20],
@@ -241,6 +264,7 @@ class Game:
           if(Game.getState("lastPlayedCard")):
             Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).setDimensions([100, 200]).muteObject().add()
             Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).update()
+<<<<<<< HEAD
             # print(Game.getState("lastPlayedCard"))
             
     # generate a deck of cards when the deck runs out of cards
@@ -268,6 +292,8 @@ class Game:
                 print(card)
             # Game.rotate()
             
+=======
+>>>>>>> fa5ece67146c089c5bce3e7bff405e2732d4685d
 
     def showDeck(self):
         for card in self.deck:
