@@ -6,7 +6,12 @@ from utilities.classes.Ai.random_ai import random_ai
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 from utilities.functions.resize import getSize
+<<<<<<< HEAD
 # from utilities.classes.Ai.Ai import Ai
+=======
+from utilities.classes.Ai.random_ai import random_ai
+from utilities.classes.Ai.bot_player import bot_player
+>>>>>>> ce1c7cffa018366234d273e6097525de675a5d3d
 from utilities.classes.Ai.advanced_ai import advanced_ai
 from utilities.classes.object.player.Player import Player
 from utilities.classes.object.deck.Deck import Deck
@@ -37,6 +42,12 @@ class Game:
             "lastCheckedTime": 0,
             #difficulty settings :: Type of Ai
             "Difficulty" : "Normal",
+<<<<<<< HEAD
+=======
+            "numOfPlayers" : 2,
+            "message" : "",
+            "chosen_color":None
+>>>>>>> ce1c7cffa018366234d273e6097525de675a5d3d
         } # this dictionary will keep track of the game state
     
     #interface settings
@@ -79,6 +90,7 @@ class Game:
         # affect 7 cards to each player 
         Game.deck.distributeCard()
         # a loop that keeps running as long as we're playing the game
+        pygame.time.delay(1000)
         while(T):
             # Game.state["playersList"][1].hand=[] #for testing
             # if(Game.getState("lastPlayedCard")): self.applyEffect()
@@ -112,18 +124,19 @@ class Game:
                 # T=False
             # Check if current player is a bot 
             # self.displayWinner()
+<<<<<<< HEAD
             if(isinstance(players[Game.getState("activePlayer")], advanced_ai) or isinstance(players[Game.getState("activePlayer")],random_ai)):
+=======
+            if(isinstance(players[Game.getState("activePlayer")], bot_player)):
+>>>>>>> ce1c7cffa018366234d273e6097525de675a5d3d
                 # print("Ai is playing")
                 # before playing a card, check if previous player has screamed UNO
                 # to base screaming UNO purely on chance for the ai 
                 head_or_tails = random.randint(0,1)
                 if(head_or_tails):
-                    print("Checking scream ")
                     self.unoScream()
                 # play ai's turn
                 players[Game.getState("activePlayer")].performMove()
-            
-
             # rendering the game
             pygame.display.update()
             Game.screen.blit(Game.backgroundImage, (0, 0))
@@ -147,24 +160,32 @@ class Game:
      #method to review !!!   
     @classmethod
     def rotate(cls):
+<<<<<<< HEAD
+=======
+        # print(Game.getState("chosen_color"))
+>>>>>>> ce1c7cffa018366234d273e6097525de675a5d3d
         #rotateBy 
         numOfPlayers=len(Game.getState("playersList"))
         rotateBy=Game.getState("rotation")
         activeId=Game.getState("activePlayer")
-        
+        # last = pygame.time.get_ticks()
+        # cooldown = 300
+        # now=pygame.time.get_ticks()
+        # if now -last >=cooldown:
+        #     last = now
         if(rotateBy>1 or rotateBy<-1): 
             return
-        #to be reviewed
+            #to be reviewed
         if(activeId + rotateBy>numOfPlayers-1):
-            Game.setState("activePlayer", 0)
-            return
-        
+                Game.setState("activePlayer", 0)
+                return
+            
         if(activeId + rotateBy<0):
-            Game.setState("activePlayer", numOfPlayers-1)
-            return
-        
+                Game.setState("activePlayer", numOfPlayers-1)
+                return
+            
         Game.setState("activePlayer", activeId + rotateBy)
-        
+            
     # render every object in objectGroup 
     def render(self):
         #show how many cards are left in the AI's hand 
@@ -181,39 +202,20 @@ class Game:
         for value in list(Game.objectsGroup.values()):
             value.update()
         
+<<<<<<< HEAD
     def generatePlayers(self, numOfPlayers=2, botExists=True):
         # bot here representes Ai 
         if(botExists):    
             if(numOfPlayers==2):
+=======
+    def generatePlayers(self):  
+>>>>>>> ce1c7cffa018366234d273e6097525de675a5d3d
                 # set list of players ( Ai and real player in this case )
                 Game.setState("playersList", [
                     advanced_ai(0),
                      #the human player starts first 
-                     Player(1)]
-                  )
-        else :
-            print("More players")
-
-            # if(numOfPlayers==2):
-            #     # set list of players ( basic_ai and real player in this case )
-            #     Game.setState("playersList", [
-            #         advanced_ai(1),
-            #         #the human player starts first 
-            #         Player(0)]
-            #         )
-            # # more than two players
-            # else:
-            #     Game.setState("playersList", Game.getState("playersList") + [Player(0)])    
-            #     Game.setState("playersList", Game.getState("playersList") + [
-            #         advanced_ai(i) for i in range(1, numOfPlayers-1)
-            #     ])
-        # # all players are real 
-        # else:
-            
-        #     Game.setState("playersList", Game.getState("playersList") + [
-        #         Player(i) for i in range(numOfPlayers)
-        #     ])
-            
+                     Player(1)])
+       
     # display player's hand, it's responsive now
     def renderPlayerHand(self):
         hand =Game.getState("playersList")[1].getHand() # index 0 not 1, 1 is the AI
@@ -244,16 +246,13 @@ class Game:
         if(not Game.deck.isEmpty()):
             Game.setState("lastPlayedCard", Game.deck.deck.pop())
     
-    # display the results of the game
-    def displayResults(self):
-        pass # Will add this method later on
-    
     # display the cards that have already been played
     def renderPlayedCard(self):
         # No need to render all the cards, just the one on the top
           if(Game.getState("lastPlayedCard")):
             Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).setDimensions([100, 200]).muteObject().add()
             Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).update()
+<<<<<<< HEAD
             # print(Game.getState("lastPlayedCard"))
             
     # generate a deck of cards when the deck runs out of cards
@@ -315,6 +314,8 @@ class Game:
         #     Object((Game.screenWidth/2, Game.screenHeight/2+250), (150, 0), 
         #             getPath("images", "exit.jpg"), Game.quit).add()
         #     return True
+=======
+>>>>>>> ce1c7cffa018366234d273e6097525de675a5d3d
     
     @classmethod
     def reset(cls):
@@ -376,7 +377,7 @@ class Game:
     # in case the current player needs to scream UNO
         if(len(current_player.getHand())==1):
             Game.getState("playersList")[Game.getState("activePlayer")].screamedUno=True
-            print("UNO !!!")
+            Game.setState("message","UNO !!!")
             # to check if the previous player screamed uno 
             previous_player=Game.getState("playersList")[abs(Game.getState("activePlayer")-1)]
             if(len(previous_player.getHand())==1 and previous_player.screamedUno==False):

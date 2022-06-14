@@ -5,6 +5,7 @@ import pygame
 from utilities.classes.object.player.Player import Player
 from utilities.classes.Ai.bot_player import bot_player
 
+
 class advanced_ai(bot_player):  
     # function defining the type of hand [NormalOnly , MixedCards , SpecialOnly]
     def getHandType(self,playableCards) :

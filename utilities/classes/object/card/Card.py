@@ -1,11 +1,12 @@
 import numbers
 import time
+from utilities.classes.Ai.random_ai import random_ai
 from utilities.classes.Ai.bot_player import bot_player
+from utilities.classes.Ai.advanced_ai import advanced_ai
 # from utilities.classes.game.Game import Game
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
-from utilities.classes.Ai.random_ai import random_ai
-from utilities.classes.Ai.advanced_ai import advanced_ai
+
 from utilities.classes.object.color_picker import ColorPicker
 import pygame
 
@@ -21,6 +22,7 @@ class Card(Object):
         # to know who throwed the card
         self.ownerId=ownerId
         self.played=False
+        self.start_time=pygame.time.get_ticks()
         
     # coloredType=["Skip", "Reverse", "Draw 2", "Draw 4", "Wild"]
     # get card's type 
@@ -77,6 +79,7 @@ class Card(Object):
     
     def throwCard(self, playerId):
         from utilities.classes.game.Game import Game as Game_t
+        pygame.time.delay(1000)
     #we need the playerId in case not the activePlayer
         if playerId==Game_t.state["activePlayer"]:
             #if compareSingleCard() returns a card
@@ -97,7 +100,7 @@ class Card(Object):
                 # In case it's a wild card , rotation whill happen only when player picks a color
                 if(Game_t.getState("lastPlayedCard").getCardType()!="Wild"):
                     Game_t.rotate()
-                self.handleMessage()
+                    self.handleMessage()
                 # Game_t.colorPicker.resetPickedColor()
                 Game_t.setState("timer",10)
                 return True
