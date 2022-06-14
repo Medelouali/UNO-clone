@@ -38,6 +38,7 @@ class Game:
             #difficulty and umber of players
             "Difficulty" : "Normal",
             "numOfPlayers" : 2,
+            "message" : "",
             "chosen_color":None
         } # this dictionary will keep track of the game state
     
@@ -81,6 +82,7 @@ class Game:
         # affect 7 cards to each player 
         Game.deck.distributeCard()
         # a loop that keeps running as long as we're playing the game
+        pygame.time.delay(1000)
         while(T):
             # Game.state["playersList"][1].hand=[] #for testing
             # if(Game.getState("lastPlayedCard")): self.applyEffect()
@@ -120,12 +122,9 @@ class Game:
                 # to base screaming UNO purely on chance for the ai 
                 head_or_tails = random.randint(0,1)
                 if(head_or_tails):
-                    print("Checking scream ")
                     self.unoScream()
                 # play ai's turn
                 players[Game.getState("activePlayer")].performMove()
-            
-
             # rendering the game
             pygame.display.update()
             Game.screen.blit(Game.backgroundImage, (0, 0))
@@ -154,20 +153,24 @@ class Game:
         numOfPlayers=len(Game.getState("playersList"))
         rotateBy=Game.getState("rotation")
         activeId=Game.getState("activePlayer")
-        
+        # last = pygame.time.get_ticks()
+        # cooldown = 300
+        # now=pygame.time.get_ticks()
+        # if now -last >=cooldown:
+        #     last = now
         if(rotateBy>1 or rotateBy<-1): 
             return
-        #to be reviewed
+            #to be reviewed
         if(activeId + rotateBy>numOfPlayers-1):
-            Game.setState("activePlayer", 0)
-            return
-        
+                Game.setState("activePlayer", 0)
+                return
+            
         if(activeId + rotateBy<0):
-            Game.setState("activePlayer", numOfPlayers-1)
-            return
-        
+                Game.setState("activePlayer", numOfPlayers-1)
+                return
+            
         Game.setState("activePlayer", activeId + rotateBy)
-        
+            
     # render every object in objectGroup 
     def render(self):
         #show how many cards are left in the AI's hand 
@@ -288,7 +291,7 @@ class Game:
     # in case the current player needs to scream UNO
         if(len(current_player.getHand())==1):
             Game.getState("playersList")[Game.getState("activePlayer")].screamedUno=True
-            print("UNO !!!")
+            Game.setState("message","UNO !!!")
             # to check if the previous player screamed uno 
             previous_player=Game.getState("playersList")[abs(Game.getState("activePlayer")-1)]
             if(len(previous_player.getHand())==1 and previous_player.screamedUno==False):
