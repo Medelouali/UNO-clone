@@ -6,12 +6,8 @@ from utilities.classes.Ai.random_ai import random_ai
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 from utilities.functions.resize import getSize
-<<<<<<< HEAD
-# from utilities.classes.Ai.Ai import Ai
-=======
 from utilities.classes.Ai.random_ai import random_ai
 from utilities.classes.Ai.bot_player import bot_player
->>>>>>> ce1c7cffa018366234d273e6097525de675a5d3d
 from utilities.classes.Ai.advanced_ai import advanced_ai
 from utilities.classes.object.player.Player import Player
 from utilities.classes.object.deck.Deck import Deck
@@ -42,12 +38,9 @@ class Game:
             "lastCheckedTime": 0,
             #difficulty settings :: Type of Ai
             "Difficulty" : "Normal",
-<<<<<<< HEAD
-=======
             "numOfPlayers" : 2,
             "message" : "",
             "chosen_color":None
->>>>>>> ce1c7cffa018366234d273e6097525de675a5d3d
         } # this dictionary will keep track of the game state
     
     #interface settings
@@ -124,11 +117,7 @@ class Game:
                 # T=False
             # Check if current player is a bot 
             # self.displayWinner()
-<<<<<<< HEAD
-            if(isinstance(players[Game.getState("activePlayer")], advanced_ai) or isinstance(players[Game.getState("activePlayer")],random_ai)):
-=======
             if(isinstance(players[Game.getState("activePlayer")], bot_player)):
->>>>>>> ce1c7cffa018366234d273e6097525de675a5d3d
                 # print("Ai is playing")
                 # before playing a card, check if previous player has screamed UNO
                 # to base screaming UNO purely on chance for the ai 
@@ -160,10 +149,7 @@ class Game:
      #method to review !!!   
     @classmethod
     def rotate(cls):
-<<<<<<< HEAD
-=======
         # print(Game.getState("chosen_color"))
->>>>>>> ce1c7cffa018366234d273e6097525de675a5d3d
         #rotateBy 
         numOfPlayers=len(Game.getState("playersList"))
         rotateBy=Game.getState("rotation")
@@ -202,14 +188,7 @@ class Game:
         for value in list(Game.objectsGroup.values()):
             value.update()
         
-<<<<<<< HEAD
-    def generatePlayers(self, numOfPlayers=2, botExists=True):
-        # bot here representes Ai 
-        if(botExists):    
-            if(numOfPlayers==2):
-=======
     def generatePlayers(self):  
->>>>>>> ce1c7cffa018366234d273e6097525de675a5d3d
                 # set list of players ( Ai and real player in this case )
                 Game.setState("playersList", [
                     advanced_ai(0),
@@ -252,70 +231,6 @@ class Game:
           if(Game.getState("lastPlayedCard")):
             Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).setDimensions([100, 200]).muteObject().add()
             Game.getState("lastPlayedCard").setPosition(Game.positions["playedCards"]).update()
-<<<<<<< HEAD
-            # print(Game.getState("lastPlayedCard"))
-            
-    # generate a deck of cards when the deck runs out of cards
-    def regenerateDeck(self):
-        # Check if deck is empty
-        if(Game.deck.getSize()==0):
-            # set a new deck from a set of played cards
-            Game.deck.setDeck([card.unmuteObject() for card in list(Game.playedCards.values())])
-            # set new size for this deck
-            Game.deck.setSize(len(Game.playedCards.values()))
-            # shuffle the deck 
-            Game.deck.shuffleDeck()
-            # empty playedCards
-            Game.playedCards={}
-            # pick a card from new shuffeled deck to move it to terrain
-            Game.setState("lastPlayedCard",Game.deck.getDeck()[-1])
-            # add lastPlayedCard to deck
-            Game.playedCards[Game.deck.getDeck()[-1].getId()]= Game.deck.getDeck()[-1]
-            # test 
-            print("Deck : ")
-            for card in Game.deck.getDeck():
-                print(card)
-            print("Played cards : ")
-            for card in Game.playedCards.values():
-                print(card)
-            # Game.rotate()
-            
-
-    def showDeck(self):
-        for card in self.deck:
-            print(f"{card.number}_{card.color}")
-            
-    def displayWinner(self):
-        # if(Game.getState("playersList")[0].getHand() and Game.getState("playersList")[1].getHand()):
-        #     return
-        
-        if(not Game.getState("playersList")[0].getHand() or not Game.getState("playersList")[1].getHand() ):
-            Game.setState("lastPlayedCard", None)
-            T=False
-            # return True
-        
-        
-        # if(not Game.getState("playersList")[0].getHand()):
-        #     writeText(f"The Bot Wins, You May Win Next Time;)", Game.screenWidth/2, Game.screenHeight/3, 50, Game.screen)
-        #     Object(Game.positions["playedCards"], (150, 0), 
-        #             getPath("images", "icons", "avatar10.png"), None).add()
-        #     Object((Game.screenWidth/2, Game.screenHeight/2+150), (150, 0), 
-        #             getPath("images", "continue2.jpg"), Game.reset).add()
-        #     Object((Game.screenWidth/2, Game.screenHeight/2+250), (150, 0), 
-        #             getPath("images", "exit.jpg"), Game.quit).add()
-        #     return True
-            
-        # if(not Game.getState("playersList")[1].getHand()):
-        #     writeText(f"You Won, Good Boy;)", Game.screenWidth/2, Game.screenHeight/3, 50, Game.screen)
-        #     Object(Game.positions["playedCards"], (150, 0), 
-        #             getPath("images", "icons", "avatar6.png"), None).add()           
-        #     Object((Game.screenWidth/2, Game.screenHeight/2+150), (150, 0), 
-        #             getPath("images", "continue2.jpg"), Game.reset).add()
-        #     Object((Game.screenWidth/2, Game.screenHeight/2+250), (150, 0), 
-        #             getPath("images", "exit.jpg"), Game.quit).add()
-        #     return True
-=======
->>>>>>> ce1c7cffa018366234d273e6097525de675a5d3d
     
     @classmethod
     def reset(cls):
