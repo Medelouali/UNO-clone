@@ -59,17 +59,44 @@ def PlayMenu(ActMenu):
                 if( Back.recc.collidepoint(pygame.mouse.get_pos()) and ActMenu=="PlayMenu"):
                         print ("Back")
                         T=False
+                
+                
                 #Start of the GAME (Normal)
                 if( Normal.recc.collidepoint(pygame.mouse.get_pos()) and ActMenu=="PlayMenu" ):
-                        print ("not yet implemented!")
-                
-                #Start of the GAME (Hard)
-                if( Hard.recc.collidepoint(pygame.mouse.get_pos()) and ActMenu=="PlayMenu" ):
-                    print("Start a game")
+                    print ("Starting  normalMode")
                     P=True
                     while(P):
                         # from utilities.classes.game.Game import Game  as Game
                         game = Game()
+                        game.setState("Difficulty","Normal")
+                        game.run()
+                        print("Playing the game")
+
+                        if( Game.getState("playersList")[0].getHand() ==[]):#the bot is the winner
+                            del(game)
+                            print("Bot Wins !")
+                            ActMenu="end"
+                            P=ending(ActMenu,"Bot Wins !")
+                            ActMenu="PlayMenu"
+                            
+
+                        if( Game.getState("playersList")[1].getHand() ==[]):#the player wins
+                            del(game)
+                            print("Player Wins !")
+                            ActMenu="end"
+                            P=ending(ActMenu,"Player Wins !")
+                            ActMenu="PlayMenu"
+
+                
+                
+                #Start of the GAME (Hard)
+                if( Hard.recc.collidepoint(pygame.mouse.get_pos()) and ActMenu=="PlayMenu" ):
+                    print("Starting hardMode")
+                    P=True
+                    while(P):
+                        # from utilities.classes.game.Game import Game  as Game
+                        game = Game()
+                        game.setState("Difficulty","Hard")
                         game.run()
                         print("Playing the game")
 
