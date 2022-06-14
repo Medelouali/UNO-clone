@@ -1,11 +1,11 @@
 import numbers
 import time
-from utilities.classes.Ai.bot_player import bot_player
+from utilities.classes.ai.random_ai import random_ai
+from utilities.classes.ai.bot_player import bot_player
+from utilities.classes.ai.advanced_ai import advanced_ai
 # from utilities.classes.game.Game import Game
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
-from utilities.classes.Ai.random_ai import random_ai
-from utilities.classes.Ai.advanced_ai import advanced_ai
 from utilities.classes.object.color_picker import ColorPicker
 import pygame
 

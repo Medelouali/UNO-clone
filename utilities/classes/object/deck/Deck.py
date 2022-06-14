@@ -38,11 +38,7 @@ class Deck(Object):
     # Shuffling the deck
     def shuffleDeck(self):
         for i in range(self.size-1, 0, -1):
-<<<<<<< HEAD
-            j = randint(0, i+1)
-=======
             j = randint(0, i)
->>>>>>> fa5ece67146c089c5bce3e7bff405e2732d4685d
             temp=self.deck[i]
             self.deck[i]=self.deck[j]
             self.deck[j]=temp
