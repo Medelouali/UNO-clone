@@ -44,7 +44,7 @@ class button() :
     #change color of the button when hovering over it 
     def set_color(self):
         if button.hover:
-            print("Hover")
+            # print("Hover")
             self.color = (33, 236, 42)
         else :
             self.color=(255, 196, 0)

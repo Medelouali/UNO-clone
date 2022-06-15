@@ -78,9 +78,9 @@ def ending(ActMenu,txt):
                     return True
 
 
-        Replay.draw_text(screen,(255,255,255),(250 ,100))
-        exitMenu.draw_text(screen ,(255,255,255),(250 ,500))
-        Exit.draw_text(screen ,(255,255,255),(250 ,300) )
+        Replay.draw_text(screen,(255,255,255),(260 ,105))
+        exitMenu.draw_text(screen ,(255,255,255),(260 ,505))
+        Exit.draw_text(screen ,(255,255,255),(260 ,305) )
         
         writeText(txt, 5*Game.screenWidth/6, 2*Game.screenHeight/5, 50, Game.screen)
         

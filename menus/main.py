@@ -2,6 +2,7 @@ import pygame,sys
 from menus.functions import button
 from menus.functions import screen 
 from menus.play import PlayMenu 
+from menus.GameRules import GameRules 
 pygame.init()
 bg = pygame.image.load("assets\images\pl.jpg")
 bg= pygame.transform.scale(bg,(1280,640))
@@ -23,7 +24,7 @@ def main(ActMenu):
         
         ActMenu="MainMenu"
         
-        print(PlayButton.get_hover())
+        # sprint(PlayButton.get_hover())
         
 
         for event in pygame.event.get():
@@ -70,6 +71,8 @@ def main(ActMenu):
 
                 if( RulesButton.recc.collidepoint(pygame.mouse.get_pos()) and ActMenu=="MainMenu"):
                         print ("Game Rules")
+                        ActMenu ="RulesMenu"
+                        GameRules(ActMenu)
                     
                 if (ExitButton.recc.collidepoint(pygame.mouse.get_pos()) and ActMenu=="MainMenu" ):
                         print ("Exit")

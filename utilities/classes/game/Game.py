@@ -266,8 +266,11 @@ class Game:
     # to render the timer
     def renderTimer(self):
         if(Game.getState("timer")==0):
-            Game.setState("message","Be quicker next time")
+            if(Game.getState("lastPlayedCard").getCardType()=="Wild" and Game.getState("chosen_color")==None):
+                Game.getState("chosen_color")=="Red"
+                Game.setState("message","We picked for you , be quicker next time")
             Game.deck.draw()
+            Game.setState("message","Be quicker next time")
             Game.rotate()
             return self.resetTimer()
         current = time.time()
