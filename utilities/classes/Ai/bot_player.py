@@ -1,4 +1,4 @@
-import random
+
 from utilities.classes.object.player.Player import Player
 class bot_player(Player):  
     def __init__(self, id):
@@ -52,6 +52,7 @@ class bot_player(Player):
             # Check if deck is empty before drawing
             if(Game_t.deck.getSize()>=1):
                 Game_t.deck.draw()
+                Game_t.setState("message", "Opponent drew a card")
                 Game_t.rotate()
             else :
                 print("Can't draw no more")

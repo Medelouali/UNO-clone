@@ -266,6 +266,7 @@ class Game:
     # to render the timer
     def renderTimer(self):
         if(Game.getState("timer")==0):
+            Game.setState("message","Be quicker next time")
             Game.deck.draw()
             Game.rotate()
             return self.resetTimer()
@@ -297,7 +298,6 @@ class Game:
             previous_player=Game.getState("playersList")[abs(Game.getState("activePlayer")-1)]
             if(len(previous_player.getHand())==1 and previous_player.screamedUno==False):
                 # if he had to scream it and haven't then he has to draw two cards
-                print("You are bamboozled")
                 # draw two cards
                 Game.deck.draw(2,abs(Game.getState("activePlayer")-1))
             # in case the previous player screamed UNO , we reset screamUno to False again for the next turn

@@ -1,9 +1,4 @@
-import numbers
-import time
-from utilities.classes.Ai.random_ai import random_ai
 from utilities.classes.Ai.bot_player import bot_player
-from utilities.classes.Ai.advanced_ai import advanced_ai
-# from utilities.classes.game.Game import Game
 from utilities.classes.object.Object import Object
 from utilities.functions.path import getPath
 
@@ -82,6 +77,7 @@ class Card(Object):
         pygame.time.delay(1000)
     #we need the playerId in case not the activePlayer
         if playerId==Game_t.state["activePlayer"]:
+            Game_t.setState("message","")
             #if compareSingleCard() returns a card
             if self.compareSingleCard():
                 newHand=[]
@@ -136,15 +132,17 @@ class Card(Object):
     def handleMessage(self):
         from utilities.classes.game.Game import Game as Game_t
         if self.type in ["Skip", "Reverse", "Draw", "Draw4"]:
-            Game_t.setState("message", f"Woow! {self.getPlayerName()} played {self.type} card!")
+            if(self.type=="Skip"):
+                Game_t.setState("message", f"{self.getPlayerName()} have been skipped")
+            if(self.type=="Reverse"):
+                Game_t.setState("message", f"The order is reversed")
+            if(self.type=="Draw"):
+                Game_t.setState("message", f"{self.getPlayerName()} drew 2 cards")
+            if(self.type=="Draw4"):
+                Game_t.setState("message", f"{self.getPlayerName()} drew 4 cards")
             return
         if(Game_t.getState("lastPlayedCard").getCardType()=="Wild"):
-            Game_t.setState("message", f"Niice {self.getPlayerName()} played wild card!")
-            return
-        if(Game_t.getState("lastPlayedCard").getCardType()=="Normal"):
-            color=Game_t.getState("lastPlayedCard").getColor()
-            number=Game_t.getState("lastPlayedCard").getNumber()
-            Game_t.setState("message", f"{self.getPlayerName()} played {number} with {color} color!")
+            Game_t.setState("message", f"{self.getPlayerName()} played wild card!")
             return
         Game_t.setState("message", "")
     def getColor(self):
@@ -158,7 +156,7 @@ class Card(Object):
     def getPlayerName(self):
         from utilities.classes.game.Game import Game as Game_t
         if(Game_t.getState("activePlayer")):
-            return "Bot"
+            return "Opponent"
         return "You"
     
     
